@@ -1,0 +1,11 @@
+Assets that i do not own:
+==================================
+Sounds/Player/footstep_jack_02.wav
+Sounds/Player/footstep_jack_03.wav
+Sounds/Player/land.wav
+Sounds/Weapon/gun_rifle_01.wav
+Sounds/Weapon/gun_shot_01.wav
+----------------------------------
+Author: Jack Menhorn
+https://opengameart.org/content/fps-placeholder-sounds
+==================================
