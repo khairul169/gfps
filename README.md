@@ -1,2 +1,2 @@
 # gFPS
-Godot Engine Better FPS Template
+Better FPS Template for Godot Engine
