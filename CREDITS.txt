@@ -1,11 +1,23 @@
 Assets that i do not own:
-==================================
+
 Sounds/Player/footstep_jack_02.wav
 Sounds/Player/footstep_jack_03.wav
 Sounds/Player/land.wav
-Sounds/Weapon/gun_rifle_01.wav
-Sounds/Weapon/gun_shot_01.wav
 ----------------------------------
 Author: Jack Menhorn
 https://opengameart.org/content/fps-placeholder-sounds
+
 ==================================
+Sounds/Weapon/ak47-shoot.wav
+Sounds/Weapon/g36c-shoot.wav
+Sounds/Weapon/handgun-shoot.wav
+Sounds/Weapon/xm1014-shoot.wav
+----------------------------------
+Author: Zach King (SweetSoundEffects.com)
+http://sweetsoundeffects.com/gun-pack-2/
+
+==================================
+Sounds/Weapon/rpg7-shoot.wav
+----------------------------------
+Author: Alexei Michalopoulos
+https://www.youtube.com/watch?v=ddJ6u2Av1QU

@@ -5,9 +5,11 @@ func _init():
 	mName = "Launcher";
 	
 	# Resources
-	mWeaponModel = "res://Models/Weapon/Launcher/Weapon.scn";
-	mAudioShoot1 = "res://Sounds/Weapon/gun_shot_01.wav";
-	mMissileObject = "res://Models/Weapon/Launcher/Rocket.scn";
+	mWeaponModel = "res://Models/Weapon/RPG7/Weapon.scn";
+	mAudioShoot1 = "res://Sounds/Weapon/rpg7-shoot.wav";
+	
+	# Missile
+	mMissileObject = "res://Models/Weapon/RPG7/Rocket.scn";
 	
 	# Weapon stats
 	mClip = 1;

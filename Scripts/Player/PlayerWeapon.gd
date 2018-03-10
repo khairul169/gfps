@@ -88,6 +88,8 @@ func _ready():
 		mStreamPlayer = AudioStreamPlayer3D.new();
 		mStreamPlayer.name = "StreamPlayer";
 		mStreamPlayer.max_distance = 100.0;
+		mStreamPlayer.unit_db = 8.0;
+		mStreamPlayer.max_db = 12.0;
 		Controller.add_child(mStreamPlayer);
 	
 	# Instance prefabs

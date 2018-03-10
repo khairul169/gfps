@@ -39,7 +39,7 @@ func _ready():
 	mStreamPlayer = AudioStreamPlayer3D.new();
 	mStreamPlayer.name = "player";
 	mStreamPlayer.stream = StepLeft;
-	mStreamPlayer.max_distance = 50;
+	mStreamPlayer.max_distance = 20;
 	Controller.add_child(mStreamPlayer);
 
 func _process(delta):

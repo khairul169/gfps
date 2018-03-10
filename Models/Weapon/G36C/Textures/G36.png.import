@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/G36.png-abf470e9816ecf7e3e6eda570ddbe982.s3tc.stex"
-path.etc2="res://.import/G36.png-abf470e9816ecf7e3e6eda570ddbe982.etc2.stex"
+path.s3tc="res://.import/G36.png-b9bdeee26c643f897d02b72bd953bfdb.s3tc.stex"
+path.etc2="res://.import/G36.png-b9bdeee26c643f897d02b72bd953bfdb.etc2.stex"
 
 [deps]
 
-source_file="res://Models/Weapon/G36/Textures/G36.png"
+source_file="res://Models/Weapon/G36C/Textures/G36.png"
 source_md5="5e14e1988886e54d0cc5ff88cefc5628"
 
-dest_files=[ "res://.import/G36.png-abf470e9816ecf7e3e6eda570ddbe982.s3tc.stex", "res://.import/G36.png-abf470e9816ecf7e3e6eda570ddbe982.etc2.stex" ]
+dest_files=[ "res://.import/G36.png-b9bdeee26c643f897d02b72bd953bfdb.s3tc.stex", "res://.import/G36.png-b9bdeee26c643f897d02b72bd953bfdb.etc2.stex" ]
 dest_md5="43a7ba4ff72a32e0fe4938675cfdd605"
 
 [params]

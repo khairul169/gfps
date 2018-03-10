@@ -7,23 +7,23 @@ onready var weapon = get_node("Weapon");
 # Weapons
 var weapon_handgun;
 var weapon_ak47;
-var weapon_launcher;
+var weapon_rpg7;
 var weapon_xm1014;
-var weapon_g36;
+var weapon_g36c;
 
 func _ready():
 	# Load weapon list
 	weapon_handgun = weapon.RegisterWeapon("res://Scripts/Weapon/Handgun.gd");
 	weapon_ak47 = weapon.RegisterWeapon("res://Scripts/Weapon/AK47.gd");
-	weapon_launcher = weapon.RegisterWeapon("res://Scripts/Weapon/Launcher.gd");
+	weapon_rpg7 = weapon.RegisterWeapon("res://Scripts/Weapon/RPG7.gd");
 	weapon_xm1014 = weapon.RegisterWeapon("res://Scripts/Weapon/XM1014.gd");
-	weapon_g36 = weapon.RegisterWeapon("res://Scripts/Weapon/G36.gd");
+	weapon_g36c = weapon.RegisterWeapon("res://Scripts/Weapon/G36C.gd");
 	
 	# Enable character sprinting
 	controller.mCanSprinting = true;
 	
 	# Set primary weapon
-	weapon.SetActiveWeapon(weapon_g36);
+	weapon.SetActiveWeapon(weapon_g36c);
 	
 	# Change camera y-rotation to follow this node rotation
 	controller.mCameraRotation.y = rotation_degrees.y;
@@ -40,10 +40,10 @@ func _input(event):
 			weapon.SetActiveWeapon(weapon_xm1014);
 		
 		if (event.scancode == KEY_4):
-			weapon.SetActiveWeapon(weapon_launcher);
+			weapon.SetActiveWeapon(weapon_rpg7);
 		
 		if (event.scancode == KEY_5):
-			weapon.SetActiveWeapon(weapon_g36);
+			weapon.SetActiveWeapon(weapon_g36c);
 		
 		# Reload weapon
 		if (event.scancode == KEY_R):

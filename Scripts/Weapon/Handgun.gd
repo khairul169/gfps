@@ -6,7 +6,7 @@ func _init():
 	
 	# Resources
 	mWeaponModel = "res://Models/Weapon/Handgun/Weapon.scn";
-	mAudioShoot1 = "res://Sounds/Weapon/gun_shot_01.wav";
+	mAudioShoot1 = "res://Sounds/Weapon/handgun-shoot.wav";
 	
 	# Weapon stats
 	mClip = 20;

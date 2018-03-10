@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/Hand.png-0e78b3ce8e05c2287dad4ffe8cfec4f3.s3tc.stex"
-path.etc2="res://.import/Hand.png-0e78b3ce8e05c2287dad4ffe8cfec4f3.etc2.stex"
+path.s3tc="res://.import/Hand.png-a01be0010a7f58661642ff5ba7a60b32.s3tc.stex"
+path.etc2="res://.import/Hand.png-a01be0010a7f58661642ff5ba7a60b32.etc2.stex"
 
 [deps]
 
-source_file="res://Models/Weapon/Launcher/Textures/Hand.png"
+source_file="res://Models/Weapon/RPG7/Textures/Hand.png"
 source_md5="0a561aa9a42bafc6f0f01a3308740ba9"
 
-dest_files=[ "res://.import/Hand.png-0e78b3ce8e05c2287dad4ffe8cfec4f3.s3tc.stex", "res://.import/Hand.png-0e78b3ce8e05c2287dad4ffe8cfec4f3.etc2.stex" ]
+dest_files=[ "res://.import/Hand.png-a01be0010a7f58661642ff5ba7a60b32.s3tc.stex", "res://.import/Hand.png-a01be0010a7f58661642ff5ba7a60b32.etc2.stex" ]
 dest_md5="d08ad7a30cc31ab23d5704f45e94b0da"
 
 [params]

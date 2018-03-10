@@ -2,11 +2,11 @@ extends "Base/BaseWeapon.gd"
 
 func _init():
 	# Weapon name
-	mName = "G36";
+	mName = "G36C";
 	
 	# Resources
-	mWeaponModel = "res://Models/Weapon/G36/Weapon.scn";
-	mAudioShoot1 = "res://Sounds/Weapon/gun_rifle_01.wav";
+	mWeaponModel = "res://Models/Weapon/G36C/Weapon.scn";
+	mAudioShoot1 = "res://Sounds/Weapon/g36c-shoot.wav";
 	
 	# Weapon stats
 	mClip = 35;
