@@ -567,7 +567,6 @@ disabled = false
 
 [node name="Information" type="Label" parent="." index="5"]
 
-visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
