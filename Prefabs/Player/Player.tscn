@@ -12,8 +12,6 @@
 [ext_resource path="res://Prefabs/Weapon/BulletShell.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Prefabs/Weapon/BulletImpact.tscn" type="PackedScene" id=11]
 
-
-
 [sub_resource type="RayShape" id=1]
 
 length = 0.3
@@ -27,7 +25,47 @@ height = 0.6
 
 script = ExtResource( 1 )
 
-[node name="Controller" type="RigidBody" parent="." index="0"]
+[node name="HUD" type="Control" parent="." index="0"]
+
+editor/display_folded = true
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+
+[node name="Ammo" type="Label" parent="HUD" index="0"]
+
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -74.0
+margin_top = -40.0
+margin_right = -29.0
+margin_bottom = -26.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "00/000"
+align = 2
+valign = 2
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Rect", "custom_colors" ]
+
+[node name="Controller" type="RigidBody" parent="." index="1"]
 
 editor/display_folded = true
 input_ray_pickable = true
@@ -79,7 +117,7 @@ shape = SubResource( 2 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
-[node name="Sounds" type="Node" parent="." index="1"]
+[node name="Sounds" type="Node" parent="." index="2"]
 
 script = ExtResource( 3 )
 Controller = NodePath("../Controller")
@@ -88,7 +126,7 @@ StepRight = ExtResource( 5 )
 StepDelay = 0.32
 JumpLanding = ExtResource( 6 )
 
-[node name="Weapon" type="Node" parent="." index="2"]
+[node name="Weapon" type="Node" parent="." index="3"]
 
 script = ExtResource( 7 )
 Controller = NodePath("../Controller")

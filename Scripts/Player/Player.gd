@@ -19,6 +19,13 @@ func _ready():
 	weapon_xm1014 = weapon.RegisterWeapon("res://Scripts/Weapon/XM1014.gd");
 	weapon_g36c = weapon.RegisterWeapon("res://Scripts/Weapon/G36C.gd");
 	
+	# Connect weapon signals
+	weapon.connect("weapon_draw", self, "update_hud");
+	weapon.connect("weapon_attack1", self, "update_hud");
+	weapon.connect("weapon_attack2", self, "update_hud");
+	weapon.connect("weapon_unload", self, "update_hud");
+	weapon.connect("weapon_reload", self, "update_hud");
+	
 	# Enable character sprinting
 	controller.mCanSprinting = true;
 	
@@ -70,3 +77,7 @@ func _physics_process(delta):
 		controller.mInput['jump'] = Input.is_key_pressed(KEY_SPACE);
 		controller.mInput['walk'] = Input.is_key_pressed(KEY_ALT);
 		controller.mInput['sprint'] = Input.is_key_pressed(KEY_SHIFT);
+
+func update_hud():
+	# Set ammo label text
+	$HUD/Ammo.text = str(weapon.mClip).pad_zeros(2) + "/" + str(weapon.mAmmo).pad_zeros(3);
