@@ -20,7 +20,7 @@ func _ready():
 	weapon_g36c = weapon.RegisterWeapon("res://Scripts/Weapon/G36C.gd");
 	
 	# Connect weapon signals
-	weapon.connect("weapon_draw", self, "update_hud");
+	weapon.connect("weapon_attach", self, "update_hud");
 	weapon.connect("weapon_attack1", self, "update_hud");
 	weapon.connect("weapon_attack2", self, "update_hud");
 	weapon.connect("weapon_unload", self, "update_hud");

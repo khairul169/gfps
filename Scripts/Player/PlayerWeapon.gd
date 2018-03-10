@@ -19,7 +19,7 @@ const BONE_BULLETEJECT = "BulletEject";
 onready var WorldNode = get_parent().get_parent();
 
 # Signals
-signal weapon_draw();
+signal weapon_attach();
 signal weapon_unload();
 signal weapon_attack1();
 signal weapon_attack2();
@@ -517,7 +517,7 @@ func SetActiveWeapon(id):
 	
 	# Call weapon draw function
 	mWeaponList[id].Draw();
-	emit_signal("weapon_draw");
+	emit_signal("weapon_attach");
 
 func RefillWeapon():
 	if (mCurrentWpn < 0 || mCurrentWpn >= mWeaponList.size()):
