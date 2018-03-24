@@ -7,7 +7,7 @@
 [ext_resource path="res://Sounds/Player/footstep_jack_03.wav" type="AudioStream" id=5]
 [ext_resource path="res://Sounds/Player/land.wav" type="AudioStream" id=6]
 [ext_resource path="res://Scripts/Player/PlayerWeapon.gd" type="Script" id=7]
-[ext_resource path="res://Scripts/Player/WeaponView.gd" type="Script" id=8]
+[ext_resource path="res://Scripts/Player/FirstPersonView.gd" type="Script" id=8]
 [ext_resource path="res://Scenes/Weapon/MuzzleFlash.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Scenes/Weapon/BulletShell.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Scenes/Weapon/BulletImpact.tscn" type="PackedScene" id=11]
@@ -156,7 +156,7 @@ JumpLanding = ExtResource( 6 )
 
 script = ExtResource( 7 )
 Controller = NodePath("../Controller")
-WeaponView = ExtResource( 8 )
+FirstPersonView = ExtResource( 8 )
 ModelScaling = 0.05
 EnableScopeRender = true
 MuzzleFlash = ExtResource( 9 )

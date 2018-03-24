@@ -2,7 +2,7 @@ extends Node
 
 # Exports
 export (NodePath) var Controller;
-export (Script) var WeaponView;
+export (Script) var FirstPersonView;
 export var ModelScaling = 0.05;
 export var EnableScopeRender = true;
 
@@ -27,7 +27,7 @@ signal weapon_reload();
 signal object_hit(obj, pos);
 
 # Nodes
-var mWeaponView;
+var mFirstPersonView;
 var mWeaponModel;
 var mAnimationPlayer;
 var mMuzzleFlash;
@@ -72,16 +72,16 @@ func _ready():
 	# Create weapon view
 	if (Controller.CameraNode):
 		# Instance scene
-		mWeaponView = Spatial.new();
-		mWeaponView.name = "WeaponView";
+		mFirstPersonView = Spatial.new();
+		mFirstPersonView.name = "FirstPersonView";
 		
 		# Set script
-		if (WeaponView is Script):
-			mWeaponView.set_script(WeaponView);
-			mWeaponView.PlayerController = Controller;
+		if (FirstPersonView is Script):
+			mFirstPersonView.set_script(FirstPersonView);
+			mFirstPersonView.PlayerController = Controller;
 		
 		# Add to camera node
-		Controller.CameraNode.add_child(mWeaponView);
+		Controller.CameraNode.add_child(mFirstPersonView);
 	
 	# Create stream player
 	if (Controller):
@@ -447,12 +447,12 @@ func SetupAttachment(wpn, skeleton):
 	wpn.mShellEjectNode = attachment;
 
 func SetWeaponModel(model):
-	if (!mWeaponView):
+	if (!mFirstPersonView):
 		return;
 	
 	# Remove old model
 	if (mWeaponModel != null):
-		mWeaponView.remove_child(mWeaponModel);
+		mFirstPersonView.remove_child(mWeaponModel);
 		mWeaponModel = null;
 	
 	if (!model || !model is Spatial):
@@ -461,7 +461,7 @@ func SetWeaponModel(model):
 	# Set new model
 	mWeaponModel = model;
 	mWeaponModel.scale = Vector3(1, 1, 1) * ModelScaling;
-	mWeaponView.add_child(mWeaponModel);
+	mFirstPersonView.add_child(mWeaponModel);
 	
 	# Find animation player
 	if (mWeaponModel.has_node("AnimationPlayer")):
@@ -556,12 +556,12 @@ func SetCameraFOV(fov):
 		Controller.mCameraFOV = Controller.CameraFOV;
 
 func SetCameraBobScale(scale):
-	if (!mWeaponView || !mWeaponView.has_method("SetCustomScale")):
+	if (!mFirstPersonView || !mFirstPersonView.has_method("SetCustomScale")):
 		return;
 	if (scale != null && scale > 0.0):
-		mWeaponView.SetCustomScale(scale);
+		mFirstPersonView.SetCustomScale(scale);
 	else:
-		mWeaponView.SetCustomScale(1.0);
+		mFirstPersonView.SetCustomScale(1.0);
 
 func GetMeshInstances(node):
 	if (!node || node.get_child_count() <= 0):
@@ -580,9 +580,9 @@ func AddToWorld(node):
 	WorldNode.add_child(node);
 
 func SetCameraShifting(enabled):
-	if (!mWeaponView || !mWeaponView.has_method("SetShiftingEnabled")):
+	if (!mFirstPersonView || !mFirstPersonView.has_method("SetShiftingEnabled")):
 		return;
-	mWeaponView.SetShiftingEnabled(enabled);
+	mFirstPersonView.SetShiftingEnabled(enabled);
 
 func ToggleWeaponLens(toggle, fov = 60.0):
 	if (!mWeaponModel || !mWeaponModel.has_method("SetLensTexture")):
