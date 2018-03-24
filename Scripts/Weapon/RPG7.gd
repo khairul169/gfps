@@ -10,6 +10,7 @@ func _init():
 	
 	# Missile
 	mMissileObject = "res://Models/Weapon/RPG7/Rocket.scn";
+	mMissileImpact = "res://Scenes/Weapon/Explosion.tscn";
 	
 	# Weapon stats
 	mClip = 1;

@@ -2,7 +2,7 @@ extends "BaseWeapon.gd"
 
 # Resources
 var mMissileObject = "";
-var mMissileImpact = "res://Prefabs/Weapon/Explosion.tscn";
+var mMissileImpact = "";
 
 # Stats
 var mVelocity = 0.0;
