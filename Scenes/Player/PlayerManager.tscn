@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://Scripts/Player/Player.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Player/PlayerManager.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Player/PlayerController.gd" type="Script" id=2]
 [ext_resource path="res://Scripts/Player/PlayerSounds.gd" type="Script" id=3]
 [ext_resource path="res://Sounds/Player/footstep_jack_02.wav" type="AudioStream" id=4]
@@ -21,9 +21,10 @@ length = 0.3
 radius = 0.4
 height = 0.6
 
-[node name="Player" type="Spatial" index="0"]
+[node name="PlayerManager" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
+_sections_unfolded = [ "Transform" ]
 
 [node name="HUD" type="Control" parent="." index="0"]
 
@@ -47,7 +48,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -74.0
 margin_top = -40.0
-margin_right = -29.0
+margin_right = -24.0
 margin_bottom = -26.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -64,6 +65,31 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Rect", "custom_colors" ]
+
+[node name="WeaponName" type="Label" parent="HUD" index="1"]
+
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -194.0
+margin_top = -70.0
+margin_right = -24.0
+margin_bottom = -56.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "Test"
+align = 2
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "custom_colors" ]
 
 [node name="Controller" type="RigidBody" parent="." index="1"]
 

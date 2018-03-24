@@ -81,7 +81,7 @@ func Draw():
 	# Weapon draw
 	PlayerWeapon.SetWeaponModel(mWeaponModel);
 	PlayerWeapon.PlayAnimation(mAnimation['draw'], false, 0.0);
-	PlayerWeapon.mNextThink = 0.5;
+	PlayerWeapon.mNextThink = 0.8;
 	PlayerWeapon.mNextIdle = 1.0;
 
 func Holster():
@@ -130,9 +130,9 @@ func PrimaryAttack(shoot_bullet = true):
 	
 	# Play animation
 	if (mCanAim && mIsAiming):
-		PlayerWeapon.PlayAnimation(mAnimation['shoot'][1], false, 0.0);
+		PlayerWeapon.PlayAnimation(mAnimation['shoot'][1], false, 0.05);
 	else:
-		PlayerWeapon.PlayAnimation(mAnimation['shoot'][0], false, 0.0);
+		PlayerWeapon.PlayAnimation(mAnimation['shoot'][0], false, 0.05);
 	
 	# Play sound
 	if (mAudioShoot1 != null):
@@ -154,11 +154,18 @@ func SecondaryAttack():
 	mNextAttack2 = 0.5;
 
 func Reload():
+	var aim_reload = false;
+	if (mIsAiming):
+		aim_reload = true;
+	
 	# Un-Aim weapon
 	ToggleAim(false);
 	
 	# Play animation
-	PlayerWeapon.PlayAnimation(mAnimation['reload']);
+	if (aim_reload):
+		PlayerWeapon.PlayAnimation(mAnimation['reload'], false, 0.2);
+	else:
+		PlayerWeapon.PlayAnimation(mAnimation['reload']);
 	return true;
 
 func PostReload():

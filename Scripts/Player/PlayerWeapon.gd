@@ -146,7 +146,7 @@ func _physics_process(delta):
 ##########################################################################
 
 func CanSprint():
-	return (!mIsFiring && !mIsReloading);
+	return (mNextThink <= 0.0 && !mIsFiring && !mIsReloading);
 
 func Idle(delta):
 	# Substract weapon spread
@@ -156,20 +156,20 @@ func Idle(delta):
 	if (Controller.mSprinting && !mSprinting && mNextThink <= 0.0):
 		SprintToggled(true);
 		mSprinting = true;
-		mNextIdle = 0.4;
-		mNextThink = mNextIdle;
+		mNextIdle = 0.5;
+		mNextThink = 0.1;
 	
 	if (!Controller.mSprinting && mSprinting && mNextThink <= 0.0):
 		SprintToggled(false);
 		mSprinting = false;
-		mNextIdle = 0.4;
-		mNextThink = mNextIdle;
+		mNextIdle = 0.5;
+		mNextThink = 0.1;
 	
 	if (mCurrentWpn > -1 && mCurrentWpn < mWeaponList.size()):
 		mWeaponList[mCurrentWpn].Think(delta);
 
 func PrimaryAttack():
-	if (!mIsFiring || mNextThink > 0.0):
+	if (!mIsFiring || mNextThink > 0.0 || mIsReloading):
 		return;
 	
 	# Cannot shoot while sprinting
@@ -203,7 +203,7 @@ func PrimaryAttack():
 	
 	# Firing delay
 	mNextThink = mFireDelay;
-	mNextIdle = mNextThink + 0.2;
+	mNextIdle = mNextThink + 0.8;
 	
 	# Spread bullet
 	mSpread = clamp(mSpread + ((mMaxSpread-mInitialSpread) * 0.1), mInitialSpread, mMaxSpread);
@@ -347,6 +347,7 @@ func RayCheck(result, direction):
 	
 	# Give damage to damageable object
 	if (result.collider.is_in_group("damageable")):
+		CreateBulletImpact(result.position, result.normal, false);
 		GiveObjectDamage(result.collider, 10.0, result.position);
 	
 	# Emit signal
@@ -409,7 +410,7 @@ func RegisterWeapon(path):
 	
 	# Set mesh layers
 	for i in GetMeshInstances(wpn.mWeaponModel):
-		i.layers = 2;
+		i.layers = 16;
 	
 	# Initialize weapon attachment
 	SetupAttachment(wpn, mSkeleton);
@@ -474,10 +475,15 @@ func UnloadCurrentWeapon():
 		
 		# Call weapon function
 		mWeaponList[mCurrentWpn].Holster();
-		emit_signal("weapon_unload");
 	
 	# Remove weapon
 	mCurrentWpn = -1;
+	emit_signal("weapon_unload");
+
+func GetCurrentWeapon():
+	if (mCurrentWpn < 0 || mCurrentWpn >= mWeaponList.size()):
+		return null;
+	return mWeaponList[mCurrentWpn];
 
 func SetActiveWeapon(id):
 	# Cannot switch to current weapon. remove it first.

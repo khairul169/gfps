@@ -1,83 +1,39 @@
-extends Spatial
+extends RigidBody
 
-# Nodes
-onready var controller = get_node("Controller");
-onready var weapon = get_node("Weapon");
+# Constants
+const INTERPOLATION = 25.0;
 
-# Weapons
-var weapon_handgun;
-var weapon_ak47;
-var weapon_rpg7;
-var weapon_xm1014;
-var weapon_g36c;
+# Variables
+var mLastState = 0.0;
+var mCurrPos = Vector3();
+var mVelocity = Vector3();
 
 func _ready():
-	# Load weapon list
-	weapon_handgun = weapon.RegisterWeapon("res://Scripts/Weapon/Handgun.gd");
-	weapon_ak47 = weapon.RegisterWeapon("res://Scripts/Weapon/AK47.gd");
-	weapon_rpg7 = weapon.RegisterWeapon("res://Scripts/Weapon/RPG7.gd");
-	weapon_xm1014 = weapon.RegisterWeapon("res://Scripts/Weapon/XM1014.gd");
-	weapon_g36c = weapon.RegisterWeapon("res://Scripts/Weapon/G36C.gd");
+	# Object type
+	add_to_group("player");
+	add_to_group("damageable");
 	
-	# Connect weapon signals
-	weapon.connect("weapon_attach", self, "update_hud");
-	weapon.connect("weapon_attack1", self, "update_hud");
-	weapon.connect("weapon_attack2", self, "update_hud");
-	weapon.connect("weapon_unload", self, "update_hud");
-	weapon.connect("weapon_reload", self, "update_hud");
-	
-	# Enable character sprinting
-	controller.mCanSprinting = true;
-	
-	# Set primary weapon
-	weapon.SetActiveWeapon(weapon_g36c);
-	
-	# Change camera y-rotation to follow this node rotation
-	controller.mCameraRotation.y = rotation_degrees.y;
-
-func _input(event):
-	if (event is InputEventKey && event.pressed):
-		if (event.scancode == KEY_1):
-			weapon.SetActiveWeapon(weapon_ak47);
-		
-		if (event.scancode == KEY_2):
-			weapon.SetActiveWeapon(weapon_handgun);
-		
-		if (event.scancode == KEY_3):
-			weapon.SetActiveWeapon(weapon_xm1014);
-		
-		if (event.scancode == KEY_4):
-			weapon.SetActiveWeapon(weapon_rpg7);
-		
-		if (event.scancode == KEY_5):
-			weapon.SetActiveWeapon(weapon_g36c);
-		
-		# Reload weapon
-		if (event.scancode == KEY_R):
-			weapon.Reload();
-		
-		if (event.scancode == KEY_L):
-			weapon.EnableScopeRender = !weapon.EnableScopeRender;
-	
-	if (event is InputEventMouseButton):
-		if (weapon && event.button_index == BUTTON_LEFT):
-			weapon.mInput['attack1'] = event.pressed;
-		
-		if (weapon && event.button_index == BUTTON_RIGHT):
-			weapon.mInput['attack2'] = event.pressed;
+	# Rigidbody params
+	mode = RigidBody.MODE_CHARACTER;
+	friction = 0.0;
+	can_sleep = false;
 
 func _physics_process(delta):
-	# Update player input
-	if (controller):
-		controller.mInput['forward'] = Input.is_key_pressed(KEY_W);
-		controller.mInput['backward'] = Input.is_key_pressed(KEY_S);
-		controller.mInput['left'] = Input.is_key_pressed(KEY_A);
-		controller.mInput['right'] = Input.is_key_pressed(KEY_D);
-		
-		controller.mInput['jump'] = Input.is_key_pressed(KEY_SPACE);
-		controller.mInput['walk'] = Input.is_key_pressed(KEY_ALT);
-		controller.mInput['sprint'] = Input.is_key_pressed(KEY_SHIFT);
+	mLastState = min(mLastState + delta, 5.0);
+	
+	if (global_transform.origin.distance_to(mCurrPos) > 5.0):
+		global_transform.origin = mCurrPos;
+	if (mLastState < 0.5):
+		linear_velocity = (mCurrPos - global_transform.origin) * INTERPOLATION;
 
-func update_hud():
-	# Set ammo label text
-	$HUD/Ammo.text = str(weapon.mClip).pad_zeros(2) + "/" + str(weapon.mAmmo).pad_zeros(3);
+func SetState(pos, rot):
+	var mLastPos = mCurrPos;
+	mVelocity = pos - mLastPos;
+	
+	mCurrPos = pos;
+	$Body.rotation_degrees.y = rot[1];
+	
+	mLastState = 0.0;
+
+func GiveDamage(dmg):
+	print(get_name(), " dmg: ", dmg);

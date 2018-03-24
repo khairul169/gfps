@@ -1,5 +1,8 @@
 extends RigidBody
 
+# Constants
+const CAMERA_PITCH_LIMIT = 80;
+
 # Exports
 export var MoveSpeed = 3.6;
 export var SprintSpeed = 1.2;
@@ -23,6 +26,7 @@ var PlayerSounds;
 var PlayerWeapon;
 
 # Variables
+var mNetworkMgr = null;
 var mMoveDir = Vector3();
 var mDefaultGravity = 0.0;
 
@@ -55,6 +59,10 @@ func _ready():
 	# Set groups
 	add_to_group("player");
 	add_to_group("damageable");
+	
+	# Check networking support
+	if (has_node("/root/NetworkManager")):
+		mNetworkMgr = get_node("/root/NetworkManager");
 	
 	# Create camera
 	CameraNode = Camera.new();
@@ -99,6 +107,12 @@ func _input(event):
 func _process(delta):
 	# Update camera transform
 	update_camera(delta);
+
+func _physics_process(delta):
+	if (mNetworkMgr):
+		# Update player transform
+		mNetworkMgr.mPlayerTransform[0] = global_transform.origin;
+		mNetworkMgr.mPlayerTransform[1] = [mCameraRotation.x, mCameraRotation.y];
 
 func _integrate_forces(state):
 	# Reset variable
@@ -201,15 +215,15 @@ func update_camera(delta):
 	mCamRot.y += mCurCamImpulse.x;
 	
 	# Calculate eye direction
-	mLookDir.x += sin(deg2rad(mCamRot.y)) * cos(deg2rad(mCamRot.x));
+	mLookDir.x -= sin(deg2rad(mCamRot.y)) * cos(deg2rad(mCamRot.x));
 	mLookDir.y += sin(deg2rad(mCamRot.x));
-	mLookDir.z += cos(deg2rad(mCamRot.y)) * cos(deg2rad(mCamRot.x));
+	mLookDir.z -= cos(deg2rad(mCamRot.y)) * cos(deg2rad(mCamRot.x));
 	
 	if (mLookDir.length() <= 0.0 || abs(mLookDir.y) >= 1.0):
 		return;
 	
 	# Set camera transform
-	CameraNode.transform = CameraNode.transform.looking_at(CameraNode.transform.origin + mLookDir.normalized(), Vector3(0, 1, 0));
+	CameraNode.global_transform = CameraNode.global_transform.looking_at(CameraNode.global_transform.origin + mLookDir.normalized(), Vector3(0, 1, 0));
 
 #########################################################################
 
@@ -224,12 +238,21 @@ func OnLadder(state):
 ##########################################################################
 
 func RotateCamera(rotation):
+	# Set camera rotation
 	var sensitivity = CameraSensitivity * (mCameraFOV/CameraFOV);
-	mCameraRotation.x = clamp(mCameraRotation.x - rotation.y * sensitivity, -80.0, 80.0);
+	mCameraRotation.x = clamp(mCameraRotation.x - rotation.y * sensitivity, -CAMERA_PITCH_LIMIT, CAMERA_PITCH_LIMIT);
 	mCameraRotation.y = fmod(mCameraRotation.y - rotation.x * sensitivity, 360.0);
+	
+	# Emit motion signal
 	emit_signal("camera_motion", rotation * sensitivity);
 
 func GetCameraTransform():
 	if (is_inside_tree() && CameraNode):
 		return CameraNode.global_transform;
 	return Transform();
+
+func SetCameraRotation(pitch, yaw):
+	if (pitch != null):
+		mCameraRotation.x = clamp(pitch, -CAMERA_PITCH_LIMIT, CAMERA_PITCH_LIMIT);
+	if (yaw != null):
+		mCameraRotation.y = fmod(yaw, 360.0);

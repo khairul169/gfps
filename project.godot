@@ -14,6 +14,10 @@ config/name="gFPS Demo"
 run/main_scene="res://Scenes/SampleScene.tscn"
 config/icon="res://Project/Icon.png"
 
+[autoload]
+
+NetworkManager="*res://Scripts/Network/NetworkManager.gd"
+
 [rendering]
 
 environment/default_environment="res://Project/Environment.tres"
