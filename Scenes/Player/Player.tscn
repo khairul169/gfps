@@ -1,6 +1,27 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://Scripts/Player/Player.gd" type="Script" id=1]
+[ext_resource path="res://scripts/player/player.gd" type="Script" id=1]
+[ext_resource path="res://scripts/player/controller.gd" type="Script" id=2]
+[ext_resource path="res://scripts/player/sounds.gd" type="Script" id=3]
+[ext_resource path="res://assets/sounds/player/footstep_jack_02.wav" type="AudioStream" id=4]
+[ext_resource path="res://assets/sounds/player/footstep_jack_03.wav" type="AudioStream" id=5]
+[ext_resource path="res://assets/sounds/player/land.wav" type="AudioStream" id=6]
+[ext_resource path="res://scripts/player/weapon.gd" type="Script" id=7]
+[ext_resource path="res://scripts/player/firstperson_view.gd" type="Script" id=8]
+[ext_resource path="res://scenes/weapon/muzzle_flash.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/weapon/bullet_shell.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/weapon/bullet_impact.tscn" type="PackedScene" id=11]
+
+
+
+
+
+
+
+
+
+
+
 
 [sub_resource type="RayShape" id=1]
 
@@ -11,74 +32,79 @@ length = 0.3
 radius = 0.4
 height = 0.6
 
-[sub_resource type="CapsuleMesh" id=3]
+[node name="PlayerManager" type="Spatial" index="0"]
 
-radius = 0.4
-mid_height = 0.8
-radial_segments = 64
-rings = 8
+script = ExtResource( 1 )
+_sections_unfolded = [ "Transform" ]
 
-[sub_resource type="CubeMesh" id=4]
+[node name="HUD" type="Control" parent="." index="0"]
 
-size = Vector3( 0.8, 0.2, 0.2 )
-subdivide_width = 0
-subdivide_height = 0
-subdivide_depth = 0
+editor/display_folded = true
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
-[sub_resource type="SpatialMaterial" id=5]
+[node name="Ammo" type="Label" parent="HUD" index="0"]
 
-render_priority = 0
-flags_transparent = false
-flags_unshaded = false
-flags_vertex_lighting = false
-flags_no_depth_test = false
-flags_use_point_size = false
-flags_world_triplanar = false
-flags_fixed_size = false
-flags_albedo_tex_force_srgb = false
-vertex_color_use_as_albedo = false
-vertex_color_is_srgb = false
-params_diffuse_mode = 0
-params_specular_mode = 0
-params_blend_mode = 0
-params_cull_mode = 0
-params_depth_draw_mode = 0
-params_line_width = 1.0
-params_point_size = 1.0
-params_billboard_mode = 0
-params_grow = false
-params_use_alpha_scissor = false
-albedo_color = Color( 0.257813, 0.257813, 0.257813, 1 )
-metallic = 0.0
-metallic_specular = 0.5
-metallic_texture_channel = 0
-roughness = 0.7
-roughness_texture_channel = 0
-emission_enabled = false
-normal_enabled = false
-rim_enabled = false
-clearcoat_enabled = false
-anisotropy_enabled = false
-ao_enabled = false
-depth_enabled = false
-subsurf_scatter_enabled = false
-transmission_enabled = false
-refraction_enabled = false
-detail_enabled = false
-uv1_scale = Vector3( 1, 1, 1 )
-uv1_offset = Vector3( 0, 0, 0 )
-uv1_triplanar = false
-uv1_triplanar_sharpness = 1.0
-uv2_scale = Vector3( 1, 1, 1 )
-uv2_offset = Vector3( 0, 0, 0 )
-uv2_triplanar = false
-uv2_triplanar_sharpness = 1.0
-proximity_fade_enable = false
-distance_fade_enable = false
-_sections_unfolded = [ "Albedo", "Roughness" ]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -74.0
+margin_top = -40.0
+margin_right = -24.0
+margin_bottom = -26.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "00/000"
+align = 2
+valign = 2
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Rect", "custom_colors" ]
 
-[node name="Player" type="RigidBody" index="0"]
+[node name="WeaponName" type="Label" parent="HUD" index="1"]
 
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -194.0
+margin_top = -70.0
+margin_right = -24.0
+margin_bottom = -56.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "Test"
+align = 2
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "custom_colors" ]
+
+[node name="Controller" type="RigidBody" parent="." index="1"]
+
+editor/display_folded = true
 input_ray_pickable = true
 input_capture_on_drag = false
 collision_layer = 1
@@ -87,7 +113,7 @@ mode = 0
 mass = 1.0
 friction = 1.0
 bounce = 0.0
-gravity_scale = 1.0
+gravity_scale = 2.0
 custom_integrator = false
 continuous_cd = false
 contacts_reported = 0
@@ -104,56 +130,48 @@ linear_velocity = Vector3( 0, 0, 0 )
 linear_damp = -1.0
 angular_velocity = Vector3( 0, 0, 0 )
 angular_damp = -1.0
-script = ExtResource( 1 )
+script = ExtResource( 2 )
+MoveSpeed = 3.6
+SprintSpeed = 1.2
+WalkSpeed = 0.5
+Acceleration = 10.0
+JumpForce = 6.0
+CameraSensitivity = 0.2
+CameraFOV = 60.0
+CameraHeight = 1.2
 
-[node name="Shape1" type="CollisionShape" parent="." index="0"]
+[node name="Shape1" type="CollisionShape" parent="Controller" index="0"]
 
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.3, 0 )
 shape = SubResource( 1 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
-[node name="Shape2" type="CollisionShape" parent="." index="1"]
+[node name="Shape2" type="CollisionShape" parent="Controller" index="1"]
 
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0 )
 shape = SubResource( 2 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
-[node name="Body" type="Spatial" parent="." index="2"]
+[node name="Sounds" type="Node" parent="." index="2"]
 
-[node name="Mesh" type="MeshInstance" parent="Body" index="0"]
+script = ExtResource( 3 )
+Controller = NodePath("../Controller")
+StepLeft = ExtResource( 4 )
+StepRight = ExtResource( 5 )
+StepDelay = 0.32
+JumpLanding = ExtResource( 6 )
 
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.8, 0 )
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-mesh = SubResource( 3 )
-skeleton = NodePath("..")
-material/0 = null
-_sections_unfolded = [ "Transform" ]
+[node name="Weapon" type="Node" parent="." index="3"]
 
-[node name="Eyes" type="MeshInstance" parent="Body" index="1"]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.27298, -0.284163 )
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-mesh = SubResource( 4 )
-skeleton = NodePath("..")
-material/0 = SubResource( 5 )
-_sections_unfolded = [ "material" ]
+script = ExtResource( 7 )
+Controller = NodePath("../Controller")
+FirstPersonView = ExtResource( 8 )
+ModelScaling = 0.05
+EnableScopeRender = true
+MuzzleFlash = ExtResource( 9 )
+BulletShell = ExtResource( 10 )
+BulletImpact = ExtResource( 11 )
 
 

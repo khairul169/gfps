@@ -1,4 +1,4 @@
-extends "BaseWeapon.gd"
+extends "base_weapon.gd"
 
 # Stats
 var mBulletSpread = 8;
@@ -12,7 +12,7 @@ var mFirstInsert = false;
 
 func _init():
 	# Weapon name
-	mName = "BaseShotgun";
+	mName = "base_shotgun";
 	
 	# Weapon stats
 	mClip = 8;

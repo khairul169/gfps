@@ -1,4 +1,4 @@
-extends "BaseWeapon.gd"
+extends "base_weapon.gd"
 
 # Resources
 var mMissileObject = "";
@@ -14,7 +14,7 @@ var mExplosionForce = 4.0;
 
 func _init():
 	# Weapon name
-	mName = "BaseProjectile";
+	mName = "base_projectile";
 	
 	# Weapon stats
 	mClip = 1;
