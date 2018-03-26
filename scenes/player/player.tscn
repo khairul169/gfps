@@ -12,20 +12,6 @@
 [ext_resource path="res://scenes/weapon/bullet_shell.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scenes/weapon/bullet_impact.tscn" type="PackedScene" id=11]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 [sub_resource type="RayShape" id=1]
 
 length = 0.3
@@ -35,12 +21,12 @@ length = 0.3
 radius = 0.4
 height = 0.6
 
-[node name="PlayerManager" type="Spatial" index="0"]
+[node name="player" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="HUD" type="Control" parent="." index="0"]
+[node name="interface" type="Control" parent="." index="0"]
 
 editor/display_folded = true
 anchor_left = 0.0
@@ -54,7 +40,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 
-[node name="Ammo" type="Label" parent="HUD" index="0"]
+[node name="ammo" type="Label" parent="interface" index="0"]
 
 anchor_left = 1.0
 anchor_top = 1.0
@@ -80,7 +66,7 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Rect", "custom_colors" ]
 
-[node name="WeaponName" type="Label" parent="HUD" index="1"]
+[node name="weapon_name" type="Label" parent="interface" index="1"]
 
 anchor_left = 1.0
 anchor_top = 1.0
@@ -105,7 +91,7 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "custom_colors" ]
 
-[node name="Controller" type="RigidBody" parent="." index="1"]
+[node name="controller" type="RigidBody" parent="." index="1"]
 
 editor/display_folded = true
 input_ray_pickable = true
@@ -142,34 +128,35 @@ JumpForce = 6.0
 CameraSensitivity = 0.2
 CameraFOV = 60.0
 CameraHeight = 1.2
+CameraPitchLimit = 80
 
-[node name="Shape1" type="CollisionShape" parent="Controller" index="0"]
+[node name="shape_leg" type="CollisionShape" parent="controller" index="0"]
 
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.3, 0 )
 shape = SubResource( 1 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
-[node name="Shape2" type="CollisionShape" parent="Controller" index="1"]
+[node name="shape_body" type="CollisionShape" parent="controller" index="1"]
 
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0 )
 shape = SubResource( 2 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
-[node name="Sounds" type="Node" parent="." index="2"]
+[node name="sounds" type="Node" parent="." index="2"]
 
 script = ExtResource( 3 )
-Controller = NodePath("../Controller")
+Controller = NodePath("../controller")
 StepLeft = ExtResource( 4 )
 StepRight = ExtResource( 5 )
 StepDelay = 0.32
 JumpLanding = ExtResource( 6 )
 
-[node name="Weapon" type="Node" parent="." index="3"]
+[node name="weapon" type="Node" parent="." index="3"]
 
 script = ExtResource( 7 )
-Controller = NodePath("../Controller")
+Controller = NodePath("../controller")
 FirstPersonView = ExtResource( 8 )
 ModelScaling = 0.05
 EnableScopeRender = true

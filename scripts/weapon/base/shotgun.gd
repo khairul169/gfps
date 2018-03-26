@@ -1,94 +1,96 @@
 extends "base_weapon.gd"
 
 # Stats
-var mBulletSpread = 8;
-var mProgressiveReload = true;
+var bullet_spread = 8;
+var progressive_reload = true;
 
 # Variables
-var mReloading = false;
-var mFirstInsert = false;
+var is_reloading = false;
+var first_insert = false;
 
 ###########################################################
 
 func _init():
 	# Weapon name
-	mName = "base_shotgun";
+	name = "base_shotgun";
 	
 	# Weapon stats
-	mClip = 8;
-	mAmmo = 32;
-	mFiringMode = MODE_AUTO;
+	clip = 8;
+	ammo = 32;
+	firing_mode = MODE_AUTO;
 	
-	mRecoil = Vector2(2.0, 4.5);
-	mFireDelay = 1.0;
-	mReloadTime = 1.0;
-	mCanAim = false;
+	recoil = Vector2(2.0, 4.5);
+	firing_delay = 1.0;
+	reload_time = 1.0;
+	can_aim = false;
 
 ###########################################################
 
-func Think(delta):
-	.Think(delta);
+func think(delta):
+	.think(delta);
 	
-	if (!mReloading || PlayerWeapon.mNextThink > 0.0):
+	if (!is_reloading || PlayerWeapon.next_think > 0.0):
 		return;
 	
-	if (mFirstInsert):
-		mFirstInsert = false;
+	if (first_insert):
+		first_insert = false;
 	else:
-		PlayerWeapon.AddWeaponClip(1);
+		PlayerWeapon.add_weapon_clip(1);
 		PlayerWeapon.emit_signal("weapon_reload");
 	
-	if (PlayerWeapon.mClip >= mClip || PlayerWeapon.mAmmo <= 0):
-		CancelReload();
+	if (PlayerWeapon.wpn_clip >= clip || PlayerWeapon.wpn_ammo <= 0):
+		cancel_reload();
 		return;
 	
-	PlayerWeapon.PlayAnimation("reload");
-	PlayerWeapon.mNextThink = mReloadTime;
-	PlayerWeapon.mNextIdle = PlayerWeapon.mNextThink + 0.5;
+	PlayerWeapon.play_animation("reload");
+	PlayerWeapon.next_think = mReloadTime;
+	PlayerWeapon.next_idle = PlayerWeapon.next_think + 0.5;
 
-func Draw():
-	.Draw();
+func attach():
+	.attach();
 	
-	mReloading = false;
+	is_reloading = false;
 
-func PrimaryAttack():
-	if (mReloading || !.PrimaryAttack(false)):
+func attack():
+	if (is_reloading || !.attack(false)):
 		return false;
 	
 	# Spread bullet
-	for i in range(0, mBulletSpread):
-		PlayerWeapon.ShootBullet(mFireRange);
+	for i in range(0, bullet_spread):
+		PlayerWeapon.shoot_bullet(mFireRange);
 	return true;
 
-func Reload():
-	if (mReloading):
+func reload():
+	if (is_reloading):
 		return false;
 	
-	if (!mProgressiveReload && .Reload()):
+	if (!progressive_reload && .reload()):
 		return true;
 	
-	if (PlayerWeapon.mClip >= mClip || PlayerWeapon.mAmmo <= 0):
+	if (PlayerWeapon.wpn_clip >= clip || PlayerWeapon.wpn_ammo <= 0):
 		return false;
 	
-	mReloading = true;
-	mFirstInsert = true;
+	is_reloading = true;
+	first_insert = true;
 	
-	PlayerWeapon.PlayAnimation("pre_reload");
-	PlayerWeapon.mNextThink = 0.4;
-	PlayerWeapon.mNextIdle = PlayerWeapon.mNextThink + 0.1;
+	PlayerWeapon.play_animation("pre_reload");
+	PlayerWeapon.next_think = 0.4;
+	PlayerWeapon.next_idle = PlayerWeapon.next_think + 0.1;
 	return false;
 
-func CancelReload():
-	if (!mReloading):
+func cancel_reload():
+	if (!is_reloading):
 		return;
 	
-	PlayerWeapon.PlayAnimation("post_reload");
-	PlayerWeapon.mNextThink = 0.4;
-	mReloading = false;
+	PlayerWeapon.play_animation("post_reload");
+	PlayerWeapon.next_think = 0.4;
+	is_reloading = false;
 
 func SprintToggled(sprinting):
 	# Stop reload
-	CancelReload();
-	PlayerWeapon.mNextThink = 0.0;
-	PlayerWeapon.mNextIdle = 0.0;
-	.SprintToggled(sprinting);
+	cancel_reload();
+	PlayerWeapon.next_think = 0.0;
+	PlayerWeapon.next_idle = 0.0;
+	
+	# call base func
+	.sprint_toggled(sprinting);

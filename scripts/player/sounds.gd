@@ -8,12 +8,12 @@ export var StepDelay = 0.32;
 export (AudioStream) var JumpLanding;
 
 # Nodes
-var mStreamPlayer;
+var stream_player;
 
 # Variables
-var mStep = 0;
-var mNextStep = 0.0;
-var mLastVelocity = 0.0;
+var foot_step = 0;
+var next_step = 0.0;
+var last_velocity = 0.0;
 
 func _ready():
 	if (!StepLeft || !StepRight):
@@ -31,57 +31,57 @@ func _ready():
 		Controller.PlayerSounds = self;
 	
 	# Disable audio looping
-	SetupSound(StepLeft);
-	SetupSound(StepRight);
-	SetupSound(JumpLanding);
+	setup_sound(StepLeft);
+	setup_sound(StepRight);
+	setup_sound(JumpLanding);
 	
 	# Initialize stream player
-	mStreamPlayer = AudioStreamPlayer3D.new();
-	mStreamPlayer.name = "player";
-	mStreamPlayer.stream = StepLeft;
-	mStreamPlayer.max_distance = 20;
-	Controller.add_child(mStreamPlayer);
+	stream_player = AudioStreamPlayer3D.new();
+	stream_player.name = "player";
+	stream_player.stream = StepLeft;
+	stream_player.max_distance = 20;
+	Controller.add_child(stream_player);
 
 func _process(delta):
-	if (mNextStep > 0.0):
-		mNextStep = max(mNextStep - delta, 0.0);
+	if (next_step > 0.0):
+		next_step = max(next_step - delta, 0.0);
 
 func _physics_process(delta):
 	if (!Controller):
 		return;
 	
-	if (mNextStep <= 0.0):
-		FootstepFx();
+	if (next_step <= 0.0):
+		footstep_fx();
 	
 	# Check for jump landing
-	if (abs(Controller.linear_velocity.y) < 0.5 && mLastVelocity < -8.0):
-		mStreamPlayer.stream = JumpLanding;
-		mStreamPlayer.play();
-		mNextStep = 0.4;
+	if (abs(Controller.linear_velocity.y) < 0.5 && last_velocity < -8.0):
+		stream_player.stream = JumpLanding;
+		stream_player.play();
+		next_step = 0.4;
 	
 	# Set last velocity
-	mLastVelocity = Controller.linear_velocity.y;
+	last_velocity = Controller.linear_velocity.y;
 
-func FootstepFx():
-	var mVelocity = Controller.linear_velocity;
-	mVelocity.y = 0.0;
-	if (mVelocity.length() < Controller.MoveSpeed/2.0):
+func footstep_fx():
+	var velocity = Controller.linear_velocity;
+	velocity.y = 0.0;
+	if (velocity.length() < Controller.MoveSpeed/2.0):
 		return;
 	
-	var mSpeed = float(Controller.MoveSpeed)/mVelocity.length();
-	mNextStep = StepDelay * mSpeed;
+	var speed = float(Controller.MoveSpeed)/velocity.length();
+	next_step = StepDelay * speed;
 	
-	if (mStep):
-		mStreamPlayer.stream = StepRight;
-		mStep = 0;
+	if (foot_step):
+		stream_player.stream = StepRight;
+		foot_step = 0;
 	else:
-		mStreamPlayer.stream = StepLeft;
-		mStep = 1;
+		stream_player.stream = StepLeft;
+		foot_step = 1;
 	
 	# Play the player
-	mStreamPlayer.play();
+	stream_player.play();
 
-func SetupSound(res):
+func setup_sound(res):
 	if (res is AudioStreamOGGVorbis):
 		res.loop = false;
 	if (res is AudioStreamSample):

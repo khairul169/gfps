@@ -8,43 +8,42 @@ const MODE_AUTO = 0;
 const MODE_SINGLE = 1;
 
 # Variables
-var mId = -1;
-var mName = "base_weapon";
+var name = "base_weapon";
 
 # Resources
-var mWeaponModel = "";
-var mAudioShoot1 = "";
+var weapon_scene = "";
+var audio_shoot = "";
 
-var mMuzzleNode;
-var mShellEjectNode;
+var MuzzleNode;
+var ShellEjectNode;
 
 # Weapon configuration
-var mClip = 12;
-var mAmmo = 48;
-var mFiringMode = MODE_AUTO;
+var clip = 12;
+var ammo = 48;
+var firing_mode = MODE_AUTO;
 
-var mRecoil = Vector2(0.0, 0.0);
-var mSpread = Vector2(0.0, 0.0);
-var mFireDelay = 1.0/1.0;
-var mFireRange = 1.0;
-var mMoveSpeed = 1.0;
-var mReloadTime = 1.0;
-var mMuzzleSize = 1.0;
+var recoil = Vector2(0.0, 0.0);
+var spread = Vector2(0.0, 0.0);
+var firing_delay = 1.0/1.0;
+var firing_range = 1.0;
+var move_speed = 1.0;
+var reload_time = 1.0;
+var muzzle_size = 1.0;
 
-var mCanAim = false;
-var mAimFOV = 0.0;
-var mAimStatsMultiplier = 1.0;
-var mAimMoveSpeed = 0.65;
-var mAimBobScale = 0.4;
-var mScopeRenderFOV = 10.0;
+var can_aim = false;
+var aim_fov = 0.0;
+var aim_statsmultiplier = 1.0;
+var aim_movespeed = 0.65;
+var aim_bobscale = 0.4;
+var dualrender_fov = 10.0;
 
 # State
-var mIsAiming = false;
-var mHasAttack = false;
-var mNextAttack2 = 0.0;
+var is_aiming = false;
+var has_attack = false;
+var next_special = 0.0;
 
 # Animation
-var mAnimation = {
+var animation = {
 	'idle' : 'idle',
 	'draw' : 'draw',
 	'reload' : 'reload',
@@ -69,111 +68,111 @@ var mAnimation = {
 
 #####################################################################
 
-func Registered():
+func registered():
 	# Load resources
-	mWeaponModel = LoadResource(mWeaponModel);
-	mAudioShoot1 = LoadResource(mAudioShoot1);
+	weapon_scene = load_resource(weapon_scene);
+	audio_shoot = load_resource(audio_shoot);
 	
-	if (mWeaponModel):
-		mWeaponModel = mWeaponModel.instance();
+	if (weapon_scene):
+		weapon_scene = weapon_scene.instance();
 
-func Draw():
-	# Weapon draw
-	PlayerWeapon.SetWeaponModel(mWeaponModel);
-	PlayerWeapon.PlayAnimation(mAnimation['draw'], false, 0.0);
-	PlayerWeapon.mNextThink = 0.8;
-	PlayerWeapon.mNextIdle = 1.0;
+func attach():
+	# On weapon attached
+	PlayerWeapon.set_weapon_scene(weapon_scene);
+	PlayerWeapon.play_animation(animation['draw'], false, 0.0);
+	PlayerWeapon.next_think = 0.8;
+	PlayerWeapon.next_idle = 1.0;
 
-func Holster():
-	# Un-Aim weapon
-	ToggleAim(false);
+func unload():
+	# Toggle weapon aim
+	toggle_aim(false);
 	
-	PlayerWeapon.SetWeaponModel(null);
+	PlayerWeapon.set_weapon_scene(null);
 
 #####################################################################
 
-func Think(delta):
-	if (mNextAttack2 > 0.0):
-		mNextAttack2 = max(mNextAttack2 - delta, 0.0);
+func think(delta):
+	if (next_special > 0.0):
+		next_special = max(next_special - delta, 0.0);
 	
-	if (PlayerWeapon.mNextThink > 0.0):
+	if (PlayerWeapon.next_think > 0.0):
 		return;
 	
 	# Idle animation
-	var mIdleAnims = mAnimation['idle'];
+	var idle_animation = animation['idle'];
 	
 	# Aiming anims
-	if (mIsAiming):
-		mIdleAnims = mAnimation['aiming'][1];
+	if (is_aiming):
+		idle_animation = animation['aiming'][1];
 	
-	if (PlayerWeapon.mSprinting):
-		mIdleAnims = mAnimation['sprint'][1];
+	if (PlayerWeapon.is_sprinting):
+		idle_animation = animation['sprint'][1];
 	
 	# Play idle animation
-	if (PlayerWeapon.mNextIdle <= 0.0):
-		PlayerWeapon.PlayAnimation(mIdleAnims, true, -1, false);
+	if (PlayerWeapon.next_idle <= 0.0):
+		PlayerWeapon.play_animation(idle_animation, true, -1, false);
 		
 		# Set next animation check
-		PlayerWeapon.mNextIdle = 0.1;
+		PlayerWeapon.next_idle = 0.1;
 	
 	# Reset single attack
-	if (mHasAttack && !PlayerWeapon.mIsFiring):
-		mHasAttack = false;
+	if (has_attack && !PlayerWeapon.is_firing):
+		has_attack = false;
 	
 	# Auto reload
-	if (PlayerWeapon.mClip <= 0 && PlayerWeapon.mAmmo > 0 && PlayerWeapon.mNextThink <= 0.0  && !PlayerWeapon.mIsReloading):
-		PlayerWeapon.Reload();
+	if (PlayerWeapon.wpn_clip <= 0 && PlayerWeapon.wpn_ammo > 0 && PlayerWeapon.next_think <= 0.0  && !PlayerWeapon.is_reloading):
+		PlayerWeapon.wpn_reload();
 
-func PrimaryAttack(shoot_bullet = true):
-	if (mFiringMode == MODE_SINGLE && mHasAttack):
+func attack(shoot_bullet = true):
+	if (firing_mode == MODE_SINGLE && has_attack):
 		return false;
 	
 	# Play animation
-	if (mCanAim && mIsAiming):
-		PlayerWeapon.PlayAnimation(mAnimation['shoot'][1], false, 0.05);
+	if (can_aim && is_aiming && PlayerWeapon.has_animation(animation['shoot'][1])):
+		PlayerWeapon.play_animation(animation['shoot'][1], false, 0.05);
 	else:
-		PlayerWeapon.PlayAnimation(mAnimation['shoot'][0], false, 0.05);
+		PlayerWeapon.play_animation(animation['shoot'][0], false, 0.05);
 	
 	# Play sound
-	if (mAudioShoot1 != null):
-		PlayerWeapon.PlayAudioStream(mAudioShoot1);
+	if (audio_shoot != null):
+		PlayerWeapon.play_audio_stream(audio_shoot);
 	
 	# Shoot a bullet
 	if (shoot_bullet):
-		PlayerWeapon.ShootBullet(mFireRange);
+		PlayerWeapon.shoot_bullet(firing_range);
 	
 	# Set state
-	mHasAttack = true;
+	has_attack = true;
 	return true;
 
-func SecondaryAttack():
-	if (!mCanAim ||  mNextAttack2 > 0.0 || PlayerWeapon.mIsReloading || PlayerWeapon.mSprinting):
+func special():
+	if (!can_aim ||  next_special > 0.0 || PlayerWeapon.is_reloading || PlayerWeapon.is_sprinting):
 		return;
 	
-	ToggleAim(!mIsAiming);
-	mNextAttack2 = 0.5;
+	toggle_aim(!is_aiming);
+	next_special = 0.5;
 
-func Reload():
+func reload():
 	var aim_reload = false;
-	if (mIsAiming):
+	if (is_aiming):
 		aim_reload = true;
 	
 	# Un-Aim weapon
-	ToggleAim(false);
+	toggle_aim(false);
 	
 	# Play animation
 	if (aim_reload):
-		PlayerWeapon.PlayAnimation(mAnimation['reload'], false, 0.2);
+		PlayerWeapon.play_animation(animation['reload'], false, 0.2);
 	else:
-		PlayerWeapon.PlayAnimation(mAnimation['reload']);
+		PlayerWeapon.play_animation(animation['reload']);
 	return true;
 
-func PostReload():
+func post_reload():
 	pass
 
 ##########################################################################
 
-func LoadResource(res):
+func load_resource(res):
 	if (typeof(res) != TYPE_STRING || res == ""):
 		return null;
 	if (!Directory.new().file_exists(res)):
@@ -181,48 +180,48 @@ func LoadResource(res):
 		return null;
 	return load(res);
 
-func ToggleAim(toggle):
-	if (toggle == mIsAiming):
+func toggle_aim(toggle):
+	if (toggle == is_aiming):
 		return;
 	
 	if (toggle):
-		PlayerWeapon.SetCameraFOV(mAimFOV);
-		PlayerWeapon.SetCameraBobScale(mAimBobScale);
-		PlayerWeapon.SetCameraShifting(false);
-		PlayerWeapon.ToggleWeaponLens(true, mScopeRenderFOV);
-		PlayerWeapon.PlayAnimation(mAnimation['aiming'][0]);
-		mIsAiming = true;
+		PlayerWeapon.set_camera_fov(aim_fov);
+		PlayerWeapon.set_camera_bobscale(aim_bobscale);
+		PlayerWeapon.set_camera_shifting(false);
+		PlayerWeapon.toggle_weaponlens(true, dualrender_fov);
+		PlayerWeapon.play_animation(animation['aiming'][0]);
+		is_aiming = true;
 	else:
-		PlayerWeapon.SetCameraFOV(null);
-		PlayerWeapon.SetCameraBobScale(null);
-		PlayerWeapon.SetCameraShifting(true);
-		PlayerWeapon.ToggleWeaponLens(false);
-		PlayerWeapon.PlayAnimation(mAnimation['aiming'][2]);
-		mIsAiming = false;
+		PlayerWeapon.set_camera_fov(null);
+		PlayerWeapon.set_camera_bobscale(null);
+		PlayerWeapon.set_camera_shifting(true);
+		PlayerWeapon.toggle_weaponlens(false);
+		PlayerWeapon.play_animation(animation['aiming'][2]);
+		is_aiming = false;
 	
 	# Set stats value with multiplier modifier
-	ReloadStats();
+	reload_stats();
 
-func SprintToggled(sprinting):
+func sprint_toggled(sprinting):
 	# Un-Aim weapon
-	ToggleAim(false);
+	toggle_aim(false);
 	
 	if (sprinting):
-		PlayerWeapon.PlayAnimation(mAnimation['sprint'][0]);
+		PlayerWeapon.play_animation(animation['sprint'][0]);
 	else:
-		PlayerWeapon.PlayAnimation(mAnimation['sprint'][2]);
+		PlayerWeapon.play_animation(animation['sprint'][2]);
 
-func ReloadStats():
+func reload_stats():
 	var multiplier = 1.0;
-	if (mIsAiming):
-		multiplier = mAimStatsMultiplier;
+	if (is_aiming):
+		multiplier = aim_statsmultiplier;
 	
 	# Set new stats
-	PlayerWeapon.mRecoil = mRecoil * multiplier;
-	PlayerWeapon.mInitialSpread = mSpread.x * multiplier;
-	PlayerWeapon.mMaxSpread = mSpread.y * multiplier;
+	PlayerWeapon.wpn_recoil = recoil * multiplier;
+	PlayerWeapon.wpn_initialspread = spread.x * multiplier;
+	PlayerWeapon.wpn_maxspread = spread.y * multiplier;
 	
-	if (mIsAiming):
-		PlayerWeapon.mMoveSpeed = mMoveSpeed * mAimMoveSpeed;
+	if (is_aiming):
+		PlayerWeapon.wpn_movespeed = move_speed * aim_movespeed;
 	else:
-		PlayerWeapon.mMoveSpeed = mMoveSpeed;
+		PlayerWeapon.wpn_movespeed = move_speed;

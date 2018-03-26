@@ -1,15 +1,15 @@
 extends Spatial
 
 # Configuration
-var BobSpeed = 1.5;
-var BobFactor = 0.008;
-var BobSprintingMultiplier = 3.0;
-var BobAngle = 1.0;
-var SwayFactor = 0.002;
-var SwayLimit = 0.015;
-var CameraShift = 0.02;
-var OnAirFactor = 0.02;
-var Interpolation = 8.0;
+var bob_speed = 1.5;
+var bob_factor = 0.008;
+var bob_sprinting = 3.0;
+var bob_angle = 1.0;
+var sway_factor = 0.002;
+var sway_limit = 0.015;
+var camera_shifting = 0.02;
+var on_air_factor = 0.02;
+var interpolation = 8.0;
 
 ############################ DO NOT EDIT BELOW ###############################
 
@@ -17,80 +17,80 @@ var Interpolation = 8.0;
 var PlayerController;
 
 # Variables
-var mBobbing = false;
-var mCycle = 0.0;
-var mPlayerHVel = Vector3();
-var mViewSway = Vector3();
-var mCustomScale = 1.0;
-var mShiftingEnabled = true;
+var is_bobbing = false;
+var bob_cycle = 0.0;
+var hvelocity = Vector3();
+var view_sway = Vector3();
+var custom_scale = 1.0;
+var shifting_enabled = true;
 
 func _ready():
 	if (PlayerController != null):
-		PlayerController.connect("camera_motion", self, "OnCameraMotion");
+		PlayerController.connect("camera_motion", self, "camera_motion");
 
 func _process(delta):
-	if (!PlayerController || !mBobbing):
+	if (!PlayerController || !is_bobbing):
 		return;
 	
-	var mCycleSpeed = min((mPlayerHVel.length()/PlayerController.MoveSpeed) * BobSpeed, 10.0);
-	mCycle = fmod(mCycle + 360 * delta * mCycleSpeed, 360.0);
+	var bob_cycleSpeed = min((hvelocity.length()/PlayerController.MoveSpeed) * bob_speed, 10.0);
+	bob_cycle = fmod(bob_cycle + 360 * delta * bob_cycleSpeed, 360.0);
 
 func _physics_process(delta):
 	if (!PlayerController):
 		return;
 	
 	# Translation vector
-	var mViewTranslation = Vector3();
-	var mViewRotation = Vector3();
+	var view_translation = Vector3();
+	var view_rotation = Vector3();
 	
 	# Player horizontal movement
-	mPlayerHVel = PlayerController.linear_velocity;
-	mPlayerHVel.y = 0.0;
+	hvelocity = PlayerController.linear_velocity;
+	hvelocity.y = 0.0;
 	
-	if (mPlayerHVel.length() > 0.1 && !PlayerController.mClimbing):
-		mBobbing = true;
+	if (hvelocity.length() > 0.1 && !PlayerController.is_climbing):
+		is_bobbing = true;
 	else:
-		if (mCycle > 0.0):
-			mCycle = 0.0;
-		mBobbing = false;
+		if (bob_cycle > 0.0):
+			bob_cycle = 0.0;
+		is_bobbing = false;
 	
-	var mFactor = BobFactor * mCustomScale;
+	var factor = bob_factor * custom_scale;
 	
-	if (PlayerController.mSprinting):
-		mFactor *= BobSprintingMultiplier;
+	if (PlayerController.is_sprinting):
+		factor *= bob_sprinting;
 	
 	# Shift weapon position
-	if (mShiftingEnabled):
-		mViewTranslation.y += sin(deg2rad(-PlayerController.mCameraRotation.x)) * CameraShift;
+	if (shifting_enabled):
+		view_translation.y += sin(deg2rad(-PlayerController.camera_rotation.x)) * camera_shifting;
 	
 	# Weapon y-pos when jumping
-	if (mShiftingEnabled && !PlayerController.mClimbing):
+	if (shifting_enabled && !PlayerController.is_climbing):
 		if (PlayerController.linear_velocity.y > 0.5):
-			mViewTranslation.y += OnAirFactor;
+			view_translation.y += on_air_factor;
 		
 		if (PlayerController.linear_velocity.y < -0.5):
-			mViewTranslation.y -= OnAirFactor;
+			view_translation.y -= on_air_factor;
 	
-	if (mBobbing):
-		mViewTranslation.x += sin(deg2rad(mCycle)) * mFactor;
-		mViewTranslation.y += abs(cos(deg2rad(mCycle))) * mFactor - mFactor;
+	if (is_bobbing):
+		view_translation.x += sin(deg2rad(bob_cycle)) * factor;
+		view_translation.y += abs(cos(deg2rad(bob_cycle))) * factor - factor;
 		
-		mViewRotation.y += cos(deg2rad(mCycle)) * BobAngle;
-		mViewRotation.z += sin(deg2rad(mCycle)) * -BobAngle;
+		view_rotation.y += cos(deg2rad(bob_cycle)) * bob_angle;
+		view_rotation.z += sin(deg2rad(bob_cycle)) * -bob_angle;
 	
-	if (mViewSway.length() > 0.0):
-		mViewTranslation += mViewSway * mCustomScale;
-		mViewSway = mViewSway.linear_interpolate(Vector3(), Interpolation * delta);
+	if (view_sway.length() > 0.0):
+		view_translation += view_sway * custom_scale;
+		view_sway = view_sway.linear_interpolate(Vector3(), interpolation * delta);
 	
-	translation = translation.linear_interpolate(mViewTranslation, Interpolation * delta);
-	rotation_degrees = rotation_degrees.linear_interpolate(mViewRotation, Interpolation * delta);
+	translation = translation.linear_interpolate(view_translation, interpolation * delta);
+	rotation_degrees = rotation_degrees.linear_interpolate(view_rotation, interpolation * delta);
 
-func OnCameraMotion(rel):
-	mViewSway.x = clamp(mViewSway.x - rel.x * SwayFactor, -SwayLimit, SwayLimit);
-	mViewSway.y = clamp(mViewSway.y + rel.y * SwayFactor, -SwayLimit, SwayLimit);
+func camera_motion(rel):
+	view_sway.x = clamp(view_sway.x - rel.x * sway_factor, -sway_limit, sway_limit);
+	view_sway.y = clamp(view_sway.y + rel.y * sway_factor, -sway_limit, sway_limit);
 
-func SetCustomScale(scale):
-	mCustomScale = scale;
+func set_custom_scale(scale):
+	custom_scale = scale;
 
-func SetShiftingEnabled(enabled):
-	mShiftingEnabled = enabled;
+func set_shifting_enabled(enabled):
+	shifting_enabled = enabled;
