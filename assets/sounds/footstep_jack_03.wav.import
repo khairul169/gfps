@@ -2,14 +2,14 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/footstep_jack_03.wav-2a8da1b86d17d8ba2f0555f6f52e5ca6.sample"
+path="res://.import/footstep_jack_03.wav-a3597f53874202fb28bd8da7e0fe9e86.sample"
 
 [deps]
 
-source_file="res://assets/sounds/player/footstep_jack_03.wav"
+source_file="res://assets/sounds/footstep_jack_03.wav"
 source_md5="ecfd6381216349f289b633b2a0c14404"
 
-dest_files=[ "res://.import/footstep_jack_03.wav-2a8da1b86d17d8ba2f0555f6f52e5ca6.sample" ]
+dest_files=[ "res://.import/footstep_jack_03.wav-a3597f53874202fb28bd8da7e0fe9e86.sample" ]
 dest_md5="e34e309f3a434b93b6f6a1efed78fc12"
 
 [params]
