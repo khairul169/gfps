@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/xm1014-shoot.wav-71e520fecbd824d6f21d2f0f5d215024.sample"
+
+[deps]
+
+source_file="res://assets/sounds/weapon/xm1014-shoot.wav"
+source_md5="922714d6b31378d1ab9d84adf22c8e0b"
+
+dest_files=[ "res://.import/xm1014-shoot.wav-71e520fecbd824d6f21d2f0f5d215024.sample" ]
+dest_md5="328c208cbb4b01cafc3573ba06265bdd"
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0
