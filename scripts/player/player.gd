@@ -1,8 +1,8 @@
 extends Spatial
 
 # Nodes
-onready var controller = get_node("Controller");
-onready var weapon = get_node("Weapon");
+onready var controller = get_node("controller");
+onready var weapon = get_node("weapon");
 
 # Weapons
 # var weapon_handgun;
@@ -10,11 +10,11 @@ onready var weapon = get_node("Weapon");
 func _ready():
 	# Set network player node
 	if (has_node("/root/network_mgr")):
-		get_node("/root/network_mgr").mPlayerNode = self;
+		get_node("/root/network_mgr").player_node = self;
 		get_node("/root/network_mgr").connect("server_hosted", self, "on_server_hosted");
 	
 	# Load weapon list
-	# weapon_handgun = weapon.RegisterWeapon("res://Scripts/Weapon/Handgun.gd");
+	# weapon_handgun = weapon.register_weapon("res://Scripts/Weapon/Handgun.gd");
 	
 	# Connect weapon signals
 	weapon.connect("weapon_attach", self, "update_hud");
@@ -24,19 +24,19 @@ func _ready():
 	weapon.connect("weapon_reload", self, "update_hud");
 	
 	# Enable character sprinting
-	controller.mCanSprinting = true;
+	controller.enable_sprint = true;
 	
 	# Set primary weapon
-	# weapon.SetActiveWeapon(weapon_handgun);
+	# weapon.set_current_weapon(weapon_handgun);
 	
 	# Change camera y-rotation to follow this node rotation
-	controller.SetCameraRotation(0.0, rotation_degrees.y);
+	controller.set_camera_rotation(0.0, rotation_degrees.y);
 
 func _input(event):
 	if (event is InputEventKey && event.pressed):
 		# Reload weapon
 		if (event.scancode == KEY_R):
-			weapon.Reload();
+			weapon.wpn_reload();
 		
 		# Toggle dual render scope
 		if (event.scancode == KEY_L):
@@ -44,39 +44,39 @@ func _input(event):
 	
 	if (event is InputEventMouseButton):
 		if (weapon && event.button_index == BUTTON_LEFT):
-			weapon.mInput['attack1'] = event.pressed;
+			weapon.input['attack1'] = event.pressed;
 		
 		if (weapon && event.button_index == BUTTON_RIGHT):
-			weapon.mInput['attack2'] = event.pressed;
+			weapon.input['attack2'] = event.pressed;
 
 func _physics_process(delta):
 	# Update player input
 	if (controller):
-		controller.mInput['forward'] = Input.is_key_pressed(KEY_W);
-		controller.mInput['backward'] = Input.is_key_pressed(KEY_S);
-		controller.mInput['left'] = Input.is_key_pressed(KEY_A);
-		controller.mInput['right'] = Input.is_key_pressed(KEY_D);
+		controller.input['forward'] = Input.is_key_pressed(KEY_W);
+		controller.input['backward'] = Input.is_key_pressed(KEY_S);
+		controller.input['left'] = Input.is_key_pressed(KEY_A);
+		controller.input['right'] = Input.is_key_pressed(KEY_D);
 		
-		controller.mInput['jump'] = Input.is_key_pressed(KEY_SPACE);
-		controller.mInput['walk'] = Input.is_key_pressed(KEY_ALT);
-		controller.mInput['sprint'] = Input.is_key_pressed(KEY_SHIFT);
+		controller.input['jump'] = Input.is_key_pressed(KEY_SPACE);
+		controller.input['walk'] = Input.is_key_pressed(KEY_ALT);
+		controller.input['sprint'] = Input.is_key_pressed(KEY_SHIFT);
 
 func update_hud():
-	var cur_wpn = weapon.GetCurrentWeapon();
+	var cur_wpn = weapon.get_current_weapon();
 	if (cur_wpn != null):
 		# Set ammo label text
-		$HUD/Ammo.show();
-		$HUD/Ammo.text = str(weapon.mClip).pad_zeros(2) + "/" + str(weapon.mAmmo).pad_zeros(3);
+		$interface/ammo.show();
+		$interface/ammo.text = str(weapon.wpn_clip).pad_zeros(2) + "/" + str(weapon.wpn_ammo).pad_zeros(3);
 		
 		# Weapon name
-		$HUD/WeaponName.show();
-		$HUD/WeaponName.text = cur_wpn.mName;
+		$interface/weapon_name.show();
+		$interface/weapon_name.text = cur_wpn.name;
 	
 	else:
 		# Hide HUD
-		$HUD/Ammo.hide();
-		$HUD/WeaponName.hide();
+		$interface/ammo.hide();
+		$interface/weapon_name.hide();
 
 func on_server_hosted():
 	if (has_node("/root/network_mgr")):
-		get_node("/root/network_mgr").CreateLocalPlayer();
+		get_node("/root/network_mgr").create_local_player();

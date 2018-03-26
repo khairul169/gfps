@@ -1,8 +1,5 @@
 extends RigidBody
 
-# Constants
-const CAMERA_PITCH_LIMIT = 80;
-
 # Exports
 export var MoveSpeed = 3.6;
 export var SprintSpeed = 1.2;
@@ -13,6 +10,7 @@ export var JumpForce = 6.0;
 export var CameraSensitivity = 0.2;
 export var CameraFOV = 60.0;
 export var CameraHeight = 1.2;
+export var CameraPitchLimit = 80;
 
 # Signals
 signal camera_motion(dir);
@@ -26,23 +24,23 @@ var PlayerSounds;
 var PlayerWeapon;
 
 # Variables
-var mNetworkMgr = null;
-var mMoveDir = Vector3();
-var mDefaultGravity = 0.0;
+var network = null;
+var move_dir = Vector3();
+var default_gravity = 0.0;
 
-var mCameraRotation = Vector3();
-var mCameraImpulse = Vector3();
-var mCurCamImpulse = Vector3();
-var mCameraFOV = 0.0;
+var camera_rotation = Vector3();
+var camera_impulse = Vector3();
+var camera_impulse_current = Vector3();
+var camera_fov = 0.0;
 
-var mIsJumping = false;
-var mIsOnFloor = false;
-var mSprinting = false;
-var mIsMoving = false;
-var mClimbing = false;
+var is_jumping = false;
+var on_floor = false;
+var is_sprinting = false;
+var is_moving = false;
+var is_climbing = false;
 
 # Input
-var mInput = {
+var input = {
 	'forward' : false,
 	'backward' : false,
 	'left' : false,
@@ -53,7 +51,7 @@ var mInput = {
 };
 
 # Character ability
-var mCanSprinting = false;
+var enable_sprint = false;
 
 func _ready():
 	# Set groups
@@ -62,7 +60,7 @@ func _ready():
 	
 	# Check networking support
 	if (has_node("/root/network_mgr")):
-		mNetworkMgr = get_node("/root/network_mgr");
+		network = get_node("/root/network_mgr");
 	
 	# Create camera
 	CameraNode = Camera.new();
@@ -72,7 +70,7 @@ func _ready():
 	
 	# Set camera as current
 	CameraNode.make_current();
-	mCameraFOV = CameraFOV;
+	camera_fov = CameraFOV;
 	
 	# Set camera znear & zfar
 	CameraNode.near = 0.01;
@@ -91,7 +89,7 @@ func _ready():
 	can_sleep = false;
 	
 	# Set gravity variable
-	mDefaultGravity = gravity_scale;
+	default_gravity = gravity_scale;
 
 func _enter_tree():
 	# Capture mouse input
@@ -102,157 +100,157 @@ func _exit_tree():
 
 func _input(event):
 	if (event is InputEventMouseMotion && Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):
-		RotateCamera(event.relative);
+		rotate_camera(event.relative);
 
 func _process(delta):
 	# Update camera transform
 	update_camera(delta);
 
 func _physics_process(delta):
-	if (mNetworkMgr):
+	if (network):
 		# Update player transform
-		mNetworkMgr.mPlayerTransform[0] = global_transform.origin;
-		mNetworkMgr.mPlayerTransform[1] = [mCameraRotation.x, mCameraRotation.y];
+		network.player_transform[0] = global_transform.origin;
+		network.player_transform[1] = [camera_rotation.x, camera_rotation.y];
 
 func _integrate_forces(state):
 	# Reset variable
-	mMoveDir = Vector3();
+	move_dir = Vector3();
 	
 	# Get camera basis
-	var mCameraDir = Basis();
+	var camera_dir = Basis();
 	if (CameraNode):
-		mCameraDir = CameraNode.global_transform.basis;
+		camera_dir = CameraNode.global_transform.basis;
 	
 	# Set move direction
-	if (mInput['forward']):
-		mMoveDir -= mCameraDir.z;
-	if (mInput['backward']):
-		mMoveDir += mCameraDir.z;
-	if (mInput['left']):
-		mMoveDir -= mCameraDir.x;
-	if (mInput['right']):
-		mMoveDir += mCameraDir.x;
+	if (input['forward']):
+		move_dir -= camera_dir.z;
+	if (input['backward']):
+		move_dir += camera_dir.z;
+	if (input['left']):
+		move_dir -= camera_dir.x;
+	if (input['right']):
+		move_dir += camera_dir.x;
 	
 	# Enable y-axis movement when climbing
-	if (mClimbing):
-		mMoveDir.y = sign(mMoveDir.y) * max(abs(mMoveDir.y), 0.8);
+	if (is_climbing):
+		move_dir.y = sign(move_dir.y) * max(abs(move_dir.y), 0.8);
 	else:
-		mMoveDir.y = 0.0;
+		move_dir.y = 0.0;
 	
 	# Calculate move vector
-	mMoveDir = mMoveDir.normalized();
-	mMoveDir = mMoveDir * MoveSpeed;
+	move_dir = move_dir.normalized();
+	move_dir = move_dir * MoveSpeed;
 	
 	# Check if player is colliding with an object
 	if (FloorRay != null && !FloorRay.is_colliding()):
-		mMoveDir = mMoveDir * 0.6;
-		mIsOnFloor = false;
+		move_dir = move_dir * 0.6;
+		on_floor = false;
 	else:
-		mIsOnFloor = true;
+		on_floor = true;
 	
 	# Sprint
-	if (mCanSprinting && mInput['sprint'] && mIsOnFloor && mMoveDir.dot(-mCameraDir[2]) > 0.2):
-		if (!PlayerWeapon || (PlayerWeapon != null && PlayerWeapon.CanSprint())):
-			mSprinting = true;
-			mMoveDir = mMoveDir * SprintSpeed;
+	if (enable_sprint && input['sprint'] && on_floor && move_dir.dot(-camera_dir[2]) > 0.2):
+		if (!PlayerWeapon || (PlayerWeapon != null && PlayerWeapon.able_to_sprint())):
+			is_sprinting = true;
+			move_dir = move_dir * SprintSpeed;
 	else:
-		mSprinting = false;
+		is_sprinting = false;
 	
 	# Walk
-	if (mInput['walk'] && mIsOnFloor):
-		mMoveDir = mMoveDir * WalkSpeed;
+	if (input['walk'] && on_floor):
+		move_dir = move_dir * WalkSpeed;
 	
 	# Weapon weight modifier
 	if (PlayerWeapon != null):
-		mMoveDir = mMoveDir * PlayerWeapon.mMoveSpeed;
+		move_dir = move_dir * PlayerWeapon.wpn_movespeed;
 	
 	# Add world gravity
-	if (!mClimbing):
-		mMoveDir.y = state.linear_velocity.y;
+	if (!is_climbing):
+		move_dir.y = state.linear_velocity.y;
 	
 	# New velocity value
-	var newVelocity = state.linear_velocity.linear_interpolate(mMoveDir, Acceleration * state.step);
+	var new_velocity = state.linear_velocity.linear_interpolate(move_dir, Acceleration * state.step);
 	
-	if (mInput['jump']):
-		if (!mIsJumping):
-			mIsJumping = true;
+	if (input['jump']):
+		if (!is_jumping):
+			is_jumping = true;
 			
 			# Jump!
 			if (FloorRay != null && FloorRay.is_colliding()):
-				newVelocity.y = JumpForce;
+				new_velocity.y = JumpForce;
 	else:
-		if (mIsJumping):
-			mIsJumping = false;
+		if (is_jumping):
+			is_jumping = false;
 	
-	if (newVelocity.length() > 0.2):
-		mIsMoving = true;
+	if (new_velocity.length() > 0.2):
+		is_moving = true;
 	else:
-		mIsMoving = false;
+		is_moving = false;
 	
 	# Set new linear velocity
-	state.linear_velocity = newVelocity;
+	state.linear_velocity = new_velocity;
 
 func update_camera(delta):
 	if (!CameraNode):
 		return;
 	
 	# Camera FOV
-	if (CameraNode && CameraNode.fov != mCameraFOV):
-		CameraNode.fov = lerp(CameraNode.fov, mCameraFOV, 16 * delta);
+	if (CameraNode && CameraNode.fov != camera_fov):
+		CameraNode.fov = lerp(CameraNode.fov, camera_fov, 16 * delta);
 	
 	# Recoil system
-	if (mCameraImpulse.length() > 0.0):
-		mCurCamImpulse = mCurCamImpulse.linear_interpolate(mCameraImpulse, 24 * delta);
+	if (camera_impulse.length() > 0.0):
+		camera_impulse_current = camera_impulse_current.linear_interpolate(camera_impulse, 24 * delta);
 	
-	if (mCameraImpulse.length() > 0.0):
-		mCameraImpulse = mCameraImpulse.linear_interpolate(Vector3(), 5 * delta);
+	if (camera_impulse.length() > 0.0):
+		camera_impulse = camera_impulse.linear_interpolate(Vector3(), 5 * delta);
 	
-	var mLookDir = Vector3();
-	var mCamRot = mCameraRotation;
+	var looking_direction = Vector3();
+	var cam_rot = camera_rotation;
 	
 	# Add camera impulse
-	mCamRot.x += mCurCamImpulse.y;
-	mCamRot.y += mCurCamImpulse.x;
+	cam_rot.x += camera_impulse_current.y;
+	cam_rot.y += camera_impulse_current.x;
 	
 	# Calculate eye direction
-	mLookDir.x -= sin(deg2rad(mCamRot.y)) * cos(deg2rad(mCamRot.x));
-	mLookDir.y += sin(deg2rad(mCamRot.x));
-	mLookDir.z -= cos(deg2rad(mCamRot.y)) * cos(deg2rad(mCamRot.x));
+	looking_direction.x -= sin(deg2rad(cam_rot.y)) * cos(deg2rad(cam_rot.x));
+	looking_direction.y += sin(deg2rad(cam_rot.x));
+	looking_direction.z -= cos(deg2rad(cam_rot.y)) * cos(deg2rad(cam_rot.x));
 	
-	if (mLookDir.length() <= 0.0 || abs(mLookDir.y) >= 1.0):
+	if (looking_direction.length() <= 0.0 || abs(looking_direction.y) >= 1.0):
 		return;
 	
 	# Set camera transform
-	CameraNode.global_transform = CameraNode.global_transform.looking_at(CameraNode.global_transform.origin + mLookDir.normalized(), Vector3(0, 1, 0));
+	CameraNode.global_transform = CameraNode.global_transform.looking_at(CameraNode.global_transform.origin + looking_direction.normalized(), Vector3(0, 1, 0));
 
 #########################################################################
 
-func OnLadder(state):
-	mClimbing = state;
+func ladder_collide(state):
+	is_climbing = state;
 	
-	if (mClimbing):
+	if (is_climbing):
 		gravity_scale = 0.0;
 	else:
-		gravity_scale = mDefaultGravity;
+		gravity_scale = default_gravity;
 
 ##########################################################################
 
-func RotateCamera(rotation):
+func rotate_camera(rotation):
 	# Set camera rotation
-	var sensitivity = CameraSensitivity * (mCameraFOV/CameraFOV);
-	mCameraRotation.x = clamp(mCameraRotation.x - rotation.y * sensitivity, -CAMERA_PITCH_LIMIT, CAMERA_PITCH_LIMIT);
-	mCameraRotation.y = fmod(mCameraRotation.y - rotation.x * sensitivity, 360.0);
+	var sensitivity = CameraSensitivity * (camera_fov/CameraFOV);
+	camera_rotation.x = clamp(camera_rotation.x - rotation.y * sensitivity, -CameraPitchLimit, CameraPitchLimit);
+	camera_rotation.y = fmod(camera_rotation.y - rotation.x * sensitivity, 360.0);
 	
 	# Emit motion signal
 	emit_signal("camera_motion", rotation * sensitivity);
 
-func GetCameraTransform():
+func get_camera_transform():
 	if (is_inside_tree() && CameraNode):
 		return CameraNode.global_transform;
 	return Transform();
 
-func SetCameraRotation(pitch, yaw):
+func set_camera_rotation(pitch, yaw):
 	if (pitch != null):
-		mCameraRotation.x = clamp(pitch, -CAMERA_PITCH_LIMIT, CAMERA_PITCH_LIMIT);
+		camera_rotation.x = clamp(pitch, -CameraPitchLimit, CameraPitchLimit);
 	if (yaw != null):
-		mCameraRotation.y = fmod(yaw, 360.0);
+		camera_rotation.y = fmod(yaw, 360.0);

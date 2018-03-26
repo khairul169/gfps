@@ -4,16 +4,16 @@ extends Node
 const NETWORK_UPDATERATE = 1.0/40.0;
 
 # Scenes
-onready var PlayerSlave = load("res://Scenes/Player/Player.tscn");
+onready var scene_networkplayer = load("res://scenes/player/network_player.tscn");
 
 # Network variables
-var mNetworkPeer;
-var mServer = false;
-var mClient = false;
+var network_peer;
+var network_server = false;
+var network_client = false;
 
 # Local player variables
-var mPlayerNode;
-var mPlayerTransform = [
+var player_node;
+var player_transform = [
 	Vector3(), # Position
 	[0.0, 0.0] # Rotation
 ];
@@ -27,19 +27,19 @@ func _ready():
 	get_tree().connect("server_disconnected", self, "_server_disconnected");
 
 func _physics_process(delta):
-	ServerThink(delta);
-	ClientThink(delta);
+	process_server(delta);
+	process_client(delta);
 
 ############################## SERVER ##############################
 
 # Player data
-var mPlayerList = {};
+var player_list = {};
 
 # Signals
 signal server_hosted();
 
 # Variables
-var mNextBroadcast = 0.0;
+var next_broadcast = 0.0;
 
 # Player class
 class Player extends Reference:
@@ -71,165 +71,165 @@ class Player extends Reference:
 #############################################################
 
 func _player_connected(id):
-	if (!mPlayerList.has(id)):
-		mPlayerList[id] = Player.new(id);
-		mPlayerList[id].connected();
+	if (!player_list.has(id)):
+		player_list[id] = Player.new(id);
+		player_list[id].connected();
 
 func _player_disconnected(id):
-	if (mPlayerList.has(id)):
-		mPlayerList[id].disconnected();
-		mPlayerList.erase(id);
+	if (player_list.has(id)):
+		player_list[id].disconnected();
+		player_list.erase(id);
 		
 		# Remove scene from all players
-		rpc("RemovePlayer", id);
+		rpc("player_remove", id);
 
-func CreateServer(port, maxplayers):
-	if (mNetworkPeer):
+func start_server(port, maxplayers):
+	if (network_peer):
 		return;
 	
-	mNetworkPeer = NetworkedMultiplayerENet.new();
-	mNetworkPeer.create_server(port, maxplayers);
-	get_tree().set_network_peer(mNetworkPeer);
+	network_peer = NetworkedMultiplayerENet.new();
+	network_peer.create_server(port, maxplayers);
+	get_tree().set_network_peer(network_peer);
 	print("Server created. Port: ", port);
 	
 	# Set network type
-	mServer = true;
+	network_server = true;
 	emit_signal("server_hosted");
 
-remote func PlayerJoin(id):
-	if (!mServer || !mPlayerList.has(id)):
+remote func player_join(id):
+	if (!network_server || !player_list.has(id)):
 		return;
 	
-	for i in mPlayerList:
+	for i in player_list:
 		if (i != id):
-			rpc_id(id, "CreatePlayer", i);
+			rpc_id(id, "player_create", i);
 	
-	if (mPlayerList[id].connected == false):
-		mPlayerList[id].connected = true;
-		mPlayerList[id].ready();
+	if (player_list[id].connected == false):
+		player_list[id].connected = true;
+		player_list[id].ready();
 
-func CreateLocalPlayer():
-	mPlayerList[1] = Player.new(1);
-	mPlayerList[1].connected();
-	PlayerJoin(1);
+func create_local_player():
+	player_list[1] = Player.new(1);
+	player_list[1].connected();
+	player_join(1);
 	
 	# Enable client side
-	mPlayerId = 1;
-	mClient = true;
+	client_player_id = 1;
+	network_client = true;
 
-func ServerThink(delta):
-	if (!mServer):
+func process_server(delta):
+	if (!network_server):
 		return;
 	
-	mNextBroadcast = max(mNextBroadcast - delta, 0.0);
-	if (mNextBroadcast > 0.0):
+	next_broadcast = max(next_broadcast - delta, 0.0);
+	if (next_broadcast > 0.0):
 		return;
 	
 	# Broadcast player transform
-	for id in mPlayerList:
+	for id in player_list:
 		# Player is not ready
-		if (!mPlayerList[id].connected):
+		if (!player_list[id].connected):
 			continue;
 		
 		# Send to all players
-		rpc("PlayerTransform", id, [
-			mPlayerList[id].pos,
-			mPlayerList[id].rot
+		rpc("set_player_transform", id, [
+			player_list[id].pos,
+			player_list[id].rot
 		]);
 	
-	mNextBroadcast = NETWORK_UPDATERATE;
+	next_broadcast = NETWORK_UPDATERATE;
 
 ############################## CLIENT ##############################
 
 # Variables
-var mPlayerId = -1;
-var mPlayerNodes = {};
+var client_player_id = -1;
+var player_nodes = {};
 
-func ConnectTo(ip, port):
-	if (mNetworkPeer):
+func connect_to(ip, port):
+	if (network_peer):
 		return;
 	
-	mNetworkPeer = NetworkedMultiplayerENet.new();
-	mNetworkPeer.create_client(ip, port);
-	get_tree().set_network_peer(mNetworkPeer);
+	network_peer = NetworkedMultiplayerENet.new();
+	network_peer.create_client(ip, port);
+	get_tree().set_network_peer(network_peer);
 	print("Connecting to ", ip, ":", port, "...");
 
 func _connected_ok():
-	if (!mNetworkPeer):
+	if (!network_peer):
 		return;
 	
 	# Get player id
-	mPlayerId = get_tree().get_network_unique_id();
+	client_player_id = get_tree().get_network_unique_id();
 	
 	# Tell server that we are ready
-	rpc("PlayerJoin", mPlayerId);
+	rpc("player_join", client_player_id);
 	
 	# Set as client
-	mClient = true;
+	network_client = true;
 
 func _server_disconnected():
 	# Server kicked us, show error and abort
 	print("Disconnected.");
 	
 	# Remove all slave players
-	for i in mPlayerNodes.keys():
-		RemovePlayer(i);
+	for i in player_nodes.keys():
+		player_remove(i);
 	
 	# Disconnect from server
-	Disconnect();
+	player_disconnect();
 
 func _connected_fail():
     pass # Could not even connect to server, abort
 
-func ClientThink(delta):
-	if (!mClient):
+func process_client(delta):
+	if (!network_client):
 		return;
 	
-	if (mServer):
+	if (network_server):
 		# Local player transform
-		PlayerTransform(1, mPlayerTransform);
+		set_player_transform(1, player_transform);
 	else:
 		# Send player current state to server
-		rpc_id(1, "PlayerTransform", mPlayerId, mPlayerTransform);
+		rpc_id(1, "set_player_transform", client_player_id, player_transform);
 
-func Disconnect():
+func player_disconnect():
 	# Disable networking
-	mNetworkPeer = null;
-	mClient = false;
+	network_peer = null;
+	network_client = false;
 	get_tree().set_network_peer(null);
 
 ###################################################################
 
-remote func PlayerTransform(id, transform):
-	if (mServer && mPlayerList.has(id) && mPlayerList[id].connected):
+remote func set_player_transform(id, transform):
+	if (network_server && player_list.has(id) && player_list[id].connected):
 		# Set player state
-		mPlayerList[id].pos = transform[0];
-		mPlayerList[id].rot = transform[1];
+		player_list[id].pos = transform[0];
+		player_list[id].rot = transform[1];
 	
-	if (mClient && id != mPlayerId):
-		if (!mPlayerNodes.has(id)):
+	if (network_client && id != client_player_id):
+		if (!player_nodes.has(id)):
 			# Player is not exist, create player
-			CreatePlayer(id);
+			player_create(id);
 		
 		# Set player transform
-		if (mPlayerNodes[id].has_method("SetState")):
-			mPlayerNodes[id].SetState(transform[0], transform[1]);
+		if (player_nodes[id].has_method("set_state")):
+			player_nodes[id].set_state(transform[0], transform[1]);
 
-sync func CreatePlayer(id):
-	if (!mPlayerNode || mPlayerNodes.has(id)):
+sync func player_create(id):
+	if (!player_node || player_nodes.has(id)):
 		return;
 	
 	# Instance slave player
-	var instance = PlayerSlave.instance();
+	var instance = scene_networkplayer.instance();
 	instance.name = str(id);
 	
-	mPlayerNode.get_parent().add_child(instance);
-	mPlayerNodes[id] = instance;
+	player_node.get_parent().add_child(instance);
+	player_nodes[id] = instance;
 
-sync func RemovePlayer(id):
-	if (!mClient):
+sync func player_remove(id):
+	if (!network_client):
 		return;
 	
-	if (mPlayerNodes.has(id)):
-		mPlayerNodes[id].queue_free();
-		mPlayerNodes.erase(id);
+	if (player_nodes.has(id)):
+		player_nodes[id].queue_free();
+		player_nodes.erase(id);

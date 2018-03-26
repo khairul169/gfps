@@ -4,9 +4,9 @@ extends RigidBody
 const INTERPOLATION = 25.0;
 
 # Variables
-var mLastState = 0.0;
-var mCurrPos = Vector3();
-var mVelocity = Vector3();
+var last_state = 0.0;
+var current_pos = Vector3();
+var current_velocity = Vector3();
 
 func _ready():
 	# Object type
@@ -19,21 +19,21 @@ func _ready():
 	can_sleep = false;
 
 func _physics_process(delta):
-	mLastState = min(mLastState + delta, 5.0);
+	last_state = min(last_state + delta, 5.0);
 	
-	if (global_transform.origin.distance_to(mCurrPos) > 5.0):
-		global_transform.origin = mCurrPos;
-	if (mLastState < 0.5):
-		linear_velocity = (mCurrPos - global_transform.origin) * INTERPOLATION;
+	if (global_transform.origin.distance_to(current_pos) > 5.0):
+		global_transform.origin = current_pos;
+	if (last_state < 0.5):
+		linear_velocity = (current_pos - global_transform.origin) * INTERPOLATION;
 
-func SetState(pos, rot):
-	var mLastPos = mCurrPos;
-	mVelocity = pos - mLastPos;
+func set_state(pos, rot):
+	var last_pos = current_pos;
+	current_velocity = pos - last_pos;
 	
-	mCurrPos = pos;
-	$Body.rotation_degrees.y = rot[1];
+	current_pos = pos;
+	$body.rotation_degrees.y = rot[1];
 	
-	mLastState = 0.0;
+	last_state = 0.0;
 
-func GiveDamage(dmg):
+func give_damage(dmg):
 	print(get_name(), " dmg: ", dmg);
