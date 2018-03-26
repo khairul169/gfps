@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://assets/weapon/ak47/ak47.dae" type="PackedScene" id=1]
+
+
+[node name="ak47" index="0" instance=ExtResource( 1 )]
+
+

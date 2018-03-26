@@ -258,7 +258,7 @@ func wpn_postreload():
 	next_think = 0.1;
 	
 	if (current_wpn > -1 && current_wpn < weapon_list.size()):
-		weapon_list[current_wpn].postreload();
+		weapon_list[current_wpn].post_reload();
 		emit_signal("weapon_reload");
 
 ###########################################################################
@@ -268,6 +268,9 @@ func get_camera_transform():
 		return Controller.get_camera_transform();
 	else:
 		return Transform();
+
+func has_animation(anim):
+	return (anim_player && anim_player.has_animation(anim));
 
 func play_animation(anim, loop = false, custom_blend = -1, immediately = true):
 	if (!anim_player):
@@ -435,11 +438,11 @@ func register_weapon(path):
 	
 	# Models skeleton
 	var skeleton = null;
-	if (wpn.weapon_node):
-		skeleton = wpn.weapon_node.find_node("Skeleton");
+	if (wpn.weapon_scene):
+		skeleton = wpn.weapon_scene.find_node("Skeleton");
 	
 	# Set mesh layers
-	for i in get_meshinstances(wpn.weapon_node):
+	for i in get_meshinstances(wpn.weapon_scene):
 		i.layers = 16;
 	
 	# Initialize weapon attachment
@@ -505,9 +508,9 @@ func set_current_weapon(id):
 	wpn_initialspread = weapon_list[id].spread.x;
 	wpn_maxspread = weapon_list[id].spread.y;
 	wpn_recoil = weapon_list[id].recoil;
-	wpn_reloadtime = weapon_list[id].reloadtime;
-	wpn_firingdelay = weapon_list[id].firingdelay;
-	wpn_movespeed = weapon_list[id].movespeed;
+	wpn_reloadtime = weapon_list[id].reload_time;
+	wpn_firingdelay = weapon_list[id].firing_delay;
+	wpn_movespeed = weapon_list[id].move_speed;
 	
 	# Set weapon clip & ammo
 	refill_weapon();
@@ -551,9 +554,9 @@ func set_camera_fov(fov):
 		return;
 	
 	if (fov != null && fov > 0):
-		Controller.cameraFOV = fov;
+		Controller.camera_fov = fov;
 	else:
-		Controller.cameraFOV = Controller.CameraFOV;
+		Controller.camera_fov = Controller.CameraFOV;
 
 func set_camera_bobscale(scale):
 	if (!fpview_node || !fpview_node.has_method("set_custom_scale")):

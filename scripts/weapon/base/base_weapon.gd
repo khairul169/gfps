@@ -128,7 +128,7 @@ func attack(shoot_bullet = true):
 		return false;
 	
 	# Play animation
-	if (can_aim && is_aiming):
+	if (can_aim && is_aiming && PlayerWeapon.has_animation(animation['shoot'][1])):
 		PlayerWeapon.play_animation(animation['shoot'][1], false, 0.05);
 	else:
 		PlayerWeapon.play_animation(animation['shoot'][0], false, 0.05);
@@ -188,14 +188,14 @@ func toggle_aim(toggle):
 		PlayerWeapon.set_camera_fov(aim_fov);
 		PlayerWeapon.set_camera_bobscale(aim_bobscale);
 		PlayerWeapon.set_camera_shifting(false);
-		PlayerWeapon.toggle_weapon_lens(true, dualrender_fov);
+		PlayerWeapon.toggle_weaponlens(true, dualrender_fov);
 		PlayerWeapon.play_animation(animation['aiming'][0]);
 		is_aiming = true;
 	else:
 		PlayerWeapon.set_camera_fov(null);
 		PlayerWeapon.set_camera_bobscale(null);
 		PlayerWeapon.set_camera_shifting(true);
-		PlayerWeapon.toggle_weapon_lens(false);
+		PlayerWeapon.toggle_weaponlens(false);
 		PlayerWeapon.play_animation(animation['aiming'][2]);
 		is_aiming = false;
 	

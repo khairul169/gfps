@@ -5,7 +5,7 @@ onready var controller = get_node("controller");
 onready var weapon = get_node("weapon");
 
 # Weapons
-# var weapon_handgun;
+var weapon_ak47;
 
 func _ready():
 	# Set network player node
@@ -14,7 +14,7 @@ func _ready():
 		get_node("/root/network_mgr").connect("server_hosted", self, "on_server_hosted");
 	
 	# Load weapon list
-	# weapon_handgun = weapon.register_weapon("res://Scripts/Weapon/Handgun.gd");
+	weapon_ak47 = weapon.register_weapon("res://scripts/weapon/wpn_ak47.gd");
 	
 	# Connect weapon signals
 	weapon.connect("weapon_attach", self, "update_hud");
@@ -27,7 +27,7 @@ func _ready():
 	controller.enable_sprint = true;
 	
 	# Set primary weapon
-	# weapon.set_current_weapon(weapon_handgun);
+	weapon.set_current_weapon(weapon_ak47);
 	
 	# Change camera y-rotation to follow this node rotation
 	controller.set_camera_rotation(0.0, rotation_degrees.y);
