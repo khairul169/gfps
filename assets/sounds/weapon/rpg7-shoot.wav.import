@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/rpg7-shoot.wav-9191291b1b16d37fababc76ddcb7a942.sample"
+
+[deps]
+
+source_file="res://assets/sounds/weapon/rpg7-shoot.wav"
+source_md5="91f13b389edd30315322ed3ee3f5106b"
+
+dest_files=[ "res://.import/rpg7-shoot.wav-9191291b1b16d37fababc76ddcb7a942.sample" ]
+dest_md5="16d3409788558efc8f733e94fccdf13f"
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

@@ -11,13 +11,13 @@ config_version=3
 [application]
 
 config/name="gFPS Demo"
-run/main_scene="res://Scenes/SampleScene.tscn"
-config/icon="res://Project/Icon.png"
+run/main_scene="res://scenes/sample_scene.tscn"
+config/icon="res://icon.png"
 
 [autoload]
 
-NetworkManager="*res://Scripts/Network/NetworkManager.gd"
+network_mgr="*res://scripts/network/network_mgr.gd"
 
 [rendering]
 
-environment/default_environment="res://Project/Environment.tres"
+environment/default_environment="res://env.tres"
