@@ -12,7 +12,7 @@ func _ready():
 	# Set timeout
 	timeout = rand_range(5.0, 8.0);
 	
-	if (!timeout):
+	if (!spawn_bullethole):
 		$Mesh.hide();
 
 func _process(delta):
