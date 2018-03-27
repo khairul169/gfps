@@ -47,7 +47,7 @@ func _physics_process(delta):
 	hvelocity = PlayerController.linear_velocity;
 	hvelocity.y = 0.0;
 	
-	if (hvelocity.length() > 0.1 && !PlayerController.is_climbing):
+	if (hvelocity.length() >= 1.0 && !PlayerController.is_climbing):
 		is_bobbing = true;
 	else:
 		if (bob_cycle > 0.0):
@@ -72,6 +72,10 @@ func _physics_process(delta):
 			view_translation.y -= on_air_factor;
 	
 	if (is_bobbing):
+		if (!PlayerController.is_sprinting):
+			view_translation.y -= factor;
+			view_translation.z += factor * 1.4;
+		
 		view_translation.x += sin(deg2rad(bob_cycle)) * factor;
 		view_translation.y += abs(cos(deg2rad(bob_cycle))) * factor - factor;
 		
