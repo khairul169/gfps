@@ -2,10 +2,6 @@
 
 [ext_resource path="res://scripts/weapon/misc/bullet_impact.gd" type="Script" id=1]
 
-
-
-
-
 [sub_resource type="PlaneMesh" id=1]
 
 size = Vector2( 2, 2 )

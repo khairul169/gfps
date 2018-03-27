@@ -15,4 +15,6 @@ void fragment() {
 	tex.rgb = mix(tex.rgb, ovl.rgb, ovl.a);
 	
 	ALBEDO = tex.rgb;
+	METALLIC = 0.0;
+	ROUGHNESS = 1.0;
 }

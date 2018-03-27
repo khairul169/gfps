@@ -2,20 +2,20 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/ak47.dae-71f4b1acd20e066f8daf9d5ec548cc16.scn"
+path="res://.import/g36c.dae-21265a166d5f091a90ae7cd496ab07a7.scn"
 
 [deps]
 
-source_file="res://assets/weapon/ak47/ak47.dae"
-source_md5="3ce4c59b201a84eb6ba5f0496605248e"
+source_file="res://assets/weapon/g36c/g36c.dae"
+source_md5="c16deadd8743d8fec1ebcb9c72506189"
 
-dest_files=[ "res://.import/ak47.dae-71f4b1acd20e066f8daf9d5ec548cc16.scn" ]
-dest_md5="5b38b6bdd776647de2ca66861c00f1d7"
+dest_files=[ "res://.import/g36c.dae-21265a166d5f091a90ae7cd496ab07a7.scn" ]
+dest_md5="a380d62f7bc829cbd7669c0a166f17f2"
 
 [params]
 
 nodes/root_type="Spatial"
-nodes/root_name="ak47"
+nodes/root_name="g36c"
 nodes/root_scale=1.0
 nodes/custom_script=""
 nodes/storage=0

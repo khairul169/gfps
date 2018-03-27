@@ -6,6 +6,7 @@ onready var weapon = get_node("weapon");
 
 # Weapons
 var weapon_ak47;
+var weapon_g36c;
 
 func _ready():
 	# Set network player node
@@ -15,6 +16,7 @@ func _ready():
 	
 	# Load weapon list
 	weapon_ak47 = weapon.register_weapon("res://scripts/weapon/wpn_ak47.gd");
+	weapon_g36c = weapon.register_weapon("res://scripts/weapon/wpn_g36c.gd");
 	
 	# Connect weapon signals
 	weapon.connect("weapon_attach", self, "update_hud");
@@ -27,7 +29,7 @@ func _ready():
 	controller.enable_sprint = true;
 	
 	# Set primary weapon
-	weapon.set_current_weapon(weapon_ak47);
+	weapon.set_current_weapon(weapon_g36c);
 	
 	# Change camera y-rotation to follow this node rotation
 	controller.set_camera_rotation(0.0, rotation_degrees.y);

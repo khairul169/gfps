@@ -72,7 +72,7 @@ func _physics_process(delta):
 			view_translation.y -= on_air_factor;
 	
 	if (is_bobbing):
-		if (!PlayerController.is_sprinting):
+		if (!PlayerController.is_sprinting && shifting_enabled):
 			view_translation.y -= factor;
 			view_translation.z += factor * 1.4;
 		

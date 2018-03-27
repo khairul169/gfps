@@ -4,8 +4,8 @@ extends RigidBody
 export var MoveSpeed = 3.6;
 export var SprintSpeed = 1.2;
 export var WalkSpeed = 0.5;
-export var Acceleration = 10.0;
-export var JumpForce = 6.0;
+export var Acceleration = 8.0;
+export var JumpForce = 7.5;
 
 export var CameraSensitivity = 0.2;
 export var CameraFOV = 60.0;
@@ -27,6 +27,7 @@ var PlayerWeapon;
 var network = null;
 var move_dir = Vector3();
 var default_gravity = 0.0;
+var stun_time = 0.0;
 
 var camera_rotation = Vector3();
 var camera_impulse = Vector3();
@@ -105,6 +106,10 @@ func _input(event):
 func _process(delta):
 	# Update camera transform
 	update_camera(delta);
+	
+	# Stun timer
+	if (stun_time > 0.0):
+		stun_time = max(stun_time - delta, 0.0);
 
 func _physics_process(delta):
 	if (network):
@@ -164,6 +169,9 @@ func _integrate_forces(state):
 	if (PlayerWeapon != null):
 		move_dir = move_dir * PlayerWeapon.wpn_movespeed;
 	
+	if (stun_time > 0.0):
+		move_dir = move_dir * 0.2;
+	
 	# Add world gravity
 	if (!is_climbing):
 		move_dir.y = state.linear_velocity.y;
@@ -176,11 +184,15 @@ func _integrate_forces(state):
 			is_jumping = true;
 			
 			# Jump!
-			if (FloorRay != null && FloorRay.is_colliding()):
+			if (FloorRay != null && FloorRay.is_colliding() && stun_time <= 0.0):
 				new_velocity.y = JumpForce;
 	else:
 		if (is_jumping):
 			is_jumping = false;
+	
+	# Disable player movement after landing from the air
+	if (state.linear_velocity.y < -8.0 && FloorRay.is_colliding() && stun_time <= 0.0):
+		stun_time = 0.5;
 	
 	if (new_velocity.length() > 0.2):
 		is_moving = true;

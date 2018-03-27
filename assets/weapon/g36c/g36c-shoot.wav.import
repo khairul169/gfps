@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/g36c-shoot.wav-b07c727452ec81dd0f6710f89be1d30a.sample"
+
+[deps]
+
+source_file="res://assets/weapon/g36c/g36c-shoot.wav"
+source_md5="0fe169e1404766ddb9ff8a2dc4f2a5c5"
+
+dest_files=[ "res://.import/g36c-shoot.wav-b07c727452ec81dd0f6710f89be1d30a.sample" ]
+dest_md5="ff2944287db590668034761e762d342b"
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0
