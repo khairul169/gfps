@@ -30,4 +30,6 @@ func set_lens_texture(res):
 		return;
 	if (!res || !res is Texture):
 		res = null;
+	
+	lens_material.set_shader_param("enable_render", res != null);
 	lens_material.set_shader_param("render", res);

@@ -9,6 +9,7 @@
 
 render_priority = 0
 shader = ExtResource( 3 )
+shader_param/enable_render = false
 shader_param/overlay = ExtResource( 4 )
 _sections_unfolded = [ "shader_param" ]
 
