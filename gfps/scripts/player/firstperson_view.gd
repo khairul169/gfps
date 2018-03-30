@@ -1,7 +1,7 @@
 extends Spatial
 
 # Configuration
-var bob_speed = 1.5;
+var bob_speed = 1.2;
 var bob_factor = 0.008;
 var bob_sprinting = 3.0;
 var bob_angle = 1.0;

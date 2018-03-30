@@ -2,7 +2,7 @@ extends RigidBody
 
 # Exports
 export var MoveSpeed = 3.6;
-export var SprintSpeed = 1.2;
+export var SprintSpeed = 1.5;
 export var WalkSpeed = 0.5;
 export var Acceleration = 8.0;
 export var JumpForce = 7.5;
