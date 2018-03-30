@@ -5,6 +5,7 @@ export var MoveSpeed = 3.6;
 export var SprintSpeed = 1.5;
 export var WalkSpeed = 0.5;
 export var Acceleration = 8.0;
+export var AirAccel = 16.0;
 export var JumpForce = 7.5;
 
 export (NodePath) var CameraNode;
@@ -152,8 +153,13 @@ func _integrate_forces(state):
 	
 	# Check if player is colliding with an object
 	if (FloorRay != null && !FloorRay.is_colliding()):
-		move_dir = linear_velocity;
 		on_floor = false;
+		if (is_climbing):
+			move_dir = move_dir * 0.8;
+		elif (move_dir.length() > 0.0):
+			move_dir = linear_velocity.linear_interpolate(move_dir, AirAccel * state.step);
+		else:
+			move_dir = linear_velocity;
 	else:
 		on_floor = true;
 	
