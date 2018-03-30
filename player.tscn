@@ -173,7 +173,7 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 script = ExtResource( 2 )
 PlayerWeapon = NodePath("../../weapon")
-size = 16
+size = 12
 width = 2.0
 color = Color( 1, 0, 0, 0.6 )
 

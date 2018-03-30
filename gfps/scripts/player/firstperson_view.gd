@@ -47,7 +47,7 @@ func _physics_process(delta):
 	hvelocity = PlayerController.linear_velocity;
 	hvelocity.y = 0.0;
 	
-	if (hvelocity.length() >= 1.0 && !PlayerController.is_climbing):
+	if (hvelocity.length() >= 1.0 && !PlayerController.is_climbing && PlayerController.on_floor):
 		is_bobbing = true;
 	else:
 		if (bob_cycle > 0.0):

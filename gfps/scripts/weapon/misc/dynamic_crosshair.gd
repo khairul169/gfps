@@ -2,7 +2,7 @@ extends Control
 
 export (NodePath) var PlayerWeapon;
 
-export var size = 16;
+export var size = 12;
 export var width = 2.0;
 export var color = Color(1,1,1,0.6);
 

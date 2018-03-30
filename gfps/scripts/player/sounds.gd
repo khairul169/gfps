@@ -53,7 +53,7 @@ func _physics_process(delta):
 func footstep_fx():
 	var velocity = controller.linear_velocity;
 	velocity.y = 0.0;
-	if (velocity.length() < controller.MoveSpeed/2.0):
+	if (!controller.on_floor || velocity.length() < controller.MoveSpeed/2.0):
 		return;
 	
 	var speed = float(controller.MoveSpeed)/velocity.length();
