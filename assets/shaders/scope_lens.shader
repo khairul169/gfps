@@ -18,8 +18,8 @@ void fragment() {
 		ROUGHNESS = 1.0;
 	
 	} else {
-		ALBEDO = vec3(0.2);
+		ALBEDO = mix(vec3(0.2), ovl.rgb, ovl.a);
 		METALLIC = 1.0;
-		ROUGHNESS = 0.1;
+		ROUGHNESS = 0.2;
 	}
 }

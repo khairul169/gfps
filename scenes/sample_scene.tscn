@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scenes/sample_scene.gd" type="Script" id=1]
 [ext_resource path="res://scenes/player/player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scripts/props/ladder.gd" type="Script" id=3]
+[ext_resource path="res://assets/sprites/grid.png" type="Texture" id=3]
+[ext_resource path="res://scripts/props/ladder.gd" type="Script" id=4]
 
 [sub_resource type="PlaneMesh" id=1]
 
@@ -33,11 +34,12 @@ params_point_size = 1.0
 params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
-albedo_color = Color( 0.613281, 0.613281, 0.613281, 1 )
-metallic = 0.0
+albedo_color = Color( 1, 1, 1, 1 )
+albedo_texture = ExtResource( 3 )
+metallic = 0.35
 metallic_specular = 0.0
 metallic_texture_channel = 0
-roughness = 1.0
+roughness = 0.66
 roughness_texture_channel = 0
 emission_enabled = false
 normal_enabled = false
@@ -50,7 +52,7 @@ subsurf_scatter_enabled = false
 transmission_enabled = false
 refraction_enabled = false
 detail_enabled = false
-uv1_scale = Vector3( 1, 1, 1 )
+uv1_scale = Vector3( 10, 10, 1 )
 uv1_offset = Vector3( 0, 0, 0 )
 uv1_triplanar = false
 uv1_triplanar_sharpness = 1.0
@@ -60,7 +62,7 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
-_sections_unfolded = [ "Albedo", "Roughness" ]
+_sections_unfolded = [ "Albedo", "Roughness", "UV1" ]
 
 [sub_resource type="ConcavePolygonShape" id=3]
 
@@ -187,8 +189,6 @@ directional_shadow_max_distance = 200.0
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.0116791, 0.141982, 0.132614 )
 
 [node name="objects" type="Spatial" parent="." index="2"]
-
-editor/display_folded = true
 
 [node name="floor" type="MeshInstance" parent="objects" index="0"]
 
@@ -544,7 +544,7 @@ reverb_bus_enable = false
 reverb_bus_name = "Master"
 reverb_bus_amount = 0.0
 reverb_bus_uniformity = 0.0
-script = ExtResource( 3 )
+script = ExtResource( 4 )
 
 [node name="Mesh" type="MeshInstance" parent="ladder" index="0"]
 
