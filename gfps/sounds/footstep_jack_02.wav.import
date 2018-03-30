@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/footstep_jack_02.wav-f55dc09b8e91a0cc089bd490302feaef.sample"
+
+[deps]
+
+source_file="res://gfps/sounds/footstep_jack_02.wav"
+source_md5="79e2ac33f955765619c56554e477e14f"
+
+dest_files=[ "res://.import/footstep_jack_02.wav-f55dc09b8e91a0cc089bd490302feaef.sample" ]
+dest_md5="b73f9a33bdb5d2e44e9f45c326301bb3"
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

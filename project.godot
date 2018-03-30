@@ -11,12 +11,12 @@ config_version=3
 [application]
 
 config/name="gFPS Demo"
-run/main_scene="res://scenes/sample_scene.tscn"
+run/main_scene="res://scene.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
-network_mgr="*res://scripts/network/network_mgr.gd"
+network_mgr="*res://gfps/scripts/network/network_mgr.gd"
 
 [rendering]
 
