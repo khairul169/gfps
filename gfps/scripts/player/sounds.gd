@@ -3,7 +3,7 @@ extends Node
 # Exports
 export (AudioStream) var StepLeft;
 export (AudioStream) var StepRight;
-export var StepDelay = 0.32;
+export var StepDelay = 0.4;
 export (AudioStream) var JumpLanding;
 
 # Nodes
