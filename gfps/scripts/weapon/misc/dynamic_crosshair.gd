@@ -1,21 +1,29 @@
+tool
 extends Control
 
-export (NodePath) var PlayerWeapon;
+export var size = 12 setget set_size, get_size;
+export var width = 2.0 setget set_width, get_width;
+export var color = Color(1,1,1,0.8) setget set_color, get_color;
 
-export var size = 12;
-export var width = 2.0;
-export var color = Color(1,1,1,0.6);
+export (NodePath) var PlayerWeapon;
 
 var num = 4;
 var spread = 0.0;
 var cur_spread = 0.0;
 var player_weapon;
 
+func _init():
+	cur_spread = 0.5 * size;
+	update();
+
 func _ready():
 	if (PlayerWeapon && typeof(PlayerWeapon) == TYPE_NODE_PATH):
 		set_weaponmgr(get_node(PlayerWeapon));
 
 func _process(delta):
+	if (!visible):
+		return;
+	
 	# Get weapon spread from weapon mgr
 	if (player_weapon):
 		spread = player_weapon.wpn_spread;
@@ -45,3 +53,27 @@ func shoot():
 func set_weaponmgr(weapon):
 	player_weapon = weapon;
 	weapon.connect("weapon_attack", self, "shoot");
+
+############################### Setter and getter ######################
+
+func set_size(v):
+	size = v;
+	cur_spread = 0.5 * size;
+	update();
+
+func get_size():
+	return size;
+
+func set_width(v):
+	width = v;
+	update();
+
+func get_width():
+	return width;
+
+func set_color(v):
+	color = v;
+	update();
+
+func get_color():
+	return color;
