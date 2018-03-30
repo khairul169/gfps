@@ -7,6 +7,7 @@ onready var anim = get_node("AnimationPlayer");
 func _ready():
 	# Hide all object
 	mesh.hide();
+	$Particles.emitting = false;
 
 func flash():
 	if (!is_inside_tree()):
