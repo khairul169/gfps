@@ -513,6 +513,7 @@ func set_current_weapon(id):
 	# Set weapon configuration
 	wpn_clip_max = weapon_list[id].clip;
 	wpn_initialspread = weapon_list[id].spread.x;
+	wpn_spread = wpn_initialspread;
 	wpn_maxspread = weapon_list[id].spread.y;
 	wpn_recoil = weapon_list[id].recoil;
 	wpn_reloadtime = weapon_list[id].reload_time;

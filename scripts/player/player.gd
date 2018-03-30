@@ -53,6 +53,10 @@ func _physics_process(delta):
 	input['jump'] = Input.is_key_pressed(KEY_SPACE);
 	input['walk'] = Input.is_key_pressed(KEY_ALT);
 	input['sprint'] = Input.is_key_pressed(KEY_SHIFT);
+	
+	# Update crosshair size
+	if (weapon):
+		$interface/crosshair.spread = weapon.wpn_spread;
 
 func load_weapon():
 	if (!weapon):
@@ -64,6 +68,9 @@ func load_weapon():
 	weapon.connect("weapon_special", self, "update_hud");
 	weapon.connect("weapon_unload", self, "update_hud");
 	weapon.connect("weapon_reload", self, "update_hud");
+	
+	# Weapon shoot effect for crosshair
+	weapon.connect("weapon_attack", $interface/crosshair, "shoot");
 	
 	# Register weapon
 	weapon_ak47 = weapon.register_weapon("res://scripts/weapon/wpn_ak47.gd");
@@ -87,3 +94,8 @@ func update_hud():
 		# Hide HUD
 		$interface/ammo.hide();
 		$interface/weapon_name.hide();
+	
+	if (cur_wpn && !cur_wpn.is_aiming):
+		$interface/crosshair.visible = true;
+	else:
+		$interface/crosshair.visible = false;
