@@ -54,6 +54,7 @@ MoveSpeed = 3.6
 SprintSpeed = 1.5
 WalkSpeed = 0.5
 Acceleration = 8.0
+AirAccel = 16.0
 JumpForce = 7.5
 CameraNode = NodePath("camera")
 CameraSensitivity = 0.2
@@ -172,13 +173,14 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 script = ExtResource( 2 )
+PlayerWeapon = NodePath("../../weapon")
 
 [node name="sounds" type="Node" parent="." index="4"]
 
 script = ExtResource( 3 )
 StepLeft = ExtResource( 4 )
 StepRight = ExtResource( 5 )
-StepDelay = 0.32
+StepDelay = 0.4
 JumpLanding = ExtResource( 6 )
 
 [node name="weapon" type="Node" parent="." index="5"]

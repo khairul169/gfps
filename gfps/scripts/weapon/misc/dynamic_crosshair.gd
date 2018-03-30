@@ -1,17 +1,28 @@
 extends Control
 
+export (NodePath) var PlayerWeapon;
+
 var size = 16;
 var width = 2.0;
 var color = Color(0,1,0,0.6);
 var num = 4;
 var spread = 0.0;
 var cur_spread = 0.0;
+var player_weapon;
 
 func _ready():
-	pass
+	if (PlayerWeapon && typeof(PlayerWeapon) == TYPE_NODE_PATH):
+		set_weaponmgr(get_node(PlayerWeapon));
 
 func _process(delta):
+	# Get weapon spread from weapon mgr
+	if (player_weapon):
+		spread = player_weapon.wpn_spread;
+	
+	# Interpolate current spread
 	cur_spread = lerp(cur_spread, max(spread * size * 0.5, 0.0), 16.0 * delta);
+	
+	# Update canvas
 	update();
 
 func _draw():
@@ -29,3 +40,7 @@ func _draw():
 
 func shoot():
 	cur_spread = size * 10.0;
+
+func set_weaponmgr(weapon):
+	player_weapon = weapon;
+	weapon.connect("weapon_attack", self, "shoot");
