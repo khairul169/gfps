@@ -1,6 +1,7 @@
 [gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://Scripts/Weapon/Misc/TimedObject.gd" type="Script" id=1]
+[ext_resource path="res://scripts/weapon/misc/timed_object.gd" type="Script" id=1]
+
 
 
 
