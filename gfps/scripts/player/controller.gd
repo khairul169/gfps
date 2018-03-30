@@ -152,7 +152,7 @@ func _integrate_forces(state):
 	
 	# Check if player is colliding with an object
 	if (FloorRay != null && !FloorRay.is_colliding()):
-		move_dir = move_dir * 0.6;
+		move_dir = linear_velocity;
 		on_floor = false;
 	else:
 		on_floor = true;
@@ -188,14 +188,14 @@ func _integrate_forces(state):
 			is_jumping = true;
 			
 			# Jump!
-			if (FloorRay != null && FloorRay.is_colliding() && stun_time <= 0.0):
+			if (FloorRay != null && on_floor && stun_time <= 0.0):
 				new_velocity.y = JumpForce;
 	else:
 		if (is_jumping):
 			is_jumping = false;
 	
 	# Disable player movement after landing from the air
-	if (state.linear_velocity.y < -8.0 && FloorRay.is_colliding() && stun_time <= 0.0):
+	if (state.linear_velocity.y < -8.0 && on_floor && stun_time <= 0.0):
 		stun_time = 0.5;
 	
 	if (new_velocity.length() > 1.0):
