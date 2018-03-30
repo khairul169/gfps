@@ -609,9 +609,9 @@ func toggle_weaponlens(toggle, fov = 60.0):
 		return;
 	if (toggle && EnableScopeRender):
 		scope_renderer.get_camera().fov = fov;
-		weapon_node.set_lens_texture(scope_renderer.get_texture());
+		weapon_node.set_lens_texture(toggle, scope_renderer.get_texture());
 	else:
-		weapon_node.set_lens_texture(null);
+		weapon_node.set_lens_texture(toggle, null);
 
 func give_object_damage(object, damage, hit_pos = Vector3()):
 	if (!object || !object.is_inside_tree() || !object.has_method("give_damage")):

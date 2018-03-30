@@ -25,11 +25,11 @@ func _ready():
 	if (mat && mat is ShaderMaterial):
 		lens_material = mat;
 
-func set_lens_texture(res):
+func set_lens_texture(enable_render, res):
 	if (!lens_material):
 		return;
 	if (!res || !res is Texture):
 		res = null;
 	
-	lens_material.set_shader_param("enable_render", res != null);
+	lens_material.set_shader_param("enable_render", enable_render);
 	lens_material.set_shader_param("render", res);
