@@ -1,8 +1,8 @@
 [gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scenes/sample_scene.gd" type="Script" id=1]
-[ext_resource path="res://scripts/props/ladder.gd" type="Script" id=2]
-[ext_resource path="res://scenes/player/player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/player/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/props/ladder.gd" type="Script" id=3]
 
 [sub_resource type="PlaneMesh" id=1]
 
@@ -182,7 +182,11 @@ directional_shadow_bias_split_scale = 0.25
 directional_shadow_depth_range = 0
 directional_shadow_max_distance = 200.0
 
-[node name="objects" type="Spatial" parent="." index="1"]
+[node name="player" parent="." index="1" instance=ExtResource( 2 )]
+
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.0116791, 0.141982, 0.132614 )
+
+[node name="objects" type="Spatial" parent="." index="2"]
 
 editor/display_folded = true
 
@@ -252,7 +256,7 @@ constant_angular_velocity = Vector3( 0, 0, 0 )
 shape = SubResource( 5 )
 disabled = false
 
-[node name="props" type="Spatial" parent="." index="2"]
+[node name="props" type="Spatial" parent="." index="3"]
 
 editor/display_folded = true
 
@@ -516,7 +520,7 @@ material/0 = null
 shape = SubResource( 7 )
 disabled = false
 
-[node name="ladder" type="Area" parent="." index="3"]
+[node name="ladder" type="Area" parent="." index="4"]
 
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.4098, 3.85807, 0 )
@@ -540,7 +544,7 @@ reverb_bus_enable = false
 reverb_bus_name = "Master"
 reverb_bus_amount = 0.0
 reverb_bus_uniformity = 0.0
-script = ExtResource( 2 )
+script = ExtResource( 3 )
 
 [node name="Mesh" type="MeshInstance" parent="ladder" index="0"]
 
@@ -563,9 +567,5 @@ _sections_unfolded = [ "Geometry", "Transform" ]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.196749, 0, 0 )
 shape = SubResource( 10 )
 disabled = false
-
-[node name="player" parent="." index="4" instance=ExtResource( 3 )]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0116791, 0.141982, 0.132614 )
 
 

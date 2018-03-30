@@ -189,15 +189,27 @@ func toggle_aim(toggle):
 		PlayerWeapon.set_camera_bobscale(aim_bobscale);
 		PlayerWeapon.set_camera_shifting(false);
 		PlayerWeapon.toggle_weaponlens(true, dualrender_fov);
-		PlayerWeapon.play_animation(animation['aiming'][0]);
-		is_aiming = true;
+		
+		# Play animation
+		if (PlayerWeapon.has_animation(animation['aiming'][0])):
+			PlayerWeapon.play_animation(animation['aiming'][0]);
+		else:
+			PlayerWeapon.play_animation(animation['aiming'][1], false, 0.2);
+	
 	else:
 		PlayerWeapon.set_camera_fov(null);
 		PlayerWeapon.set_camera_bobscale(null);
 		PlayerWeapon.set_camera_shifting(true);
 		PlayerWeapon.toggle_weaponlens(false);
-		PlayerWeapon.play_animation(animation['aiming'][2]);
-		is_aiming = false;
+		
+		# Play animation
+		if (PlayerWeapon.has_animation(animation['aiming'][2])):
+			PlayerWeapon.play_animation(animation['aiming'][2]);
+		else:
+			PlayerWeapon.play_animation(animation['idle'], false, 0.2);
+	
+	# Set aim state
+	is_aiming = toggle;
 	
 	# Set stats value with multiplier modifier
 	reload_stats();

@@ -1,32 +1,95 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://scripts/player/player.gd" type="Script" id=1]
-[ext_resource path="res://scripts/player/controller.gd" type="Script" id=2]
-[ext_resource path="res://scripts/player/sounds.gd" type="Script" id=3]
-[ext_resource path="res://assets/sounds/footstep_jack_02.wav" type="AudioStream" id=4]
-[ext_resource path="res://assets/sounds/footstep_jack_03.wav" type="AudioStream" id=5]
-[ext_resource path="res://assets/sounds/land.wav" type="AudioStream" id=6]
-[ext_resource path="res://scripts/player/weapon.gd" type="Script" id=7]
-[ext_resource path="res://scripts/player/firstperson_view.gd" type="Script" id=8]
-[ext_resource path="res://scenes/weapon/muzzle_flash.tscn" type="PackedScene" id=9]
-[ext_resource path="res://scenes/weapon/bullet_shell.tscn" type="PackedScene" id=10]
-[ext_resource path="res://scenes/weapon/bullet_impact.tscn" type="PackedScene" id=11]
-
-[sub_resource type="RayShape" id=1]
-
-length = 0.3
+[ext_resource path="res://scripts/player/sounds.gd" type="Script" id=2]
+[ext_resource path="res://assets/sounds/footstep_jack_02.wav" type="AudioStream" id=3]
+[ext_resource path="res://assets/sounds/footstep_jack_03.wav" type="AudioStream" id=4]
+[ext_resource path="res://assets/sounds/land.wav" type="AudioStream" id=5]
+[ext_resource path="res://scripts/player/weapon.gd" type="Script" id=6]
+[ext_resource path="res://scripts/player/firstperson_view.gd" type="Script" id=7]
+[ext_resource path="res://scenes/weapon/muzzle_flash.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/weapon/bullet_shell.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/weapon/bullet_impact.tscn" type="PackedScene" id=10]
 
 [sub_resource type="CapsuleShape" id=2]
 
 radius = 0.4
 height = 0.6
 
-[node name="player" type="Spatial" index="0"]
+[sub_resource type="RayShape" id=1]
 
+length = 0.3
+
+[node name="player" type="RigidBody" index="0"]
+
+input_ray_pickable = true
+input_capture_on_drag = false
+collision_layer = 1
+collision_mask = 1
+mode = 0
+mass = 1.0
+friction = 1.0
+bounce = 0.0
+gravity_scale = 2.0
+custom_integrator = false
+continuous_cd = false
+contacts_reported = 0
+contact_monitor = false
+sleeping = false
+can_sleep = true
+axis_lock_linear_x = false
+axis_lock_linear_y = false
+axis_lock_linear_z = false
+axis_lock_angular_x = false
+axis_lock_angular_y = false
+axis_lock_angular_z = false
+linear_velocity = Vector3( 0, 0, 0 )
+linear_damp = -1.0
+angular_velocity = Vector3( 0, 0, 0 )
+angular_damp = -1.0
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
+MoveSpeed = 3.6
+SprintSpeed = 1.2
+WalkSpeed = 0.5
+Acceleration = 8.0
+JumpForce = 7.5
+CameraNode = NodePath("camera")
+CameraSensitivity = 0.2
+CameraPitchLimit = 80
 
-[node name="interface" type="Control" parent="." index="0"]
+[node name="shape_body" type="CollisionShape" parent="." index="0"]
+
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0 )
+shape = SubResource( 2 )
+disabled = false
+_sections_unfolded = [ "Transform" ]
+
+[node name="shape_leg" type="CollisionShape" parent="." index="1"]
+
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.3, 0 )
+shape = SubResource( 1 )
+disabled = false
+_sections_unfolded = [ "Transform" ]
+
+[node name="camera" type="Camera" parent="." index="2"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0 )
+keep_aspect = 1
+cull_mask = 1048575
+environment = null
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 0
+current = false
+fov = 60.0
+size = 1.0
+near = 0.01
+far = 100.0
+_sections_unfolded = [ "Transform" ]
+
+[node name="interface" type="Control" parent="." index="3"]
 
 editor/display_folded = true
 anchor_left = 0.0
@@ -91,77 +154,22 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "custom_colors" ]
 
-[node name="controller" type="RigidBody" parent="." index="1"]
+[node name="sounds" type="Node" parent="." index="4"]
 
-editor/display_folded = true
-input_ray_pickable = true
-input_capture_on_drag = false
-collision_layer = 1
-collision_mask = 1
-mode = 0
-mass = 1.0
-friction = 1.0
-bounce = 0.0
-gravity_scale = 2.0
-custom_integrator = false
-continuous_cd = false
-contacts_reported = 0
-contact_monitor = false
-sleeping = false
-can_sleep = true
-axis_lock_linear_x = false
-axis_lock_linear_y = false
-axis_lock_linear_z = false
-axis_lock_angular_x = false
-axis_lock_angular_y = false
-axis_lock_angular_z = false
-linear_velocity = Vector3( 0, 0, 0 )
-linear_damp = -1.0
-angular_velocity = Vector3( 0, 0, 0 )
-angular_damp = -1.0
 script = ExtResource( 2 )
-MoveSpeed = 3.6
-SprintSpeed = 1.2
-WalkSpeed = 0.5
-Acceleration = 8.0
-JumpForce = 7.5
-CameraSensitivity = 0.2
-CameraFOV = 60.0
-CameraHeight = 1.2
-CameraPitchLimit = 80
-
-[node name="shape_leg" type="CollisionShape" parent="controller" index="0"]
-
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.3, 0 )
-shape = SubResource( 1 )
-disabled = false
-_sections_unfolded = [ "Transform" ]
-
-[node name="shape_body" type="CollisionShape" parent="controller" index="1"]
-
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0 )
-shape = SubResource( 2 )
-disabled = false
-_sections_unfolded = [ "Transform" ]
-
-[node name="sounds" type="Node" parent="." index="2"]
-
-script = ExtResource( 3 )
-Controller = NodePath("../controller")
-StepLeft = ExtResource( 4 )
-StepRight = ExtResource( 5 )
+StepLeft = ExtResource( 3 )
+StepRight = ExtResource( 4 )
 StepDelay = 0.32
-JumpLanding = ExtResource( 6 )
+JumpLanding = ExtResource( 5 )
 
-[node name="weapon" type="Node" parent="." index="3"]
+[node name="weapon" type="Node" parent="." index="5"]
 
-script = ExtResource( 7 )
-Controller = NodePath("../controller")
-FirstPersonView = ExtResource( 8 )
+script = ExtResource( 6 )
+FirstPersonView = ExtResource( 7 )
 ModelScaling = 0.05
 EnableScopeRender = true
-MuzzleFlash = ExtResource( 9 )
-BulletShell = ExtResource( 10 )
-BulletImpact = ExtResource( 11 )
+MuzzleFlash = ExtResource( 8 )
+BulletShell = ExtResource( 9 )
+BulletImpact = ExtResource( 10 )
 
 

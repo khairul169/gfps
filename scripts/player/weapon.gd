@@ -1,7 +1,6 @@
 extends Node
 
 # Exports
-export (NodePath) var Controller;
 export (Script) var FirstPersonView;
 export var ModelScaling = 0.05;
 export var EnableScopeRender = true;
@@ -16,13 +15,14 @@ const BONE_MUZZLEFLASH = "muzzle_flash";
 const BONE_BULLETEJECT = "bullet_eject";
 
 # Nodes
-onready var world_node = get_parent().get_parent();
+onready var controller = get_parent();
+onready var world_node = controller.get_parent();
 
 # Signals
 signal weapon_attach();
 signal weapon_unload();
-signal weapon_attack1();
-signal weapon_attack2();
+signal weapon_attack();
+signal weapon_special();
 signal weapon_reload();
 signal object_hit(obj, pos);
 
@@ -55,8 +55,8 @@ var wpn_movespeed = 1.0;
 
 # Input
 var input = {
-	'attack1' : false,
-	'attack2' : false
+	'attack' : false,
+	'special' : false
 };
 
 # Registered weapon
@@ -65,32 +65,26 @@ var current_wpn = -1;
 
 func _ready():
 	# Get Nodes
-	if (typeof(Controller) == TYPE_NODE_PATH):
-		Controller = get_node(Controller);
-		Controller.PlayerWeapon = self;
+	if (controller):
+		controller.PlayerWeapon = self;
 	
 	# Create weapon view
-	if (Controller.CameraNode):
-		# Instance scene
-		fpview_node = Spatial.new();
-		fpview_node.name = "firstperson_view";
+	if (controller.CameraNode):
+		# Get node if CameraNode is a NodePath
+		if (typeof(controller.CameraNode) == TYPE_NODE_PATH):
+			controller.CameraNode = controller.get_node(controller.CameraNode);
 		
-		# Set script
-		if (FirstPersonView is Script):
-			fpview_node.set_script(FirstPersonView);
-			fpview_node.PlayerController = Controller;
-		
-		# Add to camera node
-		Controller.CameraNode.add_child(fpview_node);
+		# Load first person view node
+		create_fpview(controller.CameraNode);
 	
 	# Create stream player
-	if (Controller):
+	if (controller):
 		stream_player = AudioStreamPlayer3D.new();
-		stream_player.name = "stream_player";
+		stream_player.name = "weapon_sfx";
 		stream_player.max_distance = 100.0;
 		stream_player.unit_db = 8.0;
 		stream_player.max_db = 12.0;
-		Controller.add_child(stream_player);
+		controller.call_deferred("add_child", stream_player);
 	
 	# Instance prefabs
 	if (MuzzleFlash):
@@ -114,7 +108,7 @@ func _ready():
 		add_child(impact);
 
 func _process(delta):
-	if (current_wpn < 0 || !Controller):
+	if (current_wpn < 0 || !controller):
 		return;
 	
 	if (next_think > 0.0):
@@ -124,11 +118,11 @@ func _process(delta):
 		next_idle = max(next_idle - delta, 0.0);
 
 func _physics_process(delta):
-	if (current_wpn < 0 || !Controller):
+	if (current_wpn < 0 || !controller):
 		return;
 	
 	# Player input
-	is_firing = input['attack1'];
+	is_firing = input['attack'];
 	
 	# Weapon think
 	wpn_idle(delta);
@@ -145,6 +139,19 @@ func _physics_process(delta):
 
 ##########################################################################
 
+func create_fpview(node):
+	# Instance scene
+	fpview_node = Spatial.new();
+	fpview_node.name = "firstperson_view";
+	
+	# Set script
+	if (FirstPersonView is Script):
+		fpview_node.set_script(FirstPersonView);
+		fpview_node.PlayerController = controller;
+	
+	# Add to camera node
+	node.call_deferred("add_child", fpview_node);
+
 func able_to_sprint():
 	return (next_think <= 0.0 && !is_firing && !is_reloading);
 
@@ -153,13 +160,13 @@ func wpn_idle(delta):
 	if (!is_firing && next_think <= 0.0):
 		wpn_spread = clamp(wpn_spread - ((wpn_maxspread-wpn_initialspread) * 0.2), wpn_initialspread, wpn_maxspread);
 	
-	if (Controller.is_sprinting && !is_sprinting && next_think <= 0.0):
+	if (controller.is_sprinting && !is_sprinting && next_think <= 0.0):
 		sprint_toggled(true);
 		is_sprinting = true;
 		next_idle = 0.5;
 		next_think = 0.1;
 	
-	if (!Controller.is_sprinting && is_sprinting && next_think <= 0.0):
+	if (!controller.is_sprinting && is_sprinting && next_think <= 0.0):
 		sprint_toggled(false);
 		is_sprinting = false;
 		next_idle = 0.5;
@@ -173,7 +180,7 @@ func wpn_attack():
 		return;
 	
 	# Cannot shoot while sprinting
-	if (Controller.is_sprinting || is_sprinting):
+	if (controller.is_sprinting || is_sprinting):
 		return;
 	
 	# Out of clip
@@ -209,20 +216,20 @@ func wpn_attack():
 	wpn_spread = clamp(wpn_spread + ((wpn_maxspread-wpn_initialspread) * 0.1), wpn_initialspread, wpn_maxspread);
 	
 	# Emit attack signal
-	emit_signal("weapon_attack1");
+	emit_signal("weapon_attack");
 
 func wpn_special():
-	if (!input['attack2'] || Controller.is_sprinting || is_sprinting || next_think > 0.0):
+	if (!input['special'] || controller.is_sprinting || is_sprinting || next_think > 0.0):
 		return;
 	
 	next_think = 0.1;
 	
 	if (current_wpn > -1 && current_wpn < weapon_list.size()):
 		weapon_list[current_wpn].special();
-		emit_signal("weapon_attack2");
+		emit_signal("weapon_special");
 
 func sprint_toggled(sprinting):
-	if (!Controller):
+	if (!controller):
 		return;
 	if (current_wpn > -1 && current_wpn < weapon_list.size()):
 		weapon_list[current_wpn].sprint_toggled(sprinting);
@@ -231,7 +238,7 @@ func wpn_reload():
 	if (is_reloading || next_think > 0.0 || wpn_ammo <= 0.0 || wpn_clip >= wpn_clip_max):
 		return;
 	
-	if (Controller.is_sprinting || is_sprinting):
+	if (controller.is_sprinting || is_sprinting):
 		return;
 	
 	var can_reload = true;
@@ -264,8 +271,8 @@ func wpn_postreload():
 ###########################################################################
 
 func get_camera_transform():
-	if (Controller):
-		return Controller.get_camera_transform();
+	if (controller):
+		return controller.get_camera_transform();
 	else:
 		return Transform();
 
@@ -290,15 +297,15 @@ func create_recoil(recoil):
 	recoil_impact.y = rand_range(0.5, 1.0) * recoil.y;
 	
 	# Double the recoil when player is moving
-	if (Controller.is_moving):
+	if (controller.is_moving):
 		recoil_impact *= 2.0;
 	
 	# And when climbing..
-	if (Controller.is_climbing):
+	if (controller.is_climbing):
 		recoil_impact *= 2.0;
 	
 	# Add camera impulse
-	Controller.camera_impulse += recoil_impact;
+	controller.camera_impulse += recoil_impact;
 
 func play_audio_stream(stream):
 	if (!stream_player || !stream || !stream is AudioStream):
@@ -313,17 +320,17 @@ func shoot_bullet(distance):
 	mRayVector.y += rand_range(-1.0, 1.0) * wpn_spread;
 	
 	# Spread more when moving and climbing
-	if (Controller.is_moving):
+	if (controller.is_moving):
 		mRayVector *= 2.0;
 	
-	if (Controller.is_climbing):
+	if (controller.is_climbing):
 		mRayVector *= 2.0;
 	
 	# Cast a ray
 	var cam_transform = get_camera_transform();
 	var vec_from = cam_transform.origin;
 	var vec_dir = cam_transform.basis.xform(Vector3(mRayVector.x, mRayVector.y, -distance));
-	var result = Controller.get_world().direct_space_state.intersect_ray(vec_from, vec_from + vec_dir, [Controller]);
+	var result = controller.get_world().direct_space_state.intersect_ray(vec_from, vec_from + vec_dir, [controller]);
 	
 	# Ray hit an object
 	if (!result.empty()):
@@ -373,7 +380,7 @@ func create_bulletshell(node):
 		return;
 	
 	var shell = BulletShell.instance();
-	shell.add_collision_exception_with(Controller);
+	shell.add_collision_exception_with(controller);
 	shell.global_transform = node.global_transform;
 	shell.linear_velocity = -node.global_transform.basis.z.normalized() * 0.6;
 	shell.linear_velocity.y = 0.4;
@@ -550,13 +557,13 @@ func add_weapon_clip(amount):
 	wpn_ammo = clamp(wpn_ammo - amount, 0, weapon_list[current_wpn].ammo);
 
 func set_camera_fov(fov):
-	if (!Controller):
+	if (!controller):
 		return;
 	
 	if (fov != null && fov > 0):
-		Controller.camera_fov = fov;
+		controller.camera_fov = fov;
 	else:
-		Controller.camera_fov = Controller.CameraFOV;
+		controller.camera_fov = controller.camera_defaultfov;
 
 func set_camera_bobscale(scale):
 	if (!fpview_node || !fpview_node.has_method("set_custom_scale")):

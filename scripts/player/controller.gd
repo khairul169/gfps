@@ -7,21 +7,17 @@ export var WalkSpeed = 0.5;
 export var Acceleration = 8.0;
 export var JumpForce = 7.5;
 
+export (NodePath) var CameraNode;
 export var CameraSensitivity = 0.2;
-export var CameraFOV = 60.0;
-export var CameraHeight = 1.2;
 export var CameraPitchLimit = 80;
+
+# Nodes
+var FloorRay;
+var PlayerSounds;
+var PlayerWeapon;
 
 # Signals
 signal camera_motion(dir);
-
-# Nodes
-var CameraNode;
-var FloorRay;
-
-# Sub Nodes
-var PlayerSounds;
-var PlayerWeapon;
 
 # Variables
 var network = null;
@@ -33,6 +29,7 @@ var camera_rotation = Vector3();
 var camera_impulse = Vector3();
 var camera_impulse_current = Vector3();
 var camera_fov = 0.0;
+var camera_defaultfov = 0.0;
 
 var is_jumping = false;
 var on_floor = false;
@@ -63,26 +60,24 @@ func _ready():
 	if (has_node("/root/network_mgr")):
 		network = get_node("/root/network_mgr");
 	
-	# Create camera
-	CameraNode = Camera.new();
-	CameraNode.fov = CameraFOV;
-	CameraNode.transform.origin.y = CameraHeight;
-	add_child(CameraNode, true);
+	if (CameraNode && typeof(CameraNode) == TYPE_NODE_PATH):
+		CameraNode = get_node(CameraNode);
 	
-	# Set camera as current
-	CameraNode.make_current();
-	camera_fov = CameraFOV;
-	
-	# Set camera znear & zfar
-	CameraNode.near = 0.01;
-	CameraNode.far = 100.0;
+	if (CameraNode && CameraNode is Camera):
+		# Get default fov
+		camera_fov = CameraNode.fov;
+		camera_defaultfov = camera_fov;
+		
+		# Set camera as current camera
+		CameraNode.make_current();
 	
 	# Create floor raycaster
 	FloorRay = RayCast.new();
+	FloorRay.name = "floor_raytest";
 	FloorRay.transform.origin.y = 0.3;
 	FloorRay.cast_to = Vector3(0.0, -0.5, 0.0);
 	FloorRay.enabled = true;
-	add_child(FloorRay, true);
+	add_child(FloorRay);
 	
 	# Set default arguments
 	friction = 0.0;
@@ -249,7 +244,7 @@ func ladder_collide(state):
 
 func rotate_camera(rotation):
 	# Set camera rotation
-	var sensitivity = CameraSensitivity * (camera_fov/CameraFOV);
+	var sensitivity = CameraSensitivity * (camera_fov/camera_defaultfov);
 	camera_rotation.x = clamp(camera_rotation.x - rotation.y * sensitivity, -CameraPitchLimit, CameraPitchLimit);
 	camera_rotation.y = fmod(camera_rotation.y - rotation.x * sensitivity, 360.0);
 	
