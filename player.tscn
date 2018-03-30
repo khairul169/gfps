@@ -93,7 +93,6 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="interface" type="Control" parent="." index="3"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -174,6 +173,9 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 script = ExtResource( 2 )
 PlayerWeapon = NodePath("../../weapon")
+size = 16
+width = 2.0
+color = Color( 1, 0, 0, 0.6 )
 
 [node name="sounds" type="Node" parent="." index="4"]
 
