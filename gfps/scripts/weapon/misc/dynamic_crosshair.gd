@@ -21,7 +21,7 @@ func _ready():
 		set_weaponmgr(get_node(PlayerWeapon));
 
 func _process(delta):
-	if (!visible):
+	if (!visible || Engine.editor_hint):
 		return;
 	
 	# Get weapon spread from weapon mgr
