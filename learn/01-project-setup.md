@@ -1,4 +1,4 @@
-### gFPS - FPS Framework
+# gFPS - FPS Framework
 ## 01 - Project Setup
 
 In this tutorial, you will learn how to setup your fps project, make a character controller, and control the first person camera.
