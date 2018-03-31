@@ -136,4 +136,4 @@ If you see the following message, you need to select `scene.tscn` and set it as 
 
 ![select_scene](resources/select_scene.png?raw=true)
 
-Download completed project: [project_tutorial01.zip](project_tutorial01.zip?raw=true)
+Download completed project: [project_tutorial01.zip](resources/project_tutorial01.zip?raw=true)
