@@ -41,7 +41,7 @@ Click on the shape resource to edit shape parameters.
 
 ![shape_capsule](resources/shape_capsule.png?raw=true)
 
-Our shape is created, but it is not supposed to be. We will change its translation and rotation to transform it properly.
+Our shapes are created, but it is not supposed to be. We will change its translation and rotation to transform it properly.
 
 ### Shape Transforms
 
