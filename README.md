@@ -3,7 +3,7 @@ First Person Shooter Framework for Godot Engine
 
 ## Tutorials
 
-1. [Setup New First Person Shooter Project with gFPS](learn/01-Project_Setup.md)
+1. [Setup New First Person Shooter Project with gFPS](learn/01-project-setup.md)
 
 ## Credits
 
