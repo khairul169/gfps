@@ -3,7 +3,8 @@ First Person Shooter Framework for Godot Engine
 
 ## Tutorials
 
-1. [Setup New First Person Shooter Project with gFPS](learn/01-project-setup.md)
+1. [Setup new first person shooter project with gFPS](learn/01-project-setup.md)
+2. [Add footstep, jump landing, and other sfx to the controller](learn/02-player-sfx.md)
 
 ## Credits
 
