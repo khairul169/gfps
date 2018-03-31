@@ -2,14 +2,14 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Sierra_Madre_B_HiRes_TMap.jpg-1271201749f2dc78279c4be72899611f.stex"
+path="res://.import/sky.jpg-4edd319b4718930c5cb6979fecb9a4f3.stex"
 
 [deps]
 
-source_file="res://Sierra_Madre_B_HiRes_TMap.jpg"
+source_file="res://sky.jpg"
 source_md5="a0661a316b343fe5423df401dc72df6c"
 
-dest_files=[ "res://.import/Sierra_Madre_B_HiRes_TMap.jpg-1271201749f2dc78279c4be72899611f.stex" ]
+dest_files=[ "res://.import/sky.jpg-4edd319b4718930c5cb6979fecb9a4f3.stex" ]
 dest_md5="707a1d663141182c17cff8c1dd677149"
 
 [params]
