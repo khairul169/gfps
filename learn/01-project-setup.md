@@ -90,7 +90,7 @@ Assign `Camera Node` properties to `camera` node in the scene to setup first per
 
 ## Input Mapping
 
-Back to the `player.gd` script, we will make a script that controll the player with WASD keys and several action like Jump, Sprint, etc.
+Back to the `player.gd` script, we will make a script that control the player with WASD keys and several action like Jump, Sprint, etc.
 
 ![player_script1](resources/player_script1.png?raw=true)
 
