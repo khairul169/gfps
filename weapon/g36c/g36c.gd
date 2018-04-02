@@ -5,8 +5,10 @@ func _init():
 	name = "G36C";
 	
 	# Resources
-	weapon_scene = "g36c.tscn";
-	audio_shoot = "g36c-shoot.wav";
+	view_scene = "view.tscn";
+	
+	# Sounds
+	sfx['shoot'] = "g36c-shoot.wav";
 	
 	# Weapon stats
 	clip = 40;

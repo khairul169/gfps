@@ -454,18 +454,18 @@ func register_weapon(path):
 	
 	# Models skeleton
 	var skeleton = null;
-	if (wpn.weapon_scene):
-		skeleton = wpn.weapon_scene.find_node("Skeleton");
+	if (wpn.view_scene):
+		skeleton = wpn.view_scene.find_node("Skeleton");
 	
 	# Set mesh layers
-	for i in get_meshinstances(wpn.weapon_scene):
+	for i in get_meshinstances(wpn.view_scene):
 		i.layers = 16;
 	
 	# Initialize weapon attachment
 	setup_attachment(wpn, skeleton);
 	return id;
 
-func set_weapon_scene(scene):
+func set_view_scene(scene):
 	if (!fpview_node):
 		return;
 	

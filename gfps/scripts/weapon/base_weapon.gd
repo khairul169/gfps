@@ -2,6 +2,8 @@ extends Reference
 
 # Nodes
 var PlayerWeapon;
+var MuzzleNode;
+var ShellEjectNode;
 
 # Constants
 const MODE_AUTO = 0;
@@ -11,22 +13,20 @@ const MODE_SINGLE = 1;
 var name = "base_weapon";
 
 # Resources
-var weapon_scene = "";
-var audio_shoot = "";
-
-var MuzzleNode;
-var ShellEjectNode;
+var view_scene = "";
+var sfx = {
+	'shoot' : null
+};
 
 # Weapon configuration
 var clip = 12;
 var ammo = 48;
-var firing_mode = MODE_AUTO;
-
+var move_speed = 1.0;
 var recoil = Vector2(0.0, 0.0);
 var spread = Vector2(0.0, 0.0);
 var firing_delay = 1.0/1.0;
 var firing_range = 1.0;
-var move_speed = 1.0;
+var firing_mode = MODE_AUTO;
 var reload_time = 1.0;
 var muzzle_size = 1.0;
 
@@ -35,8 +35,8 @@ var aim_fov = 0.0;
 var aim_statsmultiplier = 1.0;
 var aim_movespeed = 0.65;
 var aim_bobscale = 0.4;
-var dualrender_fov = 10.0;
 var aim_hidecrosshair = true;
+var dualrender_fov = 10.0;
 
 # State
 var is_aiming = false;
@@ -50,20 +50,20 @@ var animation = {
 	'reload' : 'reload',
 	
 	'sprint' : [
-		'pre_sprint',
-		'sprinting',
-		'post_sprint'
+		'sprint_pre',
+		'sprint_idle',
+		'sprint_post'
 	],
 	
 	'aiming' : [
-		'pre_aim',
-		'aiming',
-		'post_aim',
+		'aim_pre',
+		'aim_idle',
+		'aim_post',
 	],
 	
 	'shoot' : [
 		'shoot',
-		'shoot_aim'
+		'aim_shoot'
 	]
 };
 
@@ -71,15 +71,19 @@ var animation = {
 
 func registered():
 	# Load resources
-	weapon_scene = load_resource(weapon_scene);
-	audio_shoot = load_resource(audio_shoot);
+	view_scene = load_resource(view_scene);
 	
-	if (weapon_scene):
-		weapon_scene = weapon_scene.instance();
+	# Audio Stream
+	for i in sfx:
+		sfx[i] = load_resource(sfx[i]);
+	
+	# Instance view scene
+	if (view_scene):
+		view_scene = view_scene.instance();
 
 func attach():
 	# On weapon attached
-	PlayerWeapon.set_weapon_scene(weapon_scene);
+	PlayerWeapon.set_view_scene(view_scene);
 	PlayerWeapon.play_animation(animation['draw'], false, 0.0);
 	PlayerWeapon.next_think = 0.8;
 	PlayerWeapon.next_idle = 1.0;
@@ -88,7 +92,7 @@ func unload():
 	# Toggle weapon aim
 	toggle_aim(false);
 	
-	PlayerWeapon.set_weapon_scene(null);
+	PlayerWeapon.set_view_scene(null);
 
 #####################################################################
 
@@ -135,8 +139,8 @@ func attack(shoot_bullet = true):
 		PlayerWeapon.play_animation(animation['shoot'][0], false, 0.05);
 	
 	# Play sound
-	if (audio_shoot != null):
-		PlayerWeapon.play_audio_stream(audio_shoot);
+	if (sfx['shoot'] != null):
+		PlayerWeapon.play_audio_stream(sfx['shoot']);
 	
 	# Shoot a bullet
 	if (shoot_bullet):
@@ -154,15 +158,11 @@ func special():
 	next_special = 0.5;
 
 func reload():
-	var aim_reload = false;
-	if (is_aiming):
-		aim_reload = true;
-	
 	# Un-Aim weapon
 	toggle_aim(false);
 	
 	# Play animation
-	if (aim_reload):
+	if (is_aiming):
 		PlayerWeapon.play_animation(animation['reload'], false, 0.2);
 	else:
 		PlayerWeapon.play_animation(animation['reload']);
@@ -174,7 +174,7 @@ func post_reload():
 ##########################################################################
 
 func load_resource(res):
-	if (typeof(res) != TYPE_STRING || res == "" || res.begins_with("user://")):
+	if (!res || typeof(res) != TYPE_STRING || res == "" || res.begins_with("user://")):
 		return null;
 	if (!res.begins_with("res://") && has_meta("basedir")):
 		res = get_meta("basedir") + "/" + res;

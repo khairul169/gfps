@@ -5,8 +5,10 @@ func _init():
 	name = "AK47";
 	
 	# Resources
-	weapon_scene = "ak47.tscn";
-	audio_shoot = "ak47-shoot.wav";
+	view_scene = "view.tscn";
+	
+	# Sounds
+	sfx['shoot'] = "ak47-shoot.wav";
 	
 	# Weapon stats
 	clip = 30;
