@@ -5,6 +5,7 @@ export var MoveSpeed = 3.6;
 export var SprintSpeed = 1.5;
 export var WalkSpeed = 0.5;
 export var Acceleration = 8.0;
+export var Deacceleration = 4.0;
 export var AirAccel = 16.0;
 export var JumpForce = 7.5;
 
@@ -187,7 +188,11 @@ func _integrate_forces(state):
 		move_dir.y = state.linear_velocity.y;
 	
 	# New velocity value
-	var new_velocity = state.linear_velocity.linear_interpolate(move_dir, Acceleration * state.step);
+	var new_velocity = move_dir;
+	if (new_velocity.length() <= 0.1 || state.linear_velocity.dot(new_velocity) > 0.0):
+		new_velocity = state.linear_velocity.linear_interpolate(move_dir, Acceleration * state.step);
+	else:
+		new_velocity = state.linear_velocity.linear_interpolate(move_dir, Deacceleration * state.step);
 	
 	if (input['jump']):
 		if (!is_jumping):

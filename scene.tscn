@@ -187,6 +187,7 @@ directional_shadow_max_distance = 200.0
 [node name="player" parent="." index="1" instance=ExtResource( 2 )]
 
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.0116791, 0.141982, 0.132614 )
+Deacceleration = 4.0
 
 [node name="objects" type="Spatial" parent="." index="2"]
 
