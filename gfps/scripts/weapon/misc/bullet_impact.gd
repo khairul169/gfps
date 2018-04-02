@@ -2,18 +2,20 @@ extends Spatial
 
 # Variables
 var timeout = 0.0;
-var spawn_bullethole = true;
+var show_bullethole = true;
 
 func _ready():
 	# Emit particles
-	$ParticleFire.emitting = true;
-	$ParticleDust.emitting = true;
+	$spark.emitting = true;
+	$dust.emitting = true;
 	
 	# Set timeout
 	timeout = rand_range(5.0, 8.0);
 	
-	if (!spawn_bullethole):
-		$Mesh.hide();
+	if (show_bullethole):
+		$mesh.show();
+	else:
+		$mesh.hide();
 
 func _process(delta):
 	if (timeout > 0.0):
@@ -22,3 +24,7 @@ func _process(delta):
 	
 	# Remove node
 	queue_free();
+
+func bullet_hole(visible):
+	# Set mesh visibility
+	show_bullethole = visible;

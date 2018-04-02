@@ -17,13 +17,14 @@ func _init():
 	recoil = Vector2(1.4, 1.8);
 	spread = Vector2(1.8, 6.0);
 	move_speed = 0.96;
+	damage = 16.0;
 	
 	firing_delay = 1.0/9.0;
 	firing_range = 100.0;
 	firing_mode = MODE_AUTO;
 	
 	reload_time = 2.4;
-	muzzle_size = 1.0;
+	muzzle_size = 1.6;
 	
 	can_aim = true;
 	aim_fov = 40.0;

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://player.gd" type="Script" id=1]
 [ext_resource path="res://gfps/scripts/weapon/misc/dynamic_crosshair.gd" type="Script" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://gfps/scenes/muzzle_flash.tscn" type="PackedScene" id=9]
 [ext_resource path="res://gfps/scenes/bullet_shell.tscn" type="PackedScene" id=10]
 [ext_resource path="res://gfps/scenes/bullet_impact.tscn" type="PackedScene" id=11]
+[ext_resource path="res://gfps/scenes/blood_spray.tscn" type="PackedScene" id=12]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -54,6 +55,7 @@ MoveSpeed = 3.6
 SprintSpeed = 1.5
 WalkSpeed = 0.5
 Acceleration = 8.0
+Deacceleration = 4.0
 AirAccel = 16.0
 JumpForce = 7.5
 CameraNode = NodePath("camera")
@@ -195,5 +197,6 @@ EnableScopeRender = true
 MuzzleFlash = ExtResource( 9 )
 BulletShell = ExtResource( 10 )
 BulletImpact = ExtResource( 11 )
+BloodSpray = ExtResource( 12 )
 
 

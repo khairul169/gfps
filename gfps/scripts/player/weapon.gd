@@ -9,6 +9,7 @@ export var EnableScopeRender = true;
 export (PackedScene) var MuzzleFlash;
 export (PackedScene) var BulletShell;
 export (PackedScene) var BulletImpact;
+export (PackedScene) var BloodSpray;
 
 # Weapon attachment
 const BONE_MUZZLEFLASH = "muzzle_flash";
@@ -101,11 +102,6 @@ func _ready():
 	camera.cull_mask = 1;
 	scope_renderer.add_child(camera, true);
 	add_child(scope_renderer);
-	
-	# Hack! Prevent game from freezing when instancing bullet impact
-	if (BulletImpact):
-		var impact = BulletImpact.instance();
-		add_child(impact);
 
 func _process(delta):
 	if (current_wpn < 0 || !controller):
@@ -350,33 +346,32 @@ func raytest_check(result, direction):
 	if (!result || typeof(result) != TYPE_DICTIONARY || result.empty()):
 		return;
 	
-	# Instantiate bullet hole
-	if (result.collider is StaticBody):
-		create_bulletimpact(result.position, result.normal, true);
+	# Spawn blood splatter
+	if (result.collider.is_in_group("player")):
+		create_bloodspray(result.position, result.normal);
+	else:
+		create_bulletimpact(result.position, result.normal, result.collider is StaticBody);
 	
 	# Knock back rigidbody
 	if (result.collider is RigidBody && result.collider.is_in_group("physics")):
-		create_bulletimpact(result.position, result.normal, false);
-		
-		# Apply body impulse
 		var pos = result.position-result.collider.global_transform.origin;
 		result.collider.apply_impulse(pos, direction.normalized() * 2.0);
 	
 	# Give damage to damageable object
-	if (result.collider.is_in_group("damageable")):
-		create_bulletimpact(result.position, result.normal, false);
-		give_object_damage(result.collider, 10.0, result.position);
+	if (result.collider.is_in_group("damageable") && current_wpn >= 0 && current_wpn < weapon_list.size()):
+		give_object_damage(result.collider, weapon_list[current_wpn].damage, result.position);
 	
 	# Emit signal
 	emit_signal("object_hit", result.collider, result.position);
 
 func create_bulletimpact(pos, normal, bullet_hole = true):
-	if (!BulletImpact):
+	if (!BulletImpact || !BulletImpact is PackedScene):
 		return;
 	
-	# Instance prefabs
+	# Instance scene
 	var instance = BulletImpact.instance();
-	instance.spawn_bullethole = bullet_hole;
+	if (instance.has_method("bullet_hole")):
+		instance.bullet_hole(bullet_hole);
 	world_node.add_child(instance);
 	
 	# Set transform
@@ -393,12 +388,24 @@ func create_bulletshell(node):
 	shell.linear_velocity.y = 0.4;
 	world_node.add_child(shell);
 
+func create_bloodspray(pos, normal):
+	if (!BloodSpray || !BloodSpray is PackedScene):
+		return;
+	
+	# Instance scene
+	var instance = BloodSpray.instance();
+	world_node.add_child(instance);
+	
+	# Set transform
+	instance.look_at_from_position(pos + (normal.normalized() * 0.01), pos + normal + Vector3(1, 1, 1) * 0.001, Vector3(0, 1, 0));
+
 func attach_muzzleflash(node, size = 0.0):
 	if (!muzzleflash_node):
 		return;
 	
 	if (node):
-		muzzleflash_node.scale = Vector3(1, 1, 1) * size;
+		if (muzzleflash_node.has_method("set_size")):
+			muzzleflash_node.set_size(size);
 		node.add_child(muzzleflash_node);
 	else:
 		if (muzzleflash_node.get_parent()):

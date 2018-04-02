@@ -4,8 +4,6 @@
 [ext_resource path="res://gfps/sprites/muzzle_flash.png" type="Texture" id=2]
 [ext_resource path="res://gfps/sprites/smoke_particle.png" type="Texture" id=3]
 
-
-
 [sub_resource type="SpatialMaterial" id=1]
 
 render_priority = 0
@@ -60,13 +58,13 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
-_sections_unfolded = [ "Albedo", "Emission", "Flags", "Parameters" ]
+_sections_unfolded = [ "Albedo", "Emission", "Parameters" ]
 
 [sub_resource type="QuadMesh" id=2]
 
 size = Vector2( 1, 1 )
 
-[sub_resource type="SpatialMaterial" id=4]
+[sub_resource type="SpatialMaterial" id=3]
 
 render_priority = 0
 flags_transparent = true
@@ -122,20 +120,20 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo", "Parameters" ]
 
-[sub_resource type="Curve" id=7]
+[sub_resource type="Curve" id=4]
 
 min_value = 0.0
 max_value = 1.0
 bake_resolution = 100
 _data = [ Vector2( 0.00520833, 0.263672 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.961914 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=8]
+[sub_resource type="CurveTexture" id=5]
 
 flags = 4
 width = 2048
-curve = SubResource( 7 )
+curve = SubResource( 4 )
 
-[sub_resource type="ParticlesMaterial" id=5]
+[sub_resource type="ParticlesMaterial" id=6]
 
 render_priority = 0
 trail_divisor = 1
@@ -145,7 +143,7 @@ flag_rotate_y = false
 flag_disable_z = false
 spread = 45.0
 flatness = 0.0
-gravity = Vector3( 0, 2.5, 0 )
+gravity = Vector3( 0, 0.5, 0 )
 initial_velocity = 1.0
 initial_velocity_random = 0.0
 angular_velocity = 90.0
@@ -162,7 +160,7 @@ angle = 0.0
 angle_random = 0.0
 scale = 2.0
 scale_random = 0.0
-scale_curve = SubResource( 8 )
+scale_curve = SubResource( 5 )
 color = Color( 1, 1, 1, 1 )
 hue_variation = 0.0
 hue_variation_random = 0.0
@@ -173,18 +171,17 @@ anim_offset_random = 0.0
 anim_loop = false
 _sections_unfolded = [ "Angular Velocity", "Gravity", "Scale" ]
 
-[sub_resource type="QuadMesh" id=6]
+[sub_resource type="QuadMesh" id=7]
 
 size = Vector2( 1, 1 )
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=8]
 
-resource_name = "flash"
 length = 0.1
 loop = false
 step = 0.1
 tracks/0/type = "value"
-tracks/0/path = NodePath("Mesh:visible")
+tracks/0/path = NodePath("mesh:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -196,7 +193,7 @@ tracks/0/keys = {
 "values": [ true, false ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("Light:visible")
+tracks/1/path = NodePath("light:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -208,7 +205,7 @@ tracks/1/keys = {
 "values": [ true, false ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("Particles:emitting")
+tracks/2/path = NodePath("particles:emitting")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -224,7 +221,7 @@ tracks/2/keys = {
 
 script = ExtResource( 1 )
 
-[node name="Mesh" type="MeshInstance" parent="." index="0"]
+[node name="mesh" type="MeshInstance" parent="." index="0"]
 
 transform = Transform( 3.08545, 0, 0, 0, 3.08545, 0, 0, 0, 3.08545, 0, 0, 0 )
 layers = 1
@@ -241,11 +238,11 @@ skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Geometry", "Transform", "Visibility" ]
 
-[node name="Particles" type="Particles" parent="." index="1"]
+[node name="particles" type="Particles" parent="." index="1"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0161762 )
 layers = 1
-material_override = SubResource( 4 )
+material_override = SubResource( 3 )
 cast_shadow = 0
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -266,12 +263,12 @@ fract_delta = true
 visibility_aabb = AABB( -4, -4, -4, 8, 8, 8 )
 local_coords = true
 draw_order = 0
-process_material = SubResource( 5 )
+process_material = SubResource( 6 )
 draw_passes = 1
-draw_pass_1 = SubResource( 6 )
+draw_pass_1 = SubResource( 7 )
 _sections_unfolded = [ "Draw Passes", "Drawing", "Geometry", "Process Material", "Time" ]
 
-[node name="Light" type="OmniLight" parent="." index="2"]
+[node name="light" type="OmniLight" parent="." index="2"]
 
 layers = 1
 light_color = Color( 1, 0.915436, 0.363281, 1 )
@@ -287,7 +284,7 @@ shadow_bias = 0.15
 shadow_contact = 0.0
 shadow_reverse_cull_face = false
 editor_only = false
-omni_range = 5.0
+omni_range = 10.0
 omni_attenuation = 1.0
 omni_shadow_mode = 1
 omni_shadow_detail = 1
@@ -300,7 +297,7 @@ autoplay = ""
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/flash = SubResource( 3 )
+anims/flash = SubResource( 8 )
 blend_times = [  ]
 
 

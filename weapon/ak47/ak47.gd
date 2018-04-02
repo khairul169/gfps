@@ -15,10 +15,11 @@ func _init():
 	ammo = 90;
 	
 	reload_time = 2.4;
-	muzzle_size = 1.0;
+	muzzle_size = 1.4;
 	recoil = Vector2(1.8, 2.8);
 	spread = Vector2(2.8, 8.0);
 	move_speed = 0.94;
+	damage = 22.0;
 	
 	firing_mode = MODE_AUTO;
 	firing_delay = 1.0/10.0;

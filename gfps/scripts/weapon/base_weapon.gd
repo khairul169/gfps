@@ -29,6 +29,7 @@ var firing_range = 1.0;
 var firing_mode = MODE_AUTO;
 var reload_time = 1.0;
 var muzzle_size = 1.0;
+var damage = 10.0;
 
 var can_aim = false;
 var aim_fov = 0.0;

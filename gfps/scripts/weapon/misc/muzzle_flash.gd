@@ -1,14 +1,14 @@
 extends Spatial
 
 # Nodes
-onready var mesh = get_node("Mesh");
+onready var mesh = get_node("mesh");
 onready var anim = get_node("AnimationPlayer");
 
 func _ready():
 	# Hide all object
-	$Mesh.hide();
-	$Particles.emitting = false;
-	$Light.hide();
+	$mesh.hide();
+	$particles.emitting = false;
+	$light.hide();
 
 func flash():
 	if (!is_inside_tree()):
@@ -17,3 +17,8 @@ func flash():
 	# Show muzzleflash
 	mesh.rotation_degrees.z = rand_range(0, 360.0);
 	anim.play("flash");
+
+func set_size(size):
+	var scale = Vector3(1,1,1) * size;
+	$mesh.scale = scale
+	$light.scale = scale;
