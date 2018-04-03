@@ -18,6 +18,11 @@ config/icon="res://icon.png"
 
 network_mgr="*res://gfps/scripts/network/network_mgr.gd"
 
+[display]
+
+window/size/width=848
+window/size/height=480
+
 [rendering]
 
 environment/default_environment="res://env.tres"

@@ -28,8 +28,8 @@ var default_gravity = 0.0;
 var stun_time = 0.0;
 
 var camera_rotation = Vector3();
-var camera_impulse = Vector3();
-var camera_impulse_current = Vector3();
+var camera_recoil = Vector3();
+var camera_recoil_current = Vector3();
 var camera_fov = 0.0;
 var camera_defaultfov = 0.0;
 
@@ -228,19 +228,14 @@ func update_camera(delta):
 	if (CameraNode && CameraNode.fov != camera_fov):
 		CameraNode.fov = lerp(CameraNode.fov, camera_fov, 16 * delta);
 	
-	# Recoil system
-	if (camera_impulse.length() > 0.0):
-		camera_impulse_current = camera_impulse_current.linear_interpolate(camera_impulse, 24 * delta);
-	
-	if (camera_impulse.length() > 0.0):
-		camera_impulse = camera_impulse.linear_interpolate(Vector3(), 5 * delta);
+	# Camera recoil
+	if (camera_recoil.length() > 0.0):
+		camera_recoil_current = camera_recoil_current.linear_interpolate(camera_recoil, 24 * delta);
+	if (camera_recoil.length() > 0.0):
+		camera_recoil = camera_recoil.linear_interpolate(Vector3(), 5 * delta);
 	
 	var looking_direction = Vector3();
-	var cam_rot = camera_rotation;
-	
-	# Add camera impulse
-	cam_rot.x += camera_impulse_current.y;
-	cam_rot.y += camera_impulse_current.x;
+	var cam_rot = camera_rotation + Vector3(camera_recoil_current.y, camera_recoil_current.x, 0);
 	
 	# Calculate eye direction
 	looking_direction.x -= sin(deg2rad(cam_rot.y)) * cos(deg2rad(cam_rot.x));

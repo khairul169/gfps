@@ -1,17 +1,18 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://player.gd" type="Script" id=1]
-[ext_resource path="res://gfps/scripts/weapon/misc/dynamic_crosshair.gd" type="Script" id=2]
-[ext_resource path="res://gfps/scripts/player/sounds.gd" type="Script" id=3]
-[ext_resource path="res://gfps/sounds/footstep_jack_02.wav" type="AudioStream" id=4]
-[ext_resource path="res://gfps/sounds/footstep_jack_03.wav" type="AudioStream" id=5]
-[ext_resource path="res://gfps/sounds/land.wav" type="AudioStream" id=6]
-[ext_resource path="res://gfps/scripts/player/weapon.gd" type="Script" id=7]
-[ext_resource path="res://gfps/scripts/player/firstperson_view.gd" type="Script" id=8]
-[ext_resource path="res://gfps/scenes/muzzle_flash.tscn" type="PackedScene" id=9]
-[ext_resource path="res://gfps/scenes/bullet_shell.tscn" type="PackedScene" id=10]
-[ext_resource path="res://gfps/scenes/bullet_impact.tscn" type="PackedScene" id=11]
-[ext_resource path="res://gfps/scenes/blood_spray.tscn" type="PackedScene" id=12]
+[ext_resource path="res://gfps/scripts/player/camera_bob.gd" type="Script" id=2]
+[ext_resource path="res://gfps/scripts/weapon/misc/dynamic_crosshair.gd" type="Script" id=3]
+[ext_resource path="res://gfps/scripts/player/sounds.gd" type="Script" id=4]
+[ext_resource path="res://gfps/sounds/footstep_jack_02.wav" type="AudioStream" id=5]
+[ext_resource path="res://gfps/sounds/footstep_jack_03.wav" type="AudioStream" id=6]
+[ext_resource path="res://gfps/sounds/land.wav" type="AudioStream" id=7]
+[ext_resource path="res://gfps/scripts/player/weapon.gd" type="Script" id=8]
+[ext_resource path="res://gfps/scripts/player/firstperson_view.gd" type="Script" id=9]
+[ext_resource path="res://gfps/scenes/muzzle_flash.tscn" type="PackedScene" id=10]
+[ext_resource path="res://gfps/scenes/bullet_shell.tscn" type="PackedScene" id=11]
+[ext_resource path="res://gfps/scenes/bullet_impact.tscn" type="PackedScene" id=12]
+[ext_resource path="res://gfps/scenes/blood_spray.tscn" type="PackedScene" id=13]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -91,7 +92,12 @@ fov = 60.0
 size = 1.0
 near = 0.01
 far = 100.0
+script = ExtResource( 2 )
 _sections_unfolded = [ "Transform" ]
+Controller = NodePath("..")
+bob_speed = 1.2
+bob_factor = 0.1
+min_weight = 1.2
 
 [node name="interface" type="Control" parent="." index="3"]
 
@@ -174,7 +180,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-script = ExtResource( 2 )
+script = ExtResource( 3 )
 size = 12
 width = 2.0
 color = Color( 1, 0.199219, 0.199219, 0.834235 )
@@ -182,21 +188,21 @@ PlayerWeapon = NodePath("../../weapon")
 
 [node name="sounds" type="Node" parent="." index="4"]
 
-script = ExtResource( 3 )
-StepLeft = ExtResource( 4 )
-StepRight = ExtResource( 5 )
+script = ExtResource( 4 )
+StepLeft = ExtResource( 5 )
+StepRight = ExtResource( 6 )
 StepDelay = 0.4
-JumpLanding = ExtResource( 6 )
+JumpLanding = ExtResource( 7 )
 
 [node name="weapon" type="Node" parent="." index="5"]
 
-script = ExtResource( 7 )
-FirstPersonView = ExtResource( 8 )
+script = ExtResource( 8 )
+FirstPersonView = ExtResource( 9 )
 ModelScaling = 0.05
 EnableScopeRender = true
-MuzzleFlash = ExtResource( 9 )
-BulletShell = ExtResource( 10 )
-BulletImpact = ExtResource( 11 )
-BloodSpray = ExtResource( 12 )
+MuzzleFlash = ExtResource( 10 )
+BulletShell = ExtResource( 11 )
+BulletImpact = ExtResource( 12 )
+BloodSpray = ExtResource( 13 )
 
 

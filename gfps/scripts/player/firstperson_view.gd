@@ -32,8 +32,8 @@ func _process(delta):
 	if (!PlayerController || !is_bobbing):
 		return;
 	
-	var bob_cycleSpeed = min((hvelocity.length()/PlayerController.MoveSpeed) * bob_speed, 10.0);
-	bob_cycle = fmod(bob_cycle + 360 * delta * bob_cycleSpeed, 360.0);
+	var bob_cyclespeed = min((hvelocity.length()/PlayerController.MoveSpeed) * bob_speed, 10.0);
+	bob_cycle = fmod(bob_cycle + 360 * delta * bob_cyclespeed, 360.0);
 
 func _physics_process(delta):
 	if (!PlayerController):

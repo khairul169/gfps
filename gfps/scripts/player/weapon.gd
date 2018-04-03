@@ -308,7 +308,7 @@ func create_recoil(recoil):
 		recoil_impact *= 2.0;
 	
 	# Add camera impulse
-	controller.camera_impulse += recoil_impact;
+	controller.camera_recoil += recoil_impact;
 
 func play_audio_stream(stream):
 	if (!stream_player || !stream || !stream is AudioStream):
