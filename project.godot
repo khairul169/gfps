@@ -11,7 +11,7 @@ config_version=3
 [application]
 
 config/name="gFPS Demo"
-run/main_scene="res://sample/scene.tscn"
+run/main_scene="res://demo/scene.tscn"
 config/icon="res://demo/icon.png"
 
 [autoload]
