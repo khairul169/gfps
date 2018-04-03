@@ -8,7 +8,7 @@ var bob_angle = 1.0;
 var sway_factor = 0.002;
 var sway_limit = 0.015;
 var camera_shifting = 0.02;
-var on_air_factor = 0.02;
+var on_air_factor = 0.015;
 var interpolation = 8.0;
 
 ############################ DO NOT EDIT BELOW ###############################
@@ -67,9 +67,11 @@ func _physics_process(delta):
 	if (shifting_enabled && !PlayerController.is_climbing):
 		if (PlayerController.linear_velocity.y > 0.5):
 			view_translation.y += on_air_factor;
+			view_translation.z += on_air_factor * 0.6;
 		
 		if (PlayerController.linear_velocity.y < -0.5):
 			view_translation.y -= on_air_factor;
+			view_translation.z += on_air_factor * 0.8;
 	
 	if (is_bobbing):
 		if (!PlayerController.is_sprinting && shifting_enabled):
