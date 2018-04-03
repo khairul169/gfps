@@ -149,7 +149,7 @@ func create_fpview(node):
 	node.call_deferred("add_child", fpview_node);
 
 func able_to_sprint():
-	return (next_think <= 0.0 && !is_firing && !is_reloading);
+	return ((next_think <= 0.0 || is_sprinting) && !is_firing && !is_reloading);
 
 func wpn_idle(delta):
 	if (!is_firing):
@@ -164,16 +164,12 @@ func wpn_idle(delta):
 			wpn_spread = clamp(wpn_spread, min_spread, wpn_maxspread);
 	
 	if (controller.is_sprinting && !is_sprinting && next_think <= 0.0):
-		sprint_toggled(true);
+		sprint_state(true);
 		is_sprinting = true;
-		next_idle = 0.6;
-		next_think = 0.4;
 	
 	if (!controller.is_sprinting && is_sprinting && next_think <= 0.0):
-		sprint_toggled(false);
+		sprint_state(false);
 		is_sprinting = false;
-		next_idle = 0.6;
-		next_think = 0.4;
 	
 	if (current_wpn > -1 && current_wpn < weapon_list.size()):
 		weapon_list[current_wpn].think(delta);
@@ -231,11 +227,11 @@ func wpn_special():
 		weapon_list[current_wpn].special();
 		emit_signal("weapon_special");
 
-func sprint_toggled(sprinting):
+func sprint_state(sprinting):
 	if (!controller):
 		return;
 	if (current_wpn > -1 && current_wpn < weapon_list.size()):
-		weapon_list[current_wpn].sprint_toggled(sprinting);
+		weapon_list[current_wpn].sprint_state(sprinting);
 
 func wpn_reload():
 	if (is_reloading || next_think > 0.0 || wpn_ammo <= 0.0 || wpn_clip >= wpn_clip_max):

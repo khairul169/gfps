@@ -91,7 +91,8 @@ func attach():
 
 func unload():
 	# Toggle weapon aim
-	toggle_aim(false);
+	if (is_aiming):
+		toggle_aim(false);
 	
 	PlayerWeapon.set_view_scene(null);
 
@@ -159,8 +160,9 @@ func special():
 	next_special = 0.5;
 
 func reload():
-	# Un-Aim weapon
-	toggle_aim(false);
+	# Toggle weapon aim
+	if (is_aiming):
+		toggle_aim(false);
 	
 	# Play animation
 	if (is_aiming):
@@ -218,14 +220,19 @@ func toggle_aim(toggle):
 	# Set stats value with multiplier modifier
 	reload_stats();
 
-func sprint_toggled(sprinting):
-	# Un-Aim weapon
-	toggle_aim(false);
+func sprint_state(sprinting):
+	# Toggle weapon aim
+	if (is_aiming):
+		toggle_aim(false);
 	
 	if (sprinting):
 		PlayerWeapon.play_animation(animation['sprint'][0]);
 	else:
 		PlayerWeapon.play_animation(animation['sprint'][2]);
+	
+	# Set next think
+	PlayerWeapon.next_idle = 0.6;
+	PlayerWeapon.next_think = 0.4;
 
 func reload_stats():
 	var multiplier = 1.0;
