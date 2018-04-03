@@ -12,7 +12,7 @@ config_version=3
 
 config/name="gFPS Demo"
 run/main_scene="res://sample/scene.tscn"
-config/icon="res://sample/icon.png"
+config/icon="res://demo/icon.png"
 
 [autoload]
 
@@ -25,4 +25,4 @@ window/size/height=480
 
 [rendering]
 
-environment/default_environment="res://sample/env.tres"
+environment/default_environment="res://demo/env.tres"

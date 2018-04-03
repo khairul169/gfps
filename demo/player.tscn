@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=2]
 
-[ext_resource path="res://sample/player.gd" type="Script" id=1]
+[ext_resource path="res://demo/player.gd" type="Script" id=1]
 [ext_resource path="res://gfps/scripts/player/camera_bob.gd" type="Script" id=2]
 [ext_resource path="res://gfps/scripts/weapon/misc/dynamic_crosshair.gd" type="Script" id=3]
 [ext_resource path="res://gfps/scripts/player/sounds.gd" type="Script" id=4]
@@ -13,6 +13,7 @@
 [ext_resource path="res://gfps/scenes/bullet_shell.tscn" type="PackedScene" id=11]
 [ext_resource path="res://gfps/scenes/bullet_impact.tscn" type="PackedScene" id=12]
 [ext_resource path="res://gfps/scenes/blood_spray.tscn" type="PackedScene" id=13]
+
 
 [sub_resource type="CapsuleShape" id=1]
 

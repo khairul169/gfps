@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/ak47.png-0270f01e30336468fd54e5b1906d4f5b.s3tc.stex"
-path.etc2="res://.import/ak47.png-0270f01e30336468fd54e5b1906d4f5b.etc2.stex"
+path.s3tc="res://.import/ak47.png-1ce4d0a410229c7922126c6d4cdbacb1.s3tc.stex"
+path.etc2="res://.import/ak47.png-1ce4d0a410229c7922126c6d4cdbacb1.etc2.stex"
 
 [deps]
 
-source_file="res://sample/weapon/ak47/ak47.png"
+source_file="res://demo/weapon/ak47/ak47.png"
 source_md5="10498f2dd6956660170c013051a438c4"
 
-dest_files=[ "res://.import/ak47.png-0270f01e30336468fd54e5b1906d4f5b.s3tc.stex", "res://.import/ak47.png-0270f01e30336468fd54e5b1906d4f5b.etc2.stex" ]
+dest_files=[ "res://.import/ak47.png-1ce4d0a410229c7922126c6d4cdbacb1.s3tc.stex", "res://.import/ak47.png-1ce4d0a410229c7922126c6d4cdbacb1.etc2.stex" ]
 dest_md5="ee271006797fa9ee39232e5afa06928b"
 
 [params]

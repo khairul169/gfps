@@ -2,15 +2,15 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/view.dae-8ecf2f572254bbfa324a1a49811692be.scn"
+path="res://.import/view.dae-3f9161f5aefe0aa3fa6f5d0c354aef9d.scn"
 
 [deps]
 
-source_file="res://sample/weapon/ak47/view.dae"
+source_file="res://demo/weapon/ak47/view.dae"
 source_md5="1a5a62e0c289915d157d2cbd72fe2785"
 
-dest_files=[ "res://.import/view.dae-8ecf2f572254bbfa324a1a49811692be.scn" ]
-dest_md5="9ee3a19a11d02ff6a78ba6f244fb7bcc"
+dest_files=[ "res://.import/view.dae-3f9161f5aefe0aa3fa6f5d0c354aef9d.scn" ]
+dest_md5="d305a4587dfc69fce659eb6d6a91d723"
 
 [params]
 

@@ -2,15 +2,15 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/view.dae-1985197d2d5e258a2f5dcb08e656e6ef.scn"
+path="res://.import/view.dae-b7cba40f7b2c298ccf02cd16a58b60b2.scn"
 
 [deps]
 
-source_file="res://sample/weapon/g36c/view.dae"
+source_file="res://demo/weapon/g36c/view.dae"
 source_md5="4ce0a3fef790a5db5ef341fcaec0ce63"
 
-dest_files=[ "res://.import/view.dae-1985197d2d5e258a2f5dcb08e656e6ef.scn" ]
-dest_md5="90958cc7e8fd7ab1f8dded21c0d7afe8"
+dest_files=[ "res://.import/view.dae-b7cba40f7b2c298ccf02cd16a58b60b2.scn" ]
+dest_md5="61a2d15f5776da3dbeb9ce504669002b"
 
 [params]
 

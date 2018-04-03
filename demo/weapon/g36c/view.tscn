@@ -1,9 +1,10 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://sample/weapon/g36c/view.dae" type="PackedScene" id=1]
+[ext_resource path="res://demo/weapon/g36c/view.dae" type="PackedScene" id=1]
 [ext_resource path="res://gfps/scripts/weapon/misc/dualrender_scope.gd" type="Script" id=2]
 [ext_resource path="res://gfps/shaders/scope_lens.shader" type="Shader" id=3]
-[ext_resource path="res://sample/weapon/g36c/lens_overlay.png" type="Texture" id=4]
+[ext_resource path="res://demo/weapon/g36c/lens_overlay.png" type="Texture" id=4]
+
 
 
 

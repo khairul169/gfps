@@ -2,14 +2,14 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/sky.jpg-847ee2c88a62f3f852597d933bed01ab.stex"
+path="res://.import/sky.jpg-9be8db0144951d7c4143a6604d2bf182.stex"
 
 [deps]
 
-source_file="res://sample/sky.jpg"
+source_file="res://demo/sky.jpg"
 source_md5="a0661a316b343fe5423df401dc72df6c"
 
-dest_files=[ "res://.import/sky.jpg-847ee2c88a62f3f852597d933bed01ab.stex" ]
+dest_files=[ "res://.import/sky.jpg-9be8db0144951d7c4143a6604d2bf182.stex" ]
 dest_md5="707a1d663141182c17cff8c1dd677149"
 
 [params]
