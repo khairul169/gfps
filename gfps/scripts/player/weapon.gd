@@ -166,14 +166,14 @@ func wpn_idle(delta):
 	if (controller.is_sprinting && !is_sprinting && next_think <= 0.0):
 		sprint_toggled(true);
 		is_sprinting = true;
-		next_idle = 0.5;
-		next_think = 0.1;
+		next_idle = 0.6;
+		next_think = 0.4;
 	
 	if (!controller.is_sprinting && is_sprinting && next_think <= 0.0):
 		sprint_toggled(false);
 		is_sprinting = false;
-		next_idle = 0.5;
-		next_think = 0.1;
+		next_idle = 0.6;
+		next_think = 0.4;
 	
 	if (current_wpn > -1 && current_wpn < weapon_list.size()):
 		weapon_list[current_wpn].think(delta);
