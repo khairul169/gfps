@@ -9,29 +9,35 @@ Create new project in project manager, your project directory should be consist 
 
 ![project_dir](resources/project_dir.png?raw=true)
 
-Clone this repo or download it as .zip, then link or unzip `gfps` directory to your project dir.
+Clone this repo or download it as .zip, then uncompress **gfps** directory to your project dir.
 
-Download [game_scene.zip](resources/game_scene.zip?raw=true) and uncompress it. Open `scene.tscn`, and also you will need to set `scene.tscn` as main scene of your project.
+The best way to do this is with `ln` or `mklink` command to link gfps directory.
 
-Now we will make the character controller to control our player.
+---
+
+To follow this tutorial, you need to create a scene that have a static floor and directional light. Or if you don't want to, you can download pre created [game_scene.zip](resources/game_scene.zip?raw=true) and uncompress it into your game project.
+
+Now open `scene.tscn` in the filesystem panel. You are also need to set `scene.tscn` as main scene of your project.
+
+Next step we will make the character controller to control our player.
 
 ## Player Controller
 
-Create new scene and create new RigidBody node. Rename `RigidBody` node to `player`. Save it as `player.tscn`.
+Create new scene and create new RigidBody node. Rename `RigidBody` node to `player`. Save it as **player.tscn**.
 
 ![player_scene](resources/player_scene.png?raw=true)
 
-Set `Mode` to `Character` and `Gravity Scale` to `2`.
+Set `Mode` to **Character** and `Gravity Scale` to **2**.
 
-Create two `CollisionShape` node. We will use 2 shape, Ray shape and Capsule shape.
+Create two `CollisionShape` node. Rename it to shape1 and shape2.
 
 ![shape_new](resources/shape_new.png?raw=true)
 
-For shape1, create RayShape and shape2 CapsuleShape.
+Create new RayShape for shape1, and CapsuleShape for shape2.
 
 ![shape_new1](resources/shape_new1.png?raw=true)
 
-Click on the shape resource to edit shape parameters.
+Click shape property to edit the shape.
 
 ![shape_edit](resources/shape_edit.png?raw=true)
 
@@ -110,11 +116,19 @@ func _physics_process(delta):
 	input['sprint'] = Input.is_key_pressed(KEY_SHIFT);
 ```
 
-`input` is a `Dictionary` variable that is used in `controller.gd` to check input from user. It holds several keys like forward, backward, and other.
+`input` is a **Dictionary** variable that is used in `controller.gd` to check input from user. It holds several keys like forward, backward, and other.
 
 `Input.is_key_pressed` can be replaced with `Input.is_action_pressed` if you want to map the keys from project settings. Now your character are ready for the action! But, save it first :p
 
-**Note: You will need to set `enable_sprint` variable to `true` if you want to enable sprinting ability of your controller.**
+---
+
+If you want your character controller to have a sprinting ability, you can set `can_sprint` to **true** in the script.
+
+```
+func _ready():
+	# Enable sprinting
+	can_sprint = true;
+```
 
 ## Instance Player to The Scene
 
@@ -126,7 +140,7 @@ Switch to the `scene` tab, right click on the `scene` node and click `Instance C
 
 Select `player.tscn` that we have created first, and set the translation or position to `0, 1, 0`.
 
-And that's it :)
+That's it :)
 
 ## Play the Scene
 
@@ -135,5 +149,7 @@ Our simple scene are ready to play. Now press F5 or press the play button to pla
 If you see the following message, you need to select `scene.tscn` and set it as your main project scene.
 
 ![select_scene](resources/select_scene.png?raw=true)
+
+---
 
 Download completed project: [project_tutorial01.zip](resources/project_tutorial01.zip?raw=true)
