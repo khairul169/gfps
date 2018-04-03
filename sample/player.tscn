@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=2]
 
-[ext_resource path="res://player.gd" type="Script" id=1]
+[ext_resource path="res://sample/player.gd" type="Script" id=1]
 [ext_resource path="res://gfps/scripts/player/camera_bob.gd" type="Script" id=2]
 [ext_resource path="res://gfps/scripts/weapon/misc/dynamic_crosshair.gd" type="Script" id=3]
 [ext_resource path="res://gfps/scripts/player/sounds.gd" type="Script" id=4]

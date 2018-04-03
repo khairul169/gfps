@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/grid.png-9bb66f80dbdd793fb4bb275a0d999fdf.s3tc.stex"
-path.etc2="res://.import/grid.png-9bb66f80dbdd793fb4bb275a0d999fdf.etc2.stex"
+path.s3tc="res://.import/grid.png-8f30db94498c540d30350cfd703ccdee.s3tc.stex"
+path.etc2="res://.import/grid.png-8f30db94498c540d30350cfd703ccdee.etc2.stex"
 
 [deps]
 
-source_file="res://grid.png"
+source_file="res://sample/grid.png"
 source_md5="7acc7e9362e357d964cac7dd7759b231"
 
-dest_files=[ "res://.import/grid.png-9bb66f80dbdd793fb4bb275a0d999fdf.s3tc.stex", "res://.import/grid.png-9bb66f80dbdd793fb4bb275a0d999fdf.etc2.stex" ]
+dest_files=[ "res://.import/grid.png-8f30db94498c540d30350cfd703ccdee.s3tc.stex", "res://.import/grid.png-8f30db94498c540d30350cfd703ccdee.etc2.stex" ]
 dest_md5="b3905186a816a904d4c5e204c5f96616"
 
 [params]

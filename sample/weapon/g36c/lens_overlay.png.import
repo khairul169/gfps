@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/lens_overlay.png-5a48e96c088f3f09b4927f6bd4353c85.s3tc.stex"
-path.etc2="res://.import/lens_overlay.png-5a48e96c088f3f09b4927f6bd4353c85.etc2.stex"
+path.s3tc="res://.import/lens_overlay.png-9e270f008989b4136d952a1abc573e0d.s3tc.stex"
+path.etc2="res://.import/lens_overlay.png-9e270f008989b4136d952a1abc573e0d.etc2.stex"
 
 [deps]
 
-source_file="res://weapon/g36c/lens_overlay.png"
+source_file="res://sample/weapon/g36c/lens_overlay.png"
 source_md5="23fb2af73cc057e7f8cbc293be88e010"
 
-dest_files=[ "res://.import/lens_overlay.png-5a48e96c088f3f09b4927f6bd4353c85.s3tc.stex", "res://.import/lens_overlay.png-5a48e96c088f3f09b4927f6bd4353c85.etc2.stex" ]
+dest_files=[ "res://.import/lens_overlay.png-9e270f008989b4136d952a1abc573e0d.s3tc.stex", "res://.import/lens_overlay.png-9e270f008989b4136d952a1abc573e0d.etc2.stex" ]
 dest_md5="681cf3f278fdf7af3324e1993b6e7c19"
 
 [params]

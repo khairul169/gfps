@@ -1,8 +1,8 @@
 [gd_scene load_steps=17 format=2]
 
-[ext_resource path="res://scene.gd" type="Script" id=1]
-[ext_resource path="res://player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://grid.png" type="Texture" id=3]
+[ext_resource path="res://sample/scene.gd" type="Script" id=1]
+[ext_resource path="res://sample/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://sample/grid.png" type="Texture" id=3]
 [ext_resource path="res://gfps/scripts/props/ladder.gd" type="Script" id=4]
 
 [sub_resource type="PlaneMesh" id=1]

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/hand.png-07e3a103561bc18a5ec32ceca50e9b0d.s3tc.stex"
-path.etc2="res://.import/hand.png-07e3a103561bc18a5ec32ceca50e9b0d.etc2.stex"
+path.s3tc="res://.import/hand.png-fdbe3152b84bc10fcb6da15a3538531d.s3tc.stex"
+path.etc2="res://.import/hand.png-fdbe3152b84bc10fcb6da15a3538531d.etc2.stex"
 
 [deps]
 
-source_file="res://weapon/ak47/hand.png"
+source_file="res://sample/weapon/ak47/hand.png"
 source_md5="4c0e040c8a71e5a62c1a8378675350aa"
 
-dest_files=[ "res://.import/hand.png-07e3a103561bc18a5ec32ceca50e9b0d.s3tc.stex", "res://.import/hand.png-07e3a103561bc18a5ec32ceca50e9b0d.etc2.stex" ]
+dest_files=[ "res://.import/hand.png-fdbe3152b84bc10fcb6da15a3538531d.s3tc.stex", "res://.import/hand.png-fdbe3152b84bc10fcb6da15a3538531d.etc2.stex" ]
 dest_md5="02fc92d1af2780c31556d24866d57fda"
 
 [params]

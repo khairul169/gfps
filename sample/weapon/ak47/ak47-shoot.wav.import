@@ -2,14 +2,14 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/ak47-shoot.wav-b6e165a49a70382feb9b1157471c56d9.sample"
+path="res://.import/ak47-shoot.wav-93cf910a4dea36d8744f7f14a8a03d14.sample"
 
 [deps]
 
-source_file="res://weapon/ak47/ak47-shoot.wav"
+source_file="res://sample/weapon/ak47/ak47-shoot.wav"
 source_md5="97cf569cef87fa0c9f4b70496d21c70a"
 
-dest_files=[ "res://.import/ak47-shoot.wav-b6e165a49a70382feb9b1157471c56d9.sample" ]
+dest_files=[ "res://.import/ak47-shoot.wav-93cf910a4dea36d8744f7f14a8a03d14.sample" ]
 dest_md5="09e98bceed2202d9d5860d1be5b8b87e"
 
 [params]
