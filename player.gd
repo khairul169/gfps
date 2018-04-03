@@ -12,7 +12,7 @@ func _ready():
 	load_weapon();
 	
 	# Enable character sprinting
-	enable_sprint = true;
+	can_sprint = true;
 
 func _input(event):
 	if (event is InputEventKey && event.pressed):

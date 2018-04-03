@@ -50,8 +50,9 @@ var input = {
 	'sprint' : false,
 };
 
-# Character ability
-var enable_sprint = false;
+# Ability
+var can_move = true;
+var can_sprint = false;
 
 func _ready():
 	# Set groups
@@ -165,7 +166,7 @@ func _integrate_forces(state):
 		on_floor = true;
 	
 	# Sprint
-	if (enable_sprint && input['sprint'] && on_floor && move_dir.dot(-camera_dir[2]) > 0.2):
+	if (can_move && can_sprint && input['sprint'] && on_floor && move_dir.dot(-camera_dir[2]) > 0.2):
 		if (!PlayerWeapon || (PlayerWeapon != null && PlayerWeapon.able_to_sprint())):
 			is_sprinting = true;
 			move_dir = move_dir * SprintSpeed;
@@ -183,6 +184,9 @@ func _integrate_forces(state):
 	if (stun_time > 0.0):
 		move_dir = move_dir * 0.2;
 	
+	if (!can_move):
+		move_dir = Vector3();
+	
 	# Add world gravity
 	if (!is_climbing):
 		move_dir.y = state.linear_velocity.y;
@@ -194,13 +198,12 @@ func _integrate_forces(state):
 	else:
 		new_velocity = state.linear_velocity.linear_interpolate(move_dir, Deacceleration * state.step);
 	
+	# Jump
 	if (input['jump']):
 		if (!is_jumping):
-			is_jumping = true;
-			
-			# Jump!
-			if (FloorRay != null && on_floor && stun_time <= 0.0):
+			if (FloorRay != null && on_floor && stun_time <= 0.0 && can_move):
 				new_velocity.y = JumpForce;
+			is_jumping = true;
 	else:
 		if (is_jumping):
 			is_jumping = false;
