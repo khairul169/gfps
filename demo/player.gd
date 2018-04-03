@@ -54,8 +54,8 @@ func load_weapon():
 	weapon.connect("weapon_reload", self, "update_hud");
 	
 	# Register weapon
-	weapon_ak47 = weapon.register_weapon("res://sample/weapon/ak47/ak47.gd");
-	weapon_g36c = weapon.register_weapon("res://sample/weapon/g36c/g36c.gd");
+	weapon_ak47 = weapon.register_weapon("res://demo/weapon/ak47/ak47.gd");
+	weapon_g36c = weapon.register_weapon("res://demo/weapon/g36c/g36c.gd");
 	
 	# Set primary weapon
 	weapon.set_current_weapon(weapon_g36c);
