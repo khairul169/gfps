@@ -1,4 +1,4 @@
-extends "base_weapon.gd"
+extends "res://gfps/scripts/weapon/base_weapon.gd"
 
 # Stats
 var bullet_spread = 8;
@@ -43,7 +43,7 @@ func think(delta):
 		return;
 	
 	PlayerWeapon.play_animation("reload");
-	PlayerWeapon.next_think = mReloadTime;
+	PlayerWeapon.next_think = reload_time;
 	PlayerWeapon.next_idle = PlayerWeapon.next_think + 0.5;
 
 func attach():
@@ -57,13 +57,14 @@ func attack():
 	
 	# Spread bullet
 	for i in range(0, bullet_spread):
-		PlayerWeapon.shoot_bullet(mFireRange);
+		PlayerWeapon.shoot_bullet(firing_range);
 	return true;
 
 func reload():
 	if (is_reloading):
 		return false;
 	
+	# Normal reload
 	if (!progressive_reload && .reload()):
 		return true;
 	
@@ -73,7 +74,7 @@ func reload():
 	is_reloading = true;
 	first_insert = true;
 	
-	PlayerWeapon.play_animation("pre_reload");
+	PlayerWeapon.play_animation("reload_start");
 	PlayerWeapon.next_think = 0.4;
 	PlayerWeapon.next_idle = PlayerWeapon.next_think + 0.1;
 	return false;
@@ -82,15 +83,13 @@ func cancel_reload():
 	if (!is_reloading):
 		return;
 	
-	PlayerWeapon.play_animation("post_reload");
+	PlayerWeapon.play_animation("reload_end");
 	PlayerWeapon.next_think = 0.4;
 	is_reloading = false;
 
-func SprintToggled(sprinting):
+func sprint_state(sprinting):
 	# Stop reload
 	cancel_reload();
 	PlayerWeapon.next_think = 0.0;
 	PlayerWeapon.next_idle = 0.0;
-	
-	# call base func
-	.sprint_toggled(sprinting);
+	.sprint_state(sprinting);

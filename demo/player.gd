@@ -1,8 +1,8 @@
 extends "res://gfps/scripts/player/controller.gd"
 
 # Weapons
-var weapon_ak47;
 var weapon_g36c;
+var weapon_xm1014;
 
 func _ready():
 	# Load weapon configuration
@@ -44,12 +44,15 @@ func _physics_process(delta):
 
 func load_weapon():
 	# Register weapon
-	weapon_ak47 = $weapon.register_weapon("res://demo/weapon/ak47/ak47.gd");
 	weapon_g36c = $weapon.register_weapon("res://demo/weapon/g36c/g36c.gd");
+	weapon_xm1014 = $weapon.register_weapon("res://demo/weapon/xm1014/xm1014.gd");
 	
 	# Add weapon to inventory
-	$inventory.set_item(0, weapon_ak47);
-	$inventory.set_item(1, weapon_g36c);
+	$inventory.set_item(0, weapon_g36c);
+	$inventory.set_item(1, weapon_xm1014);
+	
+	# Select primary weapon
+	$inventory.select_item(0);
 
 func update_hud():
 	var cur_wpn = $weapon.get_current_weapon();

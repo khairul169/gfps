@@ -28,6 +28,6 @@ func _init():
 	
 	can_aim = true;
 	aim_fov = 40.0;
-	aim_statsmultiplier = 0.4;
+	aim_statsmultiplier = 0.8;
 	aim_bobscale = 0.1;
 	dualrender_fov = 30.0;

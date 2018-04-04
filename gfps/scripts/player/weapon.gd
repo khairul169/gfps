@@ -314,21 +314,17 @@ func play_audio_stream(stream):
 	stream_player.play();
 
 func shoot_bullet(distance):
-	var mRayVector = Vector2();
-	mRayVector.x += rand_range(-1.0, 1.0) * wpn_spread;
-	mRayVector.y += rand_range(-1.0, 1.0) * wpn_spread;
-	
-	# Spread more when moving and climbing
+	var vec_spread = wpn_spread;
 	if (controller.is_moving):
-		mRayVector *= 2.0;
-	
+		vec_spread = min(vec_spread * 2.0, wpn_maxspread);
 	if (controller.is_climbing):
-		mRayVector *= 2.0;
+		vec_spread = min(vec_spread * 1.8, wpn_maxspread);
+	var raytest_vector = Vector2(rand_range(-1.0, 1.0) * vec_spread, rand_range(-1.0, 1.0) * vec_spread);
 	
 	# Cast a ray
 	var cam_transform = get_camera_transform();
 	var vec_from = cam_transform.origin;
-	var vec_dir = cam_transform.basis.xform(Vector3(mRayVector.x, mRayVector.y, -distance));
+	var vec_dir = cam_transform.basis.xform(Vector3(raytest_vector.x, raytest_vector.y, -distance));
 	var result = controller.get_world().direct_space_state.intersect_ray(vec_from, vec_from + vec_dir, [controller]);
 	
 	# Ray hit an object
