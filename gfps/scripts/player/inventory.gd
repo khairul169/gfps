@@ -98,14 +98,16 @@ func remove_item(slot, switch_other = false):
 
 func scroll_weapon(dir):
 	var cur_slot = active_slot + dir;
+	var try = 0;
 	
 	# Check if item is exist
-	while (!weapon_slot[cur_slot] || weapon_slot[cur_slot]['id'] < 0):
+	while (try < slot_count && (!weapon_slot[cur_slot] || weapon_slot[cur_slot]['id'] < 0)):
 		cur_slot += dir;
+		try += 1;
 		
 		if (cur_slot < 0):
-			cur_slot = weapon_slot.size() + cur_slot;
-		if (cur_slot >= weapon_slot.size()):
+			cur_slot = slot_count + cur_slot;
+		if (cur_slot >= slot_count):
 			cur_slot = 0;
 	
 	# Switch weapon
