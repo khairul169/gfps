@@ -112,6 +112,7 @@ func think(delta):
 	if (is_aiming):
 		idle_animation = animation['aiming'][1];
 	
+	# Sprinting
 	if (PlayerWeapon.is_sprinting):
 		idle_animation = animation['sprint'][1];
 	

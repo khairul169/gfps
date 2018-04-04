@@ -7,10 +7,10 @@ path="res://.import/view.dae-b7cba40f7b2c298ccf02cd16a58b60b2.scn"
 [deps]
 
 source_file="res://demo/weapon/g36c/view.dae"
-source_md5="4ce0a3fef790a5db5ef341fcaec0ce63"
+source_md5="bc43361757deecf141c70645c026897f"
 
 dest_files=[ "res://.import/view.dae-b7cba40f7b2c298ccf02cd16a58b60b2.scn" ]
-dest_md5="61a2d15f5776da3dbeb9ce504669002b"
+dest_md5="97271a8db551701669f36f629c4dcfbd"
 
 [params]
 

@@ -502,6 +502,11 @@ func unload_current_weapon():
 	current_wpn = -1;
 	emit_signal("weapon_unload");
 
+func get_weapon_by_id(id):
+	if (id < 0 || id >= weapon_list.size()):
+		return null;
+	return weapon_list[id];
+
 func get_current_weapon():
 	if (current_wpn < 0 || current_wpn >= weapon_list.size()):
 		return null;
@@ -559,14 +564,14 @@ func set_weapon_ammo(clip, ammo):
 	if (current_wpn < 0 || current_wpn >= weapon_list.size()):
 		return;
 	
-	wpn_clip = clamp(clip, 0, wpn_clip_max);
+	wpn_clip = clamp(clip, 0, weapon_list[current_wpn].clip);
 	wpn_ammo = clamp(ammo, 0, weapon_list[current_wpn].ammo);
 
 func add_weapon_clip(amount):
 	if (current_wpn < 0 || current_wpn >= weapon_list.size()):
 		return;
 	
-	wpn_clip = clamp(wpn_clip + amount, 0, wpn_clip_max);
+	wpn_clip = clamp(wpn_clip + amount, 0, weapon_list[current_wpn].clip);
 	wpn_ammo = clamp(wpn_ammo - amount, 0, weapon_list[current_wpn].ammo);
 
 func set_camera_fov(fov):

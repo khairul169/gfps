@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://demo/player.gd" type="Script" id=1]
 [ext_resource path="res://gfps/scripts/player/camera_bob.gd" type="Script" id=2]
@@ -13,7 +13,7 @@
 [ext_resource path="res://gfps/scenes/bullet_shell.tscn" type="PackedScene" id=11]
 [ext_resource path="res://gfps/scenes/bullet_impact.tscn" type="PackedScene" id=12]
 [ext_resource path="res://gfps/scenes/blood_spray.tscn" type="PackedScene" id=13]
-
+[ext_resource path="res://gfps/scripts/player/inventory.gd" type="Script" id=14]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -205,5 +205,11 @@ MuzzleFlash = ExtResource( 10 )
 BulletShell = ExtResource( 11 )
 BulletImpact = ExtResource( 12 )
 BloodSpray = ExtResource( 13 )
+
+[node name="inventory" type="Node" parent="." index="6"]
+
+script = ExtResource( 14 )
+player_weapon = NodePath("../weapon")
+slot_count = 6
 
 
