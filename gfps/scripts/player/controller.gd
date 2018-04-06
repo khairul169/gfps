@@ -147,7 +147,7 @@ func _integrate_forces(state):
 		on_floor = true;
 
 	# Sprint
-	if (can_move && can_sprint && input['sprint'] && on_floor && move_dir.dot(-camera_dir[2]) > 0.2):
+	if (can_move && can_sprint && input['sprint'] && on_floor && move_dir.dot(-camera_dir[2]) > 0.2 && stun_time <= 0.0):
 		if (!PlayerWeapon || (PlayerWeapon != null && PlayerWeapon.able_to_sprint())):
 			is_sprinting = true;
 			move_dir = move_dir * SprintSpeed;
