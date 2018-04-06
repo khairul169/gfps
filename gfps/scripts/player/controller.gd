@@ -138,17 +138,13 @@ func _integrate_forces(state):
 	if (FloorRay != null && !FloorRay.is_colliding()):
 		on_floor = false;
 		if (is_climbing):
-			move_dir = move_dir * 0.8;
+			move_dir = move_dir * 0.6;
 		elif (move_dir.length() > 0.0):
 			move_dir = linear_velocity.linear_interpolate(move_dir, AirAccel * state.step);
 		else:
 			move_dir = linear_velocity;
 	else:
 		on_floor = true;
-		
-		# Landing animation
-		if (last_velocity.y < -LandingThreshold && CameraNode.has_method("set_camera_translation")):
-			CameraNode.set_camera_translation(Vector3(0, last_velocity.y * 0.02, 0));
 
 	# Sprint
 	if (can_move && can_sprint && input['sprint'] && on_floor && move_dir.dot(-camera_dir[2]) > 0.2):
@@ -196,6 +192,9 @@ func _integrate_forces(state):
 	# Disable player movement after landing from the air
 	if (state.linear_velocity.y < -LandingThreshold && on_floor && stun_time <= 0.0):
 		stun_time = 0.5;
+		
+		if (CameraNode.has_method("set_camera_translation")):
+			CameraNode.set_camera_translation(Vector3(0, last_velocity.y * 0.02, 0));
 	
 	if (new_velocity.length() > 1.0):
 		is_moving = true;
