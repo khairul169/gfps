@@ -13,6 +13,10 @@ func _input(event):
 		if (event.scancode == KEY_CONTROL && event.pressed):
 			toggle_mouse();
 		
+		# Toggle fullscreen
+		if (event.scancode == KEY_F1 && event.pressed):
+			OS.window_fullscreen = !OS.window_fullscreen;
+		
 		# Host a game
 		if (event.scancode == KEY_F2 && network):
 			network.start_server(26444, 32);
