@@ -2,14 +2,14 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/g36c-shoot.wav-afc0921d71425088f13232c379897949.sample"
+path="res://.import/shoot.wav-40651dd0d2f98995e4457e5be45f6067.sample"
 
 [deps]
 
-source_file="res://demo/weapon/g36c/g36c-shoot.wav"
+source_file="res://demo/weapon/g36c/sfx/shoot.wav"
 source_md5="0fe169e1404766ddb9ff8a2dc4f2a5c5"
 
-dest_files=[ "res://.import/g36c-shoot.wav-afc0921d71425088f13232c379897949.sample" ]
+dest_files=[ "res://.import/shoot.wav-40651dd0d2f98995e4457e5be45f6067.sample" ]
 dest_md5="ff2944287db590668034761e762d342b"
 
 [params]

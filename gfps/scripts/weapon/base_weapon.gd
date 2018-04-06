@@ -9,13 +9,46 @@ var ShellEjectNode;
 const MODE_AUTO = 0;
 const MODE_SINGLE = 1;
 
+class AudioSequence:
+	# vars
+	var base = null;
+	var sequence = [];
+	
+	# constructor
+	func _init(wpn_base, list):
+		if (!list || typeof(list) != TYPE_ARRAY || list.empty()):
+			return;
+		
+		self.base = wpn_base;
+		
+		for i in range(list.size()):
+			var seq = { 'time': list[i][0], 'stream': list[i][1] };
+			sequence.append(seq);
+	
+	func setup():
+		if (sequence.empty()):
+			return;
+		
+		for i in range(sequence.size()):
+			sequence[i]['stream'] = base.load_resource(sequence[i]['stream']);
+	
+	func valid(id = 0):
+		return !sequence.empty() && id >= 0 && id < sequence.size();
+	
+	func get_sequence(id):
+		if (sequence.empty() || id < 0 || id >= sequence.size()):
+			return null;
+		return sequence[id];
+
 # Variables
 var name = "base_weapon";
 
 # Resources
 var view_scene = "";
 var sfx = {
-	'shoot' : null
+	'attach': null,
+	'shoot': null,
+	'reload': null
 };
 
 # Weapon configuration
@@ -68,6 +101,11 @@ var animation = {
 	]
 };
 
+# Audio sequence
+var next_sequence = 0.0;
+var audio_sequence = null;
+var sequence_index = 0;
+
 #####################################################################
 
 func registered():
@@ -76,7 +114,11 @@ func registered():
 	
 	# Audio Stream
 	for i in sfx:
-		sfx[i] = load_resource(sfx[i]);
+		var stream = sfx[i];
+		if (typeof(stream) == TYPE_OBJECT && stream is AudioSequence):
+			stream.setup();
+		else:
+			sfx[i] = load_resource(stream);
 	
 	# Instance view scene
 	if (view_scene):
@@ -88,6 +130,9 @@ func attach():
 	PlayerWeapon.play_animation(animation['draw'], false, 0.0);
 	PlayerWeapon.next_think = 0.8;
 	PlayerWeapon.next_idle = 1.0;
+	
+	# Play sound
+	play_audio('attach');
 
 func unload():
 	# Toggle weapon aim
@@ -101,6 +146,11 @@ func unload():
 func think(delta):
 	if (next_special > 0.0):
 		next_special = max(next_special - delta, 0.0);
+	
+	# Check audio sequence
+	if (audio_sequence != null && audio_sequence is AudioSequence && audio_sequence.valid(sequence_index)):
+		next_sequence = max(next_sequence - delta, 0.0);
+		check_audio_sequence();
 	
 	if (PlayerWeapon.next_think > 0.0):
 		return;
@@ -142,8 +192,7 @@ func attack(shoot_bullet = true):
 		PlayerWeapon.play_animation(animation['shoot'][0], false, 0.05);
 	
 	# Play sound
-	if (sfx['shoot'] != null):
-		PlayerWeapon.play_audio_stream(sfx['shoot']);
+	play_audio('shoot');
 	
 	# Shoot a bullet
 	if (shoot_bullet):
@@ -170,6 +219,9 @@ func reload():
 		PlayerWeapon.play_animation(animation['reload'], false, 0.2);
 	else:
 		PlayerWeapon.play_animation(animation['reload']);
+	
+	# Play sound
+	play_audio('reload');
 	return true;
 
 func post_reload():
@@ -249,3 +301,32 @@ func reload_stats():
 		PlayerWeapon.wpn_movespeed = move_speed * aim_movespeed;
 	else:
 		PlayerWeapon.wpn_movespeed = move_speed;
+
+func play_audio(name):
+	if (!sfx.has(name) || !sfx[name]):
+		return;
+	
+	if (audio_sequence):
+		audio_sequence = null;
+	
+	if (sfx[name] is AudioStream):
+		PlayerWeapon.play_audio_stream(sfx[name]);
+	
+	if (sfx[name] is AudioSequence && sfx[name].valid()):
+		audio_sequence = sfx[name];
+		next_sequence = audio_sequence.get_sequence(0).time;
+		sequence_index = 0;
+
+func check_audio_sequence():
+	if (next_sequence > 0.0):
+		return;
+	
+	# Play audio!
+	PlayerWeapon.play_audio_stream(audio_sequence.get_sequence(sequence_index).stream);
+	
+	if (audio_sequence.valid(sequence_index + 1)):
+		sequence_index += 1;
+		next_sequence = audio_sequence.get_sequence(sequence_index).time;
+	else:
+		audio_sequence = null;
+		sequence_index = 0;

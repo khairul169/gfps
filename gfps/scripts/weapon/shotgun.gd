@@ -45,6 +45,9 @@ func think(delta):
 	PlayerWeapon.play_animation("reload");
 	PlayerWeapon.next_think = reload_time;
 	PlayerWeapon.next_idle = PlayerWeapon.next_think + 0.5;
+	
+	# Play sound
+	play_audio('reload');
 
 func attach():
 	.attach();
