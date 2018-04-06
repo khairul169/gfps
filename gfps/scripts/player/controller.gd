@@ -8,6 +8,7 @@ export var Acceleration = 8.0;
 export var Deacceleration = 4.0;
 export var AirAccel = 16.0;
 export var JumpForce = 7.5;
+export var LandingThreshold = 8.0;
 
 export (NodePath) var CameraNode;
 export var CameraSensitivity = 0.2;
@@ -26,7 +27,9 @@ var network = null;
 var move_dir = Vector3();
 var default_gravity = 0.0;
 var stun_time = 0.0;
+var last_velocity = Vector3();
 
+var camera_base = null;
 var camera_rotation = Vector3();
 var camera_recoil = Vector3();
 var camera_recoil_current = Vector3();
@@ -59,30 +62,8 @@ func _ready():
 	add_to_group("player");
 	add_to_group("damageable");
 	
-	# Check networking support
-	if (has_node("/root/network_mgr")):
-		network = get_node("/root/network_mgr");
-		network.player_node = self;
-		network.connect("server_hosted", self, "_server_hosted");
-	
-	if (CameraNode && typeof(CameraNode) == TYPE_NODE_PATH):
-		CameraNode = get_node(CameraNode);
-	
-	if (CameraNode && CameraNode is Camera):
-		# Get default fov
-		camera_fov = CameraNode.fov;
-		camera_defaultfov = camera_fov;
-		
-		# Set camera as current camera
-		CameraNode.make_current();
-	
-	# Create floor raycaster
-	FloorRay = RayCast.new();
-	FloorRay.name = "floor_raytest";
-	FloorRay.transform.origin.y = 0.3;
-	FloorRay.cast_to = Vector3(0.0, -0.5, 0.0);
-	FloorRay.enabled = true;
-	add_child(FloorRay);
+	# Setting up the controller
+	setup_controller();
 	
 	# Set default arguments
 	friction = 0.0;
@@ -164,7 +145,11 @@ func _integrate_forces(state):
 			move_dir = linear_velocity;
 	else:
 		on_floor = true;
-	
+		
+		# Landing animation
+		if (last_velocity.y < -LandingThreshold && CameraNode.has_method("set_camera_translation")):
+			CameraNode.set_camera_translation(Vector3(0, last_velocity.y * 0.02, 0));
+
 	# Sprint
 	if (can_move && can_sprint && input['sprint'] && on_floor && move_dir.dot(-camera_dir[2]) > 0.2):
 		if (!PlayerWeapon || (PlayerWeapon != null && PlayerWeapon.able_to_sprint())):
@@ -209,7 +194,7 @@ func _integrate_forces(state):
 			is_jumping = false;
 	
 	# Disable player movement after landing from the air
-	if (state.linear_velocity.y < -8.0 && on_floor && stun_time <= 0.0):
+	if (state.linear_velocity.y < -LandingThreshold && on_floor && stun_time <= 0.0):
 		stun_time = 0.5;
 	
 	if (new_velocity.length() > 1.0):
@@ -219,16 +204,54 @@ func _integrate_forces(state):
 	
 	# Set new linear velocity
 	state.linear_velocity = new_velocity;
+	last_velocity = state.linear_velocity;
+
+func setup_controller():
+	# Check networking support
+	if (has_node("/root/network_mgr")):
+		network = get_node("/root/network_mgr");
+		network.player_node = self;
+		network.connect("server_hosted", self, "_server_hosted");
+	
+	if (CameraNode && typeof(CameraNode) == TYPE_NODE_PATH):
+		CameraNode = get_node(CameraNode);
+	
+	if (CameraNode && CameraNode is Camera):
+		# Create new camera base node
+		camera_base = Spatial.new();
+		camera_base.name = "camera_base";
+		camera_base.transform = CameraNode.transform;
+		
+		# Reparent camera node
+		CameraNode.get_parent().remove_child(CameraNode);
+		camera_base.add_child(CameraNode);
+		add_child(camera_base);
+		
+		# Configure camera
+		camera_fov = CameraNode.fov;
+		camera_defaultfov = camera_fov;
+		
+		# Set as current cam
+		CameraNode.transform = Transform();
+		CameraNode.make_current();
+	
+	# Create floor raycaster
+	FloorRay = RayCast.new();
+	FloorRay.name = "floor_raytest";
+	FloorRay.transform.origin.y = 0.3;
+	FloorRay.cast_to = Vector3(0.0, -0.5, 0.0);
+	FloorRay.enabled = true;
+	add_child(FloorRay);
 
 func update_camera(delta):
-	if (!CameraNode):
+	if (!CameraNode || !camera_base || !camera_base.is_inside_tree()):
 		return;
 	
-	# Camera FOV
+	# Interpolate camera field of view
 	if (CameraNode && CameraNode.fov != camera_fov):
 		CameraNode.fov = lerp(CameraNode.fov, camera_fov, 16 * delta);
 	
-	# Camera recoil
+	# Calculate recoil
 	if (camera_recoil.length() > 0.0):
 		camera_recoil_current = camera_recoil_current.linear_interpolate(camera_recoil, 24 * delta);
 	if (camera_recoil.length() > 0.0):
@@ -246,7 +269,7 @@ func update_camera(delta):
 		return;
 	
 	# Set camera transform
-	CameraNode.global_transform = CameraNode.global_transform.looking_at(CameraNode.global_transform.origin + looking_direction.normalized(), Vector3(0, 1, 0));
+	camera_base.global_transform = camera_base.global_transform.looking_at(camera_base.global_transform.origin + looking_direction.normalized(), Vector3(0, 1, 0));
 
 #########################################################################
 
@@ -273,8 +296,7 @@ func rotate_camera(rotation):
 	emit_signal("camera_motion", rotation * sensitivity);
 
 func get_camera_transform():
-	if (is_inside_tree() && CameraNode):
-		return CameraNode.global_transform;
+	if (CameraNode && CameraNode.is_inside_tree()): return CameraNode.global_transform;
 	return Transform();
 
 func set_camera_rotation(pitch, yaw):

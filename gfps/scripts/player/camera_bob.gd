@@ -1,20 +1,19 @@
 extends Camera
 
+export var enabled = true;
 export (NodePath) var Controller;
 export var bob_speed = 1.2;
-export var bob_factor = 0.1;
+export var bob_factor = 0.05;
 export var min_weight = 1.2;
+export var interpolation = 4.0;
 
-var camera_height = 0.0;
 var bob_cycle = 0.0;
+var cam_translation = Vector3();
 
 func _ready():
 	# Get controller
 	if (Controller && typeof(Controller) == TYPE_NODE_PATH):
 		Controller = get_node(Controller);
-	
-	# Get camera default height
-	camera_height = transform.origin.y;
 
 func _process(delta):
 	if (!Controller):
@@ -34,9 +33,20 @@ func _process(delta):
 		bob_cycle = 0.0;
 	
 	var factor = bob_factor * bob_weight;
-	var cam_transform = Vector3(0, camera_height, 0);
+	var cam_transform = cam_translation;
+	
+	# Calculate bob vector
 	cam_transform -= transform.basis.x * sin(deg2rad(bob_cycle)) * factor;
-	cam_transform += transform.basis.y * abs(cos(deg2rad(bob_cycle))) * factor;
+	cam_transform += transform.basis.y * abs(sin(deg2rad(bob_cycle))) * factor;
+	
+	# Interpolate cam translation
+	cam_translation = cam_translation.linear_interpolate(Vector3(), interpolation * delta);
 	
 	# Set camera transform
-	transform.origin = transform.origin.linear_interpolate(cam_transform, 8 * delta);
+	transform.origin = transform.origin.linear_interpolate(cam_transform, interpolation * delta);
+	transform = transform.looking_at(Vector3(0, 0, -1), Vector3(0, 1, 0));
+
+func set_camera_translation(vec): cam_translation = vec;
+
+func set_camera_animation(anims):
+	pass # TODO
