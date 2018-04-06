@@ -60,6 +60,7 @@ Acceleration = 8.0
 Deacceleration = 4.0
 AirAccel = 16.0
 JumpForce = 7.5
+LandingThreshold = 8.0
 CameraNode = NodePath("camera")
 CameraSensitivity = 0.2
 CameraPitchLimit = 80
@@ -95,10 +96,12 @@ near = 0.01
 far = 100.0
 script = ExtResource( 2 )
 _sections_unfolded = [ "Transform" ]
+enabled = true
 Controller = NodePath("..")
 bob_speed = 1.2
-bob_factor = 0.1
+bob_factor = 0.05
 min_weight = 1.2
+interpolation = 4.0
 
 [node name="interface" type="Control" parent="." index="3"]
 

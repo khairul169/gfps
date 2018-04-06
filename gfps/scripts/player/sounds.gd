@@ -42,7 +42,7 @@ func _physics_process(delta):
 		footstep_fx();
 	
 	# Check for jump landing
-	if (abs(controller.linear_velocity.y) < 0.5 && last_velocity < -8.0):
+	if (controller.on_floor && last_velocity < -controller.LandingThreshold):
 		stream_player.stream = JumpLanding;
 		stream_player.play();
 		next_step = 0.4;
