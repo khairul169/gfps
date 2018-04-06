@@ -1,7 +1,7 @@
 [gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://demo/player.gd" type="Script" id=1]
-[ext_resource path="res://gfps/scripts/player/camera_bob.gd" type="Script" id=2]
+[ext_resource path="res://gfps/scripts/player/camera.gd" type="Script" id=2]
 [ext_resource path="res://gfps/scripts/weapon/misc/dynamic_crosshair.gd" type="Script" id=3]
 [ext_resource path="res://gfps/scripts/player/sounds.gd" type="Script" id=4]
 [ext_resource path="res://gfps/sounds/footstep_jack_02.wav" type="AudioStream" id=5]
@@ -14,6 +14,7 @@
 [ext_resource path="res://gfps/scenes/bullet_impact.tscn" type="PackedScene" id=12]
 [ext_resource path="res://gfps/scenes/blood_spray.tscn" type="PackedScene" id=13]
 [ext_resource path="res://gfps/scripts/player/inventory.gd" type="Script" id=14]
+
 
 [sub_resource type="CapsuleShape" id=1]
 
