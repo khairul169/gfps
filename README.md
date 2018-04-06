@@ -14,6 +14,7 @@ First Person Shooter Framework for Godot Engine
 
 Assets used in demo project:
 - Gun Sounds Pack by [Zach King](http://sweetsoundeffects.com/gun-pack-2/)
+- Magazine sounds by [SoundBible.com](http://soundbible.com/tags-magazine.html)
 - Sierra Madre B by [hdrlabs.com](http://www.hdrlabs.com/sibl/archive.html) (CC-BY-NC-SA 3.0)
 
 Other assets are made by me and licensed under public domain.

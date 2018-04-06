@@ -8,7 +8,12 @@ func _init():
 	view_scene = "view.tscn";
 	
 	# Sounds
-	sfx['shoot'] = "g36c-shoot.wav";
+	sfx['shoot'] = "sfx/shoot.wav";
+	sfx['reload'] = AudioSequence.new(self, [
+		[0.35, "sfx/mag_pull.wav"],
+		[0.76, "sfx/mag_in.wav"],
+		[0.68, "sfx/mag_in.wav"]
+	]);
 	
 	# Weapon stats
 	clip = 40;

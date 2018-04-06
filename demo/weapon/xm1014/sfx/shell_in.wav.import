@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/shell_in.wav-ec22c7179ec74bbe15f144f1faec87af.sample"
+
+[deps]
+
+source_file="res://demo/weapon/xm1014/sfx/shell_in.wav"
+source_md5="c57ce7312b974695abd1cb5fecc59f51"
+
+dest_files=[ "res://.import/shell_in.wav-ec22c7179ec74bbe15f144f1faec87af.sample" ]
+dest_md5="ba564f6f58cf7dffd214f015edd571cd"
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0
