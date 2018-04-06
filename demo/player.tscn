@@ -187,7 +187,9 @@ size_flags_vertical = 1
 script = ExtResource( 3 )
 size = 12
 width = 2.0
-color = Color( 1, 0.199219, 0.199219, 0.834235 )
+color = Color( 1, 0.230469, 0.230469, 0.834235 )
+rotation = 0.0
+num = 3
 PlayerWeapon = NodePath("../../weapon")
 
 [node name="sounds" type="Node" parent="." index="4"]
