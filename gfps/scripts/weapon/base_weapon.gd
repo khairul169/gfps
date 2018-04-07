@@ -139,7 +139,11 @@ func unload():
 	if (is_aiming):
 		toggle_aim(false);
 	
+	# Remove view scene
 	PlayerWeapon.set_view_scene(null);
+	
+	# Reset audio sequence
+	audio_sequence = null;
 
 #####################################################################
 

@@ -584,8 +584,8 @@ shape = SubResource( 10 )
 disabled = false
 
 [node name="test" type="RigidBody" parent="." index="5" groups=[
-"player",
 "damageable",
+"player",
 ]]
 
 editor/display_folded = true
