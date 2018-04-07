@@ -5,7 +5,11 @@ export var size = 12 setget set_size, get_size;
 export var width = 2.0 setget set_width, get_width;
 export var color = Color(1,1,1,0.8) setget set_color, get_color;
 export var rotation = 0.0 setget set_rotation, get_rotation;
-export var num = 4 setget set_num, get_num;
+export var dot = true setget set_dot, get_dot;
+export var line = true setget set_line, get_line;
+export var line_count= 4 setget set_line_count, get_line_count;
+export var circle = false setget set_circle, get_circle;
+export var anti_aliasing = false setget set_antialiasing, get_antialiasing;
 
 export (NodePath) var PlayerWeapon;
 
@@ -39,14 +43,29 @@ func _draw():
 	if (!visible):
 		return;
 	
-	for i in range(num):
-		var angle = deg2rad(rotation + (360.0 / num * i));
-		var pos = rect_size / 2.0;
-		var from = pos + (cur_spread * Vector2(sin(angle), -cos(angle)));
-		var to = pos + ((cur_spread + size) * Vector2(sin(angle), -cos(angle)));
+	var center = rect_size / 2.0;
+	
+	if (dot):
+		var dot_size = Vector2(1, 1) * max(width, 2.0);
+		var rect = Rect2(center - (Vector2(dot_size)/2.0), dot_size);
+		draw_rect(rect, color, true);
+	
+	if (line):
+		for i in range(line_count):
+			var angle = deg2rad(rotation + (360.0 / line_count * i));
+			var from = center + (cur_spread * Vector2(sin(angle), -cos(angle)));
+			var to = center + ((cur_spread + size) * Vector2(sin(angle), -cos(angle)));
+			
+			# Draw the line
+			draw_line(from, to, color, width, anti_aliasing);
+	
+	if (circle):
+		var points = PoolVector2Array();
+		for i in range(0, 360):
+			var angle = deg2rad(i);
+			points.append(center + ((cur_spread + (size/2.0)) * Vector2(sin(angle), -cos(angle))));
 		
-		# Draw the line
-		draw_line(from, to, color, width);
+		draw_polyline(points, color, width, anti_aliasing);
 
 func shoot():
 	cur_spread = size * 10.0;
@@ -86,9 +105,37 @@ func set_rotation(v):
 func get_rotation():
 	return rotation;
 
-func set_num(v):
-	num = v;
+func set_dot(v):
+	dot = v;
 	update();
 
-func get_num():
-	return num;
+func get_dot():
+	return dot;
+
+func set_line(v):
+	line = v;
+	update();
+
+func get_line():
+	return line;
+
+func set_line_count(v):
+	line_count = v;
+	update();
+
+func get_line_count():
+	return line_count;
+
+func set_circle(v):
+	circle = v;
+	update();
+
+func get_circle():
+	return circle;
+
+func set_antialiasing(v):
+	anti_aliasing = v;
+	update();
+
+func get_antialiasing():
+	return anti_aliasing;

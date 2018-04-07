@@ -15,7 +15,6 @@
 [ext_resource path="res://gfps/scenes/blood_spray.tscn" type="PackedScene" id=13]
 [ext_resource path="res://gfps/scripts/player/inventory.gd" type="Script" id=14]
 
-
 [sub_resource type="CapsuleShape" id=1]
 
 radius = 0.4
@@ -99,8 +98,8 @@ script = ExtResource( 2 )
 _sections_unfolded = [ "Transform" ]
 enabled = true
 Controller = NodePath("..")
-bob_speed = 1.2
-bob_factor = 0.05
+bob_speed = 0.8
+bob_factor = 0.01
 min_weight = 1.2
 interpolation = 4.0
 
@@ -188,9 +187,13 @@ size_flags_vertical = 1
 script = ExtResource( 3 )
 size = 12
 width = 2.0
-color = Color( 1, 0.230469, 0.230469, 0.834235 )
+color = Color( 0.992188, 1, 0, 0.705882 )
 rotation = 0.0
-num = 3
+dot = true
+line = true
+line_count = 4
+circle = true
+anti_aliasing = false
 PlayerWeapon = NodePath("../../weapon")
 
 [node name="sounds" type="Node" parent="." index="4"]

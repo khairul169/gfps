@@ -2,8 +2,8 @@ extends Camera
 
 export var enabled = true;
 export (NodePath) var Controller;
-export var bob_speed = 1.2;
-export var bob_factor = 0.05;
+export var bob_speed = 0.8;
+export var bob_factor = 0.01;
 export var min_weight = 1.2;
 export var interpolation = 4.0;
 
