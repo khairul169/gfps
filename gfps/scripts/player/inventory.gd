@@ -55,7 +55,7 @@ func set_item(slot, wpnid, auto_switch = true, drop_item = false):
 	weapon_slot[slot] = { 'id' : wpnid, 'clip' : weapon.clip, 'ammo' : weapon.ammo };
 	
 	# Switch weapon
-	if (active_slot < 0 || auto_switch):
+	if (auto_switch):
 		select_item(slot);
 
 func select_item(slot):
