@@ -25,4 +25,4 @@ window/size/height=480
 
 [rendering]
 
-environment/default_environment="res://demo/env.tres"
+environment/default_environment="res://demo/default_env.tres"

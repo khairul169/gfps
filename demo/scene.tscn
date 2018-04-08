@@ -1,9 +1,8 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://demo/scene.gd" type="Script" id=1]
 [ext_resource path="res://demo/player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://demo/floortileclean_normal.png" type="Texture" id=3]
-[ext_resource path="res://gfps/scripts/props/ladder.gd" type="Script" id=4]
+[ext_resource path="res://gfps/scripts/props/ladder.gd" type="Script" id=3]
 
 [sub_resource type="PlaneMesh" id=1]
 
@@ -34,16 +33,14 @@ params_point_size = 1.0
 params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
-albedo_color = Color( 0.220001, 0.277995, 0.316406, 1 )
-metallic = 0.77
+albedo_color = Color( 0.777344, 0.777344, 0.777344, 1 )
+metallic = 0.2
 metallic_specular = 0.0
 metallic_texture_channel = 0
-roughness = 0.38
+roughness = 0.8
 roughness_texture_channel = 0
 emission_enabled = false
-normal_enabled = true
-normal_scale = 0.68
-normal_texture = ExtResource( 3 )
+normal_enabled = false
 rim_enabled = false
 clearcoat_enabled = false
 anisotropy_enabled = false
@@ -63,7 +60,7 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
-_sections_unfolded = [ "Albedo", "Metallic", "NormalMap", "Roughness", "UV1" ]
+_sections_unfolded = [ "Albedo", "Metallic", "Roughness", "UV1" ]
 
 [sub_resource type="ConcavePolygonShape" id=3]
 
@@ -153,18 +150,6 @@ subdivide_depth = 0
 [sub_resource type="ConvexPolygonShape" id=10]
 
 points = PoolVector3Array( -0.0999756, 4, 0.5, 0.0999756, 4, -0.5, 0.0999756, 4, 0.5, -0.0999756, 4, -0.5, -0.0999756, -4, 0.5, 0.0999756, -4, -0.5, 0.0999756, -4, 0.5, -0.0999756, -4, -0.5, 0.0999756, 4, 0.5, -0.0999756, 4, -0.5, 0.0999756, 4, -0.5, -0.0999756, 4, 0.5, 0.0999756, -4, 0.5, -0.0999756, -4, -0.5, 0.0999756, -4, -0.5, -0.0999756, -4, 0.5, 0.0999756, 4, 0.5, -0.0999756, -4, 0.5, -0.0999756, 4, 0.5, 0.0999756, -4, 0.5, 0.0999756, 4, -0.5, -0.0999756, -4, -0.5, -0.0999756, 4, -0.5, 0.0999756, -4, -0.5 )
-
-[sub_resource type="CapsuleMesh" id=11]
-
-radius = 0.4
-mid_height = 0.6
-radial_segments = 64
-rings = 8
-
-[sub_resource type="CapsuleShape" id=12]
-
-radius = 0.4
-height = 0.6
 
 [node name="scene" type="Spatial" index="0"]
 
@@ -559,7 +544,7 @@ reverb_bus_enable = false
 reverb_bus_name = "Master"
 reverb_bus_amount = 0.0
 reverb_bus_uniformity = 0.0
-script = ExtResource( 4 )
+script = ExtResource( 3 )
 
 [node name="Mesh" type="MeshInstance" parent="ladder" index="0"]
 
@@ -581,62 +566,6 @@ _sections_unfolded = [ "Geometry", "Transform" ]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.196749, 0, 0 )
 shape = SubResource( 10 )
-disabled = false
-
-[node name="test" type="RigidBody" parent="." index="5" groups=[
-"damageable",
-"player",
-]]
-
-editor/display_folded = true
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.55855, 0, -3.62243 )
-input_ray_pickable = true
-input_capture_on_drag = false
-collision_layer = 1
-collision_mask = 1
-mode = 1
-mass = 1.0
-friction = 1.0
-bounce = 0.0
-gravity_scale = 1.0
-custom_integrator = false
-continuous_cd = false
-contacts_reported = 0
-contact_monitor = false
-sleeping = false
-can_sleep = true
-axis_lock_linear_x = false
-axis_lock_linear_y = false
-axis_lock_linear_z = false
-axis_lock_angular_x = false
-axis_lock_angular_y = false
-axis_lock_angular_z = false
-linear_velocity = Vector3( 0, 0, 0 )
-linear_damp = -1.0
-angular_velocity = Vector3( 0, 0, 0 )
-angular_damp = -1.0
-
-[node name="MeshInstance" type="MeshInstance" parent="test" index="0"]
-
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.585632, 0 )
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-mesh = SubResource( 11 )
-skeleton = NodePath("..")
-material/0 = null
-_sections_unfolded = [ "Transform" ]
-
-[node name="CollisionShape" type="CollisionShape" parent="test" index="1"]
-
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.580142, 0 )
-shape = SubResource( 12 )
 disabled = false
 
 
