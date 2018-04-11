@@ -16,7 +16,7 @@ func _ready():
 		Controller = get_node(Controller);
 
 func _process(delta):
-	if (!Controller):
+	if (!enabled || !Controller):
 		return;
 	
 	# Get horizontal velocity from controller

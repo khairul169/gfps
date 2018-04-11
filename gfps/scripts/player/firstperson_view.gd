@@ -65,13 +65,13 @@ func _physics_process(delta):
 	
 	# Weapon y-pos when jumping
 	if (shifting_enabled && !PlayerController.is_climbing):
-		if (PlayerController.linear_velocity.y > 0.5):
+		if (PlayerController.linear_velocity.y > 1.0):
 			view_translation.y += on_air_factor;
-			view_translation.z += on_air_factor * 0.6;
+			view_translation.z += on_air_factor * -0.4;
 		
-		if (PlayerController.linear_velocity.y < -0.5):
+		if (PlayerController.linear_velocity.y < -4.0):
 			view_translation.y -= on_air_factor;
-			view_translation.z += on_air_factor * 0.8;
+			view_translation.z += on_air_factor * 0.2;
 	
 	if (is_bobbing):
 		if (!PlayerController.is_sprinting && shifting_enabled):

@@ -135,7 +135,7 @@ func _integrate_forces(state):
 	move_dir = move_dir * MoveSpeed;
 	
 	# Check if player is colliding with an object
-	if (abs(state.linear_velocity.y) < 0.5 && FloorRay && FloorRay.is_colliding()):
+	if (abs(state.linear_velocity.y) < 1.0 || (FloorRay && FloorRay.is_colliding())):
 		on_floor = true;
 	else:
 		on_floor = false;
@@ -185,6 +185,7 @@ func _integrate_forces(state):
 		if (!is_jumping):
 			if (FloorRay != null && on_floor && stun_time <= 0.0 && can_move):
 				new_velocity.y = JumpForce;
+				CameraNode.set_camera_translation(Vector3(0, -0.1, 0));
 			is_jumping = true;
 	else:
 		if (is_jumping):
