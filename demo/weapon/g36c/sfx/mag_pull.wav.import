@@ -7,10 +7,7 @@ path="res://.import/mag_pull.wav-0ee0c096a311edf8727adfe19922fcba.sample"
 [deps]
 
 source_file="res://demo/weapon/g36c/sfx/mag_pull.wav"
-source_md5="726eafac00ccf7946fbfa08165379471"
-
 dest_files=[ "res://.import/mag_pull.wav-0ee0c096a311edf8727adfe19922fcba.sample" ]
-dest_md5="f9ff9f173865e191a4991dfc13d80dbc"
 
 [params]
 

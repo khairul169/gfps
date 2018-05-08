@@ -7,10 +7,7 @@ path="res://.import/view.dae-3eb1f6a49e312a51e3f0c1a49791300f.scn"
 [deps]
 
 source_file="res://demo/weapon/xm1014/view.dae"
-source_md5="d013185ecb7ace602a57ff6194ddcef4"
-
 dest_files=[ "res://.import/view.dae-3eb1f6a49e312a51e3f0c1a49791300f.scn" ]
-dest_md5="d0bc400b054b6c122f04f352e14f1f43"
 
 [params]
 

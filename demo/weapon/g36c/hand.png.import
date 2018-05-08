@@ -8,10 +8,7 @@ path.etc2="res://.import/hand.png-eda3b3206cf48821aa1c1a0572a0b4d5.etc2.stex"
 [deps]
 
 source_file="res://demo/weapon/g36c/hand.png"
-source_md5="4c0e040c8a71e5a62c1a8378675350aa"
-
 dest_files=[ "res://.import/hand.png-eda3b3206cf48821aa1c1a0572a0b4d5.s3tc.stex", "res://.import/hand.png-eda3b3206cf48821aa1c1a0572a0b4d5.etc2.stex" ]
-dest_md5="02fc92d1af2780c31556d24866d57fda"
 
 [params]
 

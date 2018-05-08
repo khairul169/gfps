@@ -7,10 +7,7 @@ path="res://.import/shoot.wav-7f01585c0bd812cd0da62b8a79c6871e.sample"
 [deps]
 
 source_file="res://demo/weapon/xm1014/sfx/shoot.wav"
-source_md5="922714d6b31378d1ab9d84adf22c8e0b"
-
 dest_files=[ "res://.import/shoot.wav-7f01585c0bd812cd0da62b8a79c6871e.sample" ]
-dest_md5="328c208cbb4b01cafc3573ba06265bdd"
 
 [params]
 

@@ -68,6 +68,8 @@ func _draw():
 		draw_polyline(points, color, width, anti_aliasing);
 
 func shoot():
+	if (player_weapon.wpn_spread <= 0.0):
+		return;
 	cur_spread = size * 10.0;
 
 func set_weaponmgr(weapon):

@@ -8,10 +8,7 @@ path.etc2="res://.import/xm1014.png-2f821ab8e6d3da1a776028a717a1f79d.etc2.stex"
 [deps]
 
 source_file="res://demo/weapon/xm1014/xm1014.png"
-source_md5="342753f7b4a41e775aea602e3d244364"
-
 dest_files=[ "res://.import/xm1014.png-2f821ab8e6d3da1a776028a717a1f79d.s3tc.stex", "res://.import/xm1014.png-2f821ab8e6d3da1a776028a717a1f79d.etc2.stex" ]
-dest_md5="d740c806cbc6a007e0a4f7a42d24605f"
 
 [params]
 

@@ -4,6 +4,7 @@ extends Node
 export (Script) var FirstPersonView;
 export var ModelScaling = 0.05;
 export var EnableScopeRender = true;
+export var ScopeRenderSize = 512.0;
 
 # Prefabs
 export (PackedScene) var MuzzleFlash;
@@ -94,8 +95,10 @@ func _ready():
 	# Create scope lens viewport
 	scope_renderer = Viewport.new();
 	scope_renderer.name = "scope_renderer";
-	scope_renderer.size = Vector2(1, 1) * 512.0;
+	scope_renderer.size = Vector2(1, 1) * ScopeRenderSize;
 	scope_renderer.render_target_v_flip = true;
+	scope_renderer.msaa = Viewport.MSAA_DISABLED;
+	scope_renderer.gui_disable_input = true;
 	
 	var camera = Camera.new();
 	camera.fov = 10.0;
@@ -313,24 +316,37 @@ func play_audio_stream(stream):
 	stream_player.stream = stream;
 	stream_player.play();
 
+func screenray_test(ray_extends = Vector3(0, 0, -1), exclusion = []):
+	var cam_transform = get_camera_transform();
+	var vec_from = cam_transform.origin;
+	var vec_dir = cam_transform.basis.xform(ray_extends);
+	
+	if (typeof(exclusion) != TYPE_ARRAY):
+		exclusion = [];
+	else:
+		exclusion.append(controller);
+	
+	var return_value = {
+		'from': vec_from,
+		'line': vec_dir,
+		'result': controller.get_world().direct_space_state.intersect_ray(vec_from, vec_from + vec_dir, exclusion),
+	};
+	return return_value;
+
 func shoot_bullet(distance):
 	var vec_spread = wpn_spread;
 	if (controller.is_moving):
 		vec_spread = min(vec_spread * 2.0, wpn_maxspread);
 	if (controller.is_climbing):
 		vec_spread = min(vec_spread * 1.8, wpn_maxspread);
-	var raytest_vector = Vector2(rand_range(-1.0, 1.0) * vec_spread, rand_range(-1.0, 1.0) * vec_spread);
 	
-	# Cast a ray
-	var cam_transform = get_camera_transform();
-	var vec_from = cam_transform.origin;
-	var vec_dir = cam_transform.basis.xform(Vector3(raytest_vector.x, raytest_vector.y, -distance));
-	var result = controller.get_world().direct_space_state.intersect_ray(vec_from, vec_from + vec_dir, [controller]);
+	var raytest_vector = Vector3(rand_range(-1.0, 1.0) * vec_spread, rand_range(-1.0, 1.0) * vec_spread, -distance);
+	var ray = screenray_test(raytest_vector);
 	
 	# Ray hit an object
-	if (!result.empty()):
-		raytest_check(result, vec_dir);
-		return result;
+	if (!ray.result.empty()):
+		raytest_check(ray.result, ray.line);
+		return ray;
 	
 	return null;
 
