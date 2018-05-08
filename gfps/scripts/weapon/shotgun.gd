@@ -12,7 +12,7 @@ var first_insert = false;
 
 func _init():
 	# Weapon name
-	name = "base_shotgun";
+	name = "Base Shotgun";
 	
 	# Weapon stats
 	clip = 8;

@@ -13,14 +13,15 @@ var target_gravity = 0.0;
 
 func _init():
 	# Weapon name
-	name = "base_physicsgun";
+	name = "Base Physics Gun";
 	
 	# Weapon stats
 	clip = 1;
 	ammo = 0;
+	recoil = Vector2(1.4, 4.8);
 	firing_mode = MODE_SINGLE;
 	firing_range = 5.0;
-	firing_delay = 0.1;
+	firing_delay = 1.0;
 
 ###########################################################
 
@@ -31,9 +32,13 @@ func think(delta):
 		return;
 	
 	var new_position = PlayerWeapon.get_camera_transform().xform(Vector3(0, 0, -target_distance));
-	var object_dir = new_position - grab_target.global_transform.origin;
+	var object_velocity = (new_position - grab_target.global_transform.origin) * drag_speed;
 	
-	grab_target.linear_velocity = object_dir * drag_speed;
+	if (object_velocity.length() > 50.0):
+		set_object_state(false);
+		return;
+	
+	grab_target.linear_velocity = object_velocity;
 	grab_target.angular_velocity = Vector3();
 
 func attach():
@@ -45,15 +50,38 @@ func unload():
 	grab_target = null;
 
 func attack():
-	if (!.attack(false)):
+	if (!grab_target):
 		return false;
 	
-	# Keep weapon clip above zero
-	PlayerWeapon.wpn_clip += 1;
+	var object = grab_target;
+	set_object_state(false);
+	
+	var impulse = PlayerWeapon.get_camera_transform().basis.xform(Vector3(0, 0, -impulse_force));
+	object.apply_impulse(Vector3(), impulse);
+	
+	# Shoot animation
+	PlayerWeapon.play_animation('shoot', false, 0.05);
+	
+	# Play sound
+	play_audio('shoot');
+	return true;
+
+func special():
+	if (next_special > 0.0):
+		return;
+	
+	# Delay function
+	next_special = firing_delay;
 	
 	if (grab_target):
 		set_object_state(false);
 		return;
+	
+	# Grab animation
+	PlayerWeapon.play_animation('grab', false, 0.05);
+	
+	# Play sound
+	play_audio('grab');
 	
 	var ray = PlayerWeapon.screenray_test(Vector3(0, 0, -firing_range));
 	if (ray.result.empty()):
@@ -61,18 +89,6 @@ func attack():
 	
 	if (ray.result.collider is RigidBody && ray.result.collider.is_in_group("physics")):
 		set_object_state(true, ray.result.collider);
-	return true;
-
-func special():
-	next_special = 0.5;
-	
-	if (!grab_target):
-		return;
-	
-	var impulse = PlayerWeapon.get_camera_transform().basis.xform(Vector3(0, 0, -impulse_force));
-	grab_target.apply_impulse(Vector3(), impulse);
-	
-	set_object_state(false);
 
 func reload():
 	return false;
@@ -87,6 +103,9 @@ func set_object_state(picked, object = null):
 	else:
 		grab_target.gravity_scale = target_gravity;
 		grab_target.continuous_cd = true;
+		grab_target.linear_velocity = Vector3();
+		grab_target.angular_velocity = Vector3();
+		
 		grab_target = null;
 		target_gravity = 0.0;
 		target_distance = 0.0;

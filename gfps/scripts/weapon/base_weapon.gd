@@ -41,7 +41,8 @@ class AudioSequence:
 		return sequence[id];
 
 # Variables
-var name = "base_weapon";
+var id = -1;
+var name = "Base Weapon";
 
 # Resources
 var view_scene = "";
@@ -186,7 +187,7 @@ func think(delta):
 		PlayerWeapon.wpn_reload();
 
 func attack(shoot_bullet = true):
-	if (firing_mode == MODE_SINGLE && has_attack):
+	if (PlayerWeapon.wpn_clip <= 0 || (firing_mode == MODE_SINGLE && has_attack)):
 		return false;
 	
 	# Play animation
@@ -201,6 +202,9 @@ func attack(shoot_bullet = true):
 	# Shoot a bullet
 	if (shoot_bullet):
 		PlayerWeapon.shoot_bullet(firing_range);
+		
+	# Reduce weapon clip
+	PlayerWeapon.wpn_clip -= 1;
 	
 	# Set state
 	has_attack = true;

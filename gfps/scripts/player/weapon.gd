@@ -185,10 +185,6 @@ func wpn_attack():
 	if (controller.is_sprinting || is_sprinting):
 		return;
 	
-	# Out of clip
-	if (wpn_clip <= 0):
-		return;
-	
 	var attack = false;
 	if (current_wpn > -1 && current_wpn < weapon_list.size()):
 		attack = weapon_list[current_wpn].attack();
@@ -206,9 +202,6 @@ func wpn_attack():
 	# Eject bullet shell
 	if (weapon_list[current_wpn].ShellEjectNode):
 		create_bulletshell(weapon_list[current_wpn].ShellEjectNode);
-	
-	# Reduce weapon clip
-	wpn_clip -= 1;
 	
 	# Firing delay
 	next_think = wpn_firingdelay;
@@ -463,6 +456,7 @@ func register_weapon(path):
 	
 	# Initialize weapon
 	var id = (weapon_list.size()-1);
+	wpn.id = id;
 	wpn.set_meta("id", id);
 	wpn.set_meta("basedir", path.get_base_dir());
 	wpn.registered();
