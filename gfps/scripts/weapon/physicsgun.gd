@@ -1,13 +1,15 @@
 extends "res://gfps/scripts/weapon/base_weapon.gd"
 
 # Stats
-var impulse_force = 8.0;
+var impulse_force = 15.0;
 var drag_speed = 5.0;
+var static_distance = 0.0;
 
 # Variables
 var grab_target = null;
 var target_distance = 0.0;
 var target_gravity = 0.0;
+var target_offset = Vector3();
 
 ###########################################################
 
@@ -31,7 +33,11 @@ func think(delta):
 	if (!grab_target || PlayerWeapon.next_think > 0.0):
 		return;
 	
-	var new_position = PlayerWeapon.get_camera_transform().xform(Vector3(0, 0, -target_distance));
+	var object_distance = target_distance;
+	if (static_distance > 0.0):
+		object_distance = static_distance;
+	
+	var new_position = PlayerWeapon.get_camera_transform().xform(Vector3(0, 0, -object_distance)) - target_offset;
 	var object_velocity = (new_position - grab_target.global_transform.origin) * drag_speed;
 	
 	if (object_velocity.length() > 50.0):
@@ -50,7 +56,7 @@ func unload():
 	grab_target = null;
 
 func attack():
-	if (!grab_target):
+	if (!grab_target || impulse_force <= 0.0):
 		return false;
 	
 	var object = grab_target;
@@ -88,15 +94,16 @@ func special():
 		return true;
 	
 	if (ray.result.collider is RigidBody && ray.result.collider.is_in_group("physics")):
-		set_object_state(true, ray.result.collider);
+		set_object_state(true, ray.result.collider, ray.result.position);
 
 func reload():
 	return false;
 
-func set_object_state(picked, object = null):
+func set_object_state(picked, object = null, hit_position = Vector3()):
 	if (picked):
 		target_distance = object.global_transform.origin.distance_to(PlayerWeapon.get_camera_transform().origin);
 		target_gravity = object.gravity_scale;
+		target_offset = hit_position - object.global_transform.origin;
 		object.gravity_scale = 0.0;
 		object.continuous_cd = true;
 		grab_target = object;
@@ -109,3 +116,4 @@ func set_object_state(picked, object = null):
 		grab_target = null;
 		target_gravity = 0.0;
 		target_distance = 0.0;
+		target_offset = Vector3();
