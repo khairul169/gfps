@@ -65,6 +65,13 @@ var input = {
 var weapon_list = [];
 var current_wpn = -1;
 
+func _preload_scene_with_particles(packedscene):
+	if (!world_node || !packedscene || !packedscene is PackedScene):
+		return;
+	var instance = packedscene.instance();
+	world_node.call_deferred("add_child", instance);
+	instance.call_deferred("queue_free");
+
 func _ready():
 	# Get Nodes
 	if (controller):
@@ -105,6 +112,12 @@ func _ready():
 	camera.cull_mask = 1;
 	scope_renderer.add_child(camera, true);
 	add_child(scope_renderer);
+	
+	# Prevent game from freezing when instancing particles
+	_preload_scene_with_particles(MuzzleFlash);
+	_preload_scene_with_particles(BulletShell);
+	_preload_scene_with_particles(BulletImpact);
+	_preload_scene_with_particles(BloodSpray);
 
 func _process(delta):
 	if (current_wpn < 0 || !controller):
