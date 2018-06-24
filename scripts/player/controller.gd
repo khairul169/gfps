@@ -23,7 +23,6 @@ var PlayerWeapon;
 signal camera_motion(dir);
 
 # Variables
-var network = null;
 var move_dir = Vector3();
 var default_gravity = 0.0;
 var stun_time = 0.0;
@@ -87,10 +86,6 @@ func _input(event):
 	if (event is InputEventMouseMotion && Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):
 		rotate_camera(event.relative);
 
-func _server_hosted():
-	if (network):
-		network.create_local_player();
-
 func _process(delta):
 	# Update camera transform
 	update_camera(delta);
@@ -98,12 +93,6 @@ func _process(delta):
 	# Stun timer
 	if (stun_time > 0.0):
 		stun_time = max(stun_time - delta, 0.0);
-
-func _physics_process(delta):
-	if (network):
-		# Update player transform
-		network.player_transform[0] = global_transform.origin;
-		network.player_transform[1] = [camera_rotation.x, camera_rotation.y];
 
 func _integrate_forces(state):
 	# Reset variable
@@ -208,12 +197,6 @@ func _integrate_forces(state):
 	last_velocity = state.linear_velocity;
 
 func setup_controller():
-	# Check networking support
-	if (has_node("/root/network_mgr")):
-		network = get_node("/root/network_mgr");
-		network.player_node = self;
-		network.connect("server_hosted", self, "_server_hosted");
-	
 	if (CameraNode && typeof(CameraNode) == TYPE_NODE_PATH):
 		CameraNode = get_node(CameraNode);
 	
