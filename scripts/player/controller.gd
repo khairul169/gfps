@@ -55,6 +55,7 @@ var input = {
 # Ability
 var can_move = true;
 var can_sprint = false;
+var can_jump = true;
 
 func _ready():
 	# Set groups
@@ -172,7 +173,7 @@ func _integrate_forces(state):
 	# Jump
 	if (input['jump']):
 		if (!is_jumping):
-			if (FloorRay != null && on_floor && stun_time <= 0.0 && can_move):
+			if (FloorRay != null && on_floor && stun_time <= 0.0 && can_move && can_jump):
 				new_velocity.y = JumpForce;
 				CameraNode.set_camera_translation(Vector3(0, -0.1, 0));
 			is_jumping = true;
