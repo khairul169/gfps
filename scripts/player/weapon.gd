@@ -138,8 +138,11 @@ func _physics_process(delta):
 	
 	# Weapon think
 	wpn_idle(delta);
-	wpn_attack();
-	wpn_special();
+	
+	# Weapon function
+	if (Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):
+		wpn_attack();
+		wpn_special();
 	
 	# Refill clip
 	if (is_reloading && next_think <= 0.0):
