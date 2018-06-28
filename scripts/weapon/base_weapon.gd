@@ -53,17 +53,17 @@ var sfx = {
 };
 
 # Weapon configuration
-var clip = 12;
-var ammo = 48;
+var clip = 0;
+var ammo = 0;
 var move_speed = 1.0;
-var recoil = Vector2(0.0, 0.0);
-var spread = Vector2(0.0, 0.0);
-var firing_delay = 1.0/1.0;
+var recoil = Vector2();
+var spread = Vector2();
+var firing_delay = 1.0;
 var firing_range = 1.0;
-var firing_mode = MODE_AUTO;
+var firing_mode = MODE_SINGLE;
 var reload_time = 1.0;
 var muzzle_size = 1.0;
-var damage = 10.0;
+var damage = 0.0;
 
 var can_aim = false;
 var aim_fov = 0.0;
