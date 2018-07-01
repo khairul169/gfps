@@ -22,7 +22,7 @@ func _init():
 	update();
 
 func _ready():
-	if (PlayerWeapon && typeof(PlayerWeapon) == TYPE_NODE_PATH):
+	if (PlayerWeapon && typeof(PlayerWeapon) == TYPE_NODE_PATH && has_node(PlayerWeapon)):
 		set_weaponmgr(get_node(PlayerWeapon));
 
 func _process(delta):
@@ -73,6 +73,8 @@ func shoot():
 	cur_spread = size * 10.0;
 
 func set_weaponmgr(weapon):
+	if (!weapon):
+		return;
 	player_weapon = weapon;
 	weapon.connect("weapon_attack", self, "shoot");
 
