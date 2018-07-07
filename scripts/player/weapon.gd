@@ -1,8 +1,9 @@
 extends Node
 
+const WEAPON_CULL_MASK = 16;
+
 # Exports
 export (Script) var FirstPersonView;
-export var ModelScaling = 0.05;
 export var EnableScopeRender = true;
 export var ScopeRenderSize = 512.0;
 
@@ -35,6 +36,8 @@ var anim_player;
 var muzzleflash_node;
 var stream_player;
 var scope_renderer;
+var weapon_viewport;
+var camera_viewport;
 
 # Variables
 var is_firing = false;
@@ -72,19 +75,37 @@ func _preload_scene_with_particles(packedscene):
 	world_node.call_deferred("add_child", instance);
 	instance.call_deferred("queue_free");
 
+func _resized():
+	if (weapon_viewport):
+		weapon_viewport.size = get_viewport().size;
+
 func _ready():
 	# Get Nodes
 	if (controller):
 		controller.PlayerWeapon = self;
 	
-	# Create weapon view
-	if (controller.CameraNode):
-		# Get node if CameraNode is a NodePath
-		if (typeof(controller.CameraNode) == TYPE_NODE_PATH):
-			controller.CameraNode = controller.get_node(controller.CameraNode);
-		
-		# Load first person view node
-		create_fpview(controller.CameraNode);
+	# Weapon viewport
+	weapon_viewport = Viewport.new();
+	weapon_viewport.name = "viewport";
+	weapon_viewport.size = get_viewport().size;
+	weapon_viewport.transparent_bg = true;
+	weapon_viewport.render_target_v_flip = true;
+	weapon_viewport.gui_disable_input = true;
+	add_child(weapon_viewport);
+	
+	# Create view camera
+	camera_viewport = Camera.new();
+	camera_viewport.cull_mask = WEAPON_CULL_MASK;
+	weapon_viewport.add_child(camera_viewport);
+	create_fpview(camera_viewport);
+	
+	# Viewport container
+	var viewport_container = TextureRect.new();
+	viewport_container.set_anchors_and_margins_preset(Control.PRESET_WIDE);
+	viewport_container.texture = weapon_viewport.get_texture();
+	viewport_container.expand = true;
+	controller.call_deferred("add_child", viewport_container);
+	controller.call_deferred("move_child", viewport_container, 0);
 	
 	# Create stream player
 	if (controller):
@@ -118,8 +139,21 @@ func _ready():
 	_preload_scene_with_particles(BulletShell);
 	_preload_scene_with_particles(BulletImpact);
 	_preload_scene_with_particles(BloodSpray);
+	
+	# Signals
+	get_tree().connect("screen_resized", self, "_resized");
+	call_deferred("_post_ready");
+
+func _post_ready():
+	# Hide weapon node from main camera
+	if (controller.CameraNode):
+		controller.CameraNode.cull_mask = 1;
 
 func _process(delta):
+	if (camera_viewport && controller.CameraNode):
+		camera_viewport.transform = controller.CameraNode.transform;
+		camera_viewport.fov = controller.CameraNode.fov;
+	
 	if (current_wpn < 0 || !controller):
 		return;
 	
@@ -484,7 +518,7 @@ func register_weapon(path):
 	
 	# Set mesh layers
 	for i in get_meshinstances(wpn.view_scene):
-		i.layers = 16;
+		i.layers = WEAPON_CULL_MASK;
 	
 	# Initialize weapon attachment
 	setup_attachment(wpn, skeleton);
@@ -504,7 +538,6 @@ func set_view_scene(scene):
 	
 	# Set new scene
 	weapon_node = scene;
-	weapon_node.scale = Vector3(1, 1, 1) * ModelScaling;
 	fpview_node.add_child(weapon_node);
 	
 	# Find animation player

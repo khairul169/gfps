@@ -37,14 +37,13 @@ func _process(delta):
 	
 	# Calculate bob vector
 	cam_transform -= transform.basis.x * sin(deg2rad(bob_cycle)) * factor;
-	cam_transform += transform.basis.y * abs(sin(deg2rad(bob_cycle))) * factor;
+	cam_transform += transform.basis.y * abs(sin(deg2rad(bob_cycle))) * factor * 1.5;
 	
 	# Interpolate cam translation
 	cam_translation = cam_translation.linear_interpolate(Vector3(), interpolation * delta);
 	
 	# Set camera transform
 	transform.origin = transform.origin.linear_interpolate(cam_transform, interpolation * delta);
-	transform = transform.looking_at(Vector3(0, 0, -1), Vector3(0, 1, 0));
 
 func set_camera_translation(vec): cam_translation = vec;
 
