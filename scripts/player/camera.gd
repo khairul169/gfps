@@ -3,7 +3,7 @@ extends Camera
 # Editor variable
 export var enabled = true;
 export var bob_speed = 0.8;
-export var bob_factor = 0.01;
+export var bob_factor = 0.2;
 export var min_weight = 1.2;
 export var interpolation = 4.0;
 

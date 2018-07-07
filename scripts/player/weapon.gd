@@ -119,6 +119,9 @@ func _ready():
 	# Instance prefabs
 	if (MuzzleFlash):
 		muzzleflash_node = MuzzleFlash.instance();
+		# Set mesh layers
+		for i in get_meshinstances(muzzleflash_node):
+			i.layers = WEAPON_CULL_MASK;
 	
 	# Create scope lens viewport
 	scope_renderer = Viewport.new();
@@ -151,7 +154,7 @@ func _post_ready():
 
 func _process(delta):
 	if (camera_viewport && controller.CameraNode):
-		camera_viewport.transform = controller.CameraNode.transform;
+		camera_viewport.transform = controller.CameraNode.global_transform;
 		camera_viewport.fov = controller.CameraNode.fov;
 	
 	if (current_wpn < 0 || !controller):
@@ -436,7 +439,7 @@ func create_bulletshell(node):
 	shell.add_collision_exception_with(controller);
 	shell.global_transform = node.global_transform;
 	shell.linear_velocity = -node.global_transform.basis.z.normalized() * 0.6;
-	shell.linear_velocity.y = 0.4;
+	shell.linear_velocity.y = 2.4;
 	world_node.add_child(shell);
 
 func create_bloodspray(pos, normal):
@@ -519,6 +522,7 @@ func register_weapon(path):
 	# Set mesh layers
 	for i in get_meshinstances(wpn.view_scene):
 		i.layers = WEAPON_CULL_MASK;
+		i.cast_shadow = MeshInstance.SHADOW_CASTING_SETTING_OFF;
 	
 	# Initialize weapon attachment
 	setup_attachment(wpn, skeleton);
