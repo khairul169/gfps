@@ -186,7 +186,7 @@ func _integrate_forces(state):
 		stun_time = 0.5;
 		
 	if (last_velocity.y < -4.0 && on_floor && CameraNode.has_method("set_camera_translation")):
-		CameraNode.set_camera_translation(Vector3(0, -last_velocity.y * 0.02, 0));
+		CameraNode.set_camera_translation(Vector3(0, -clamp(abs(last_velocity.y) * 0.1, 0.0, 1.2), 0));
 	
 	if (new_velocity.length() > 1.0):
 		is_moving = true;

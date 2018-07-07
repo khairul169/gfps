@@ -1,30 +1,32 @@
 extends Camera
 
+# Editor variable
 export var enabled = true;
-export (NodePath) var Controller;
 export var bob_speed = 0.8;
 export var bob_factor = 0.01;
 export var min_weight = 1.2;
 export var interpolation = 4.0;
 
+# Node
+onready var controller = get_parent();
+
+# Variable
 var bob_cycle = 0.0;
 var cam_translation = Vector3();
 
 func _ready():
-	# Get controller
-	if (Controller && typeof(Controller) == TYPE_NODE_PATH):
-		Controller = get_node(Controller);
+	pass
 
 func _process(delta):
-	if (!enabled || !Controller):
+	if (!enabled || !controller):
 		return;
 	
 	# Get horizontal velocity from controller
-	var hv = Controller.linear_velocity;
+	var hv = controller.linear_velocity;
 	hv.y = 0.0;
 	
 	# Calculate bob weight
-	var bob_weight = min((hv.length()/Controller.MoveSpeed), 10.0);
+	var bob_weight = min((hv.length()/controller.MoveSpeed), 10.0);
 	
 	# Cycle bob angle
 	if (bob_weight >= min_weight):
@@ -45,7 +47,13 @@ func _process(delta):
 	# Set camera transform
 	transform.origin = transform.origin.linear_interpolate(cam_transform, interpolation * delta);
 
-func set_camera_translation(vec): cam_translation = vec;
+func set_camera_translation(vec):
+	# Fix with camera pitch
+	vec.z = -vec.y * sin(deg2rad(controller.camera_rotation[0]));
+	vec.y = vec.y * cos(deg2rad(controller.camera_rotation[0]));
+	
+	# Apply camera translation
+	cam_translation = vec;
 
 func set_camera_animation(anims):
 	pass # TODO
