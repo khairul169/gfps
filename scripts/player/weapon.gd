@@ -154,7 +154,7 @@ func _post_ready():
 
 func _process(delta):
 	if (camera_viewport && controller.CameraNode):
-		camera_viewport.transform = controller.CameraNode.global_transform;
+		camera_viewport.global_transform = controller.CameraNode.global_transform;
 		camera_viewport.fov = controller.CameraNode.fov;
 	
 	if (current_wpn < 0 || !controller):
